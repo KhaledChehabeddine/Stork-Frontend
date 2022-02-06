@@ -8,8 +8,9 @@ const Home = (props) => {
     <div align='center' id='home'>
       <h1>Welcome home!</h1>
       <Button onClick={() => { navigate('/employee/add') }}>Add Employees</Button>
-      <Button onClick={() => { navigate('/applicant/add')}}>Add Applicants</Button>
       <Button onClick={() => { navigate('/employee/all') }}>View Employees</Button>
+      <Button onClick={() => { navigate('/applicant/add') }}>Add Applicants</Button>
+      <Button onClick={() => { navigate('/applicant/all') }}>View Applicants</Button>
     </div>
   );
 };

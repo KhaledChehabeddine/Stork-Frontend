@@ -43,23 +43,30 @@ class ApiClient extends ApiClientBase {
     return this.Post('/employee/delete', params);
   }
 
-  /* -----------to be implemented--------------- */
   getAllApplicants() {
-
+    return this.Get('/applicant/all');
   }
 
-  findApplicant() {
-
+  findApplicant(email) {
+    const params = {};
+    params.email = email;
+    return this.Get('/applicant/find', params);
   }
 
   addApplicant(endpoint, name, email, phone, sex, imageUrl) {
-
+    const params = {};
+    params.name = name;
+    params.email = email;
+    params.phone = phone;
+    params.imageUrl = imageUrl;
+    return this.Post('/applicant/add', params);
   }
 
-  deleteApplicant() {
-
+  deleteApplicant(email) {
+    const params = {};
+    params.email = email;
+    return this.Post('/applicant/delete', params);
   }
-  /* ------------------------------------------- */
 
 }
 
