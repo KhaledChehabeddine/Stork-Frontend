@@ -43,6 +43,24 @@ class ApiClient extends ApiClientBase {
     return this.Post('/employee/delete', params);
   }
 
+  /* -----------to be implemented--------------- */
+  getAllApplicants() {
+
+  }
+
+  findApplicant() {
+
+  }
+
+  addApplicant(endpoint, name, email, phone, sex, imageUrl) {
+
+  }
+
+  deleteApplicant() {
+
+  }
+  /* ------------------------------------------- */
+
 }
 
 export default ApiClient;
