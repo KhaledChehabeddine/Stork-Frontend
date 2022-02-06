@@ -1,19 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import EmployeeCard from "./EmployeeCard";
 import getApiClient from "../../api_client/getApiClient";
 
+const reducer = (state, action) => {
+  switch(action.type) {
+    case 'page-loaded':
+      return { pageLoaded: true };
+    default:
+      return { ...state };
+  }
+}
+
 const EmployeeCardWrapper = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    pageLoaded: false
+  });
   const [employees, setEmployees] = useState([]);
   const getAllEmployees = useEffect(() => {
     getApiClient().getAllEmployees()
       .then(response => {
         setEmployees(response.data);
+        dispatch({ type: 'page-loaded' });
       }).catch(error => {console.log(error)});
   }, []);
   return (
-    <div className='card_wrapper'>
-      {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} />)}
-    </div>
+    <>
+      {state.pageLoaded === true
+        ? <div style={{ display: 'flex', flexDirection: 'column'}}>
+            <h1 align='center' style={{ padding: '2rem' }}>Employees</h1>
+            <div className='card_wrapper'>
+              {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} />)}
+            </div>
+          </div>
+        : <h1 align='center'>Loading...</h1>}
+    </>
   )
 }
 
