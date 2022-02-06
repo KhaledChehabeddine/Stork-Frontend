@@ -11,12 +11,13 @@ const ApplicantForm = (props) => {
   const [sex, setSex] = useState('');
 
   const addApplicantHandler = useCallback(() => {
-    getApiClient().addApplicant('/add', name, email, phone, sex, 'https://bootdey.com/img/Content/avatar/avatar3.png')
-      .then(response => {
-        alert('Employee ' + response.data.name + ' with email ' + response.data.email + ' has been added succesfully!');
-      }).catch(error => {
-        console.log(error);
-    });
+//    getApiClient().addApplicant('/add', name, email, phone, sex, 'https://bootdey.com/img/Content/avatar/avatar3.png')
+//      .then(response => {
+//        alert('Employee ' + response.data.name + ' with email ' + response.data.email + ' has been added succesfully!');
+//      }).catch(error => {
+//        console.log(error);
+//    });
+    console.log('applicant added');
   }, [name, email, phone, sex]);
 
   return (
@@ -27,7 +28,7 @@ const ApplicantForm = (props) => {
           <Input onChange={event => { setEmail(event.target.value) }} placeholder='Email'/>
           <Input onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
           <Input onChange={event => { setSex(event.target.value) }} placeholder='Sex'/>
-          <Button onClick={addApplicantHandler()}>Add Applicant</Button>
+          <Button onClick={addApplicantHandler}>Add Applicant</Button>
       </Form>
     </div>
   );
