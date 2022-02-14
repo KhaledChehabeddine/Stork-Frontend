@@ -5,6 +5,7 @@ import ApplicantForm from './Components/Forms/ApplicantForm'
 import EmployeeForm from './Components/Forms/EmployeeForm';
 import EmployeeCardWrapper from './Components/Cards/EmployeeCardWrapper';
 import ApplicantCardWrapper from "./Components/Cards/ApplicantCardWrapper";
+import ScheduleForm from './Components/Forms/ScheduleForm';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route exact path='/employee/all' element={ <EmployeeCardWrapper /> } />
         <Route exact path='/applicant/add' element={ <ApplicantForm /> } />
         <Route exact path='/applicant/all' element={ <ApplicantCardWrapper />} />
+        <Route exact path='/interview/schedule' element={ <ScheduleForm /> } />
       </Routes>
     </Router>
   );
