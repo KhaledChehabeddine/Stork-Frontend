@@ -3,6 +3,7 @@ import getApiClient from '../../api_client/getApiClient';
 import Button from '../Utils/Button';
 import Form from '../Utils/Form';
 import Input from '../Utils/Input';
+import NavBar from "../Utils/Navbar";
 
 const EmployeeForm = (props) => {
   const [id, setId] = useState('');
@@ -22,6 +23,14 @@ const EmployeeForm = (props) => {
 
   return (
     <div align='center'>
+      <NavBar/>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item"><a href="\home">Home</a></li>
+          <li className="breadcrumb-item"><a href="#">Manage Employees</a></li>
+          <li className="breadcrumb-item active" aria-current="\employee\add">Employee Form</li>
+        </ol>
+      </nav>
       <Form onSubmit={event => { event.preventDefault(); }}>
         <h1 style={{ padding: '1rem' }}>Employee Adder</h1>
         <Input onChange={event => { setId(event.target.value); }} placeholder='Id' />
