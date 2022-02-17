@@ -43,10 +43,10 @@ const EmployeeForm = (props) => {
 
   return (
     <>
+      <NavBar/>
       {state.addingEmployee ? <Spinner />
         :
           <div align='center'>
-            <NavBar/>
             <Form onSubmit={event => { event.preventDefault(); }}>
               <h1 style={{ padding: '1rem' }}>Employee Adder</h1>
               <Input onChange={event => { setId(event.target.value); }} placeholder='Id' />

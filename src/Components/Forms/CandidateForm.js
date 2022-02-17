@@ -5,6 +5,7 @@ import Form from '../Utils/Form';
 import Input from '../Utils/Input';
 import {useNavigate} from "react-router-dom";
 import Spinner from "../Utils/Spinner";
+import Navbar from "../Utils/Navbar";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -46,6 +47,7 @@ const CandidateForm = (props) => {
 
   return (
     <>
+      <Navbar />
       {state.addingCandidate ? <Spinner />
         :
         <div align='center'>
