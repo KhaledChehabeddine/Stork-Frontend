@@ -17,9 +17,9 @@ class ApiClient extends ApiClientBase {
   }
    */
   login(username, password) {
-    const data = new FormData();
-    data.append('username', username);
-    data.append('password', password);
+    const data = {};
+    data.username = username;
+    data.password = password;
     return this.Post('/login', data);
   }
 
@@ -34,13 +34,13 @@ class ApiClient extends ApiClientBase {
   }
 
   addEmployee(endpoint, id, name, email, jobTitle, phone, imageUrl) {
-    const data = new FormData();
-    data.append('id', id);
-    data.append('name', name);
-    data.append('email', email);
-    data.append('jobTitle', jobTitle);
-    data.append('phone', phone);
-    data.append('imageUrl', imageUrl);
+    const data = {};
+    data.id = id;
+    data.name = name;
+    data.email = email;
+    data.jobTitle = jobTitle;
+    data.phone = phone;
+    data.imageUrl = imageUrl;
     return this.Post('/employee' + endpoint, data);
   }
 
@@ -61,12 +61,12 @@ class ApiClient extends ApiClientBase {
   }
 
   addCandidate(endpoint, name, email, phone, resume, imageUrl) {
-    const data = new FormData();
-    data.append('name', name);
-    data.append('email', email);
-    data.append('phone', phone);
-    data.append('resume', resume);
-    data.append('imageUrl', imageUrl);
+    const data = {};
+    data.name = name;
+    data.email = email;
+    data.phone = phone;
+    data.resume = resume;
+    data.imageUrl = imageUrl;
     return this.Post('/candidate/add', data);
   }
 
@@ -77,13 +77,13 @@ class ApiClient extends ApiClientBase {
   }
 
   scheduleInterview(date, time, location, vacancyId, interviewers, candidateId) {
-    const data = new FormData();
-    data.append('date', date);
-    data.append('time', time);
-    data.append('location', location);
-    data.append('vacancyId', vacancyId);
-    data.append('interviewers', interviewers);
-    data.append('candidateId', candidateId);
+    const data = {};
+    data.date = date;
+    data.time = time;
+    data.location = location;
+    data.vacancyId = vacancyId;
+    data.interviewers = interviewers;
+    data.candidateId = candidateId;
     return this.Post('/interview/schedule', data);
   }
 
