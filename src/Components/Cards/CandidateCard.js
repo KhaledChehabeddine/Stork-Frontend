@@ -10,7 +10,7 @@ const CandidateCard = ({ candidate }) => {
     <div className='card'>
       <div className='card_body'>
         <img className='card_image' src={DefaultProfile} alt='' />
-        <h2 className='card_name'>{candidate.name}</h2>
+        <h2 className='card_name'>{candidate.firstName + ' ' + candidate.lastName}</h2>
         <h2 className='card_name'>{"Id: " + candidate.id}</h2>
       </div>
       <Button className='button' onClick={() => navigate(`/candidate/${candidate.id}`)}>View Candidate</Button>

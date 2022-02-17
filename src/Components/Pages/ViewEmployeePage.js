@@ -31,7 +31,7 @@ const ViewEmployeePage = ({ employee }) => {
         :
         <div align='center'>
           <h1>{employee.id}</h1>
-          <h1>{employee.name}</h1>
+          <h1>{employee.firstName + ' ' + employee.lastName}</h1>
           <h1>{employee.email}</h1>
           <h1>{employee.jobTitle}</h1>
           <h1>{employee.phone}</h1>

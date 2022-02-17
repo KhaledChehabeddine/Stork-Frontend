@@ -31,7 +31,7 @@ const ViewCandidatePage = ({ candidate }) => {
         :
         <div align='center'>
           <h1>{candidate.id}</h1>
-          <h1>{candidate.name}</h1>
+          <h1>{candidate.firstName + ' ' + candidate.lastName}</h1>
           <h1>{candidate.email}</h1>
           <h1>{candidate.phone}</h1>
           <Button onClick={deleteEmployeeHandler}>Delete Candidate</Button>
