@@ -20,52 +20,64 @@ class ApiClient extends ApiClientBase {
     return this.Get('/employee/all');
   }
 
-  findEmployee(id) {
-    const params = {};
-    params.id = id;
-    return this.Get('/employee/find', params);
+  getEmployee(id) {
+    const data = new FormData();
+    data.append('id', id);
+    return this.Get('/employee/find', data);
   }
 
   addEmployee(endpoint, id, name, email, jobTitle, phone, imageUrl) {
-    const params = {};
-    params.id = id;
-    params.name = name;
-    params.email = email;
-    params.jobTitle = jobTitle;
-    params.phone = phone;
-    params.imageUrl = imageUrl;
-    return this.Post('/employee' + endpoint, params);
+    const data = new FormData();
+    data.append('id', id);
+    data.append('name', name);
+    data.append('email', email);
+    data.append('jobTitle', jobTitle);
+    data.append('phone', phone);
+    data.append('imageUrl', imageUrl);
+    return this.Post('/employee' + endpoint, data);
   }
 
   deleteEmployee(id) {
-    const params = {};
-    params.id = id;
-    return this.Post('/employee/delete', params);
+    const data = new FormData();
+    data.append('id', id);
+    return this.Post('/employee/delete', data);
   }
 
-  getAllApplicants() {
+  getAllCandidates() {
     return this.Get('/applicant/all');
   }
 
-  findApplicant(email) {
+  getCandidate(id) {
     const params = {};
-    params.email = email;
+    params.id = id;
     return this.Get('/applicant/find', params);
   }
 
-  addApplicant(endpoint, name, email, phone, sex, imageUrl) {
-    const params = {};
-    params.name = name;
-    params.email = email;
-    params.phone = phone;
-    params.imageUrl = imageUrl;
-    return this.Post('/applicant/add', params);
+  addCandidate(endpoint, name, email, phone, sex, imageUrl) {
+    const data = new FormData();
+    data.append('name', name);
+    data.append('email', email);
+    data.append('phone', phone);
+    data.append('sex', sex);
+    data.append('imageUrl', imageUrl);
+    return this.Post('/applicant/add', data);
   }
 
-  deleteApplicant(email) {
-    const params = {};
-    params.email = email;
-    return this.Post('/applicant/delete', params);
+  deleteCandidate(id) {
+    const data = new FormData();
+    data.append('id', id);
+    return this.Post('/applicant/delete', data);
+  }
+
+  scheduleInterview(date, time, location, vacancyId, interviewers, candidateId) {
+    const data = new FormData();
+    data.append('date', date);
+    data.append('time', time);
+    data.append('location', location);
+    data.append('vacancyId', vacancyId);
+    data.append('interviewers', interviewers);
+    data.append('candidateId', candidateId);
+    return this.Post('/interview/schedule', data);
   }
 
 }

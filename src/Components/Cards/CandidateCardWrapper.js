@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import getApiClient from "../../api_client/getApiClient";
-import ApplicantCard from "./ApplicantCard";
+import CandidateCard from "./CandidateCard";
 import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
@@ -12,15 +12,16 @@ const reducer = (state, action) => {
   }
 }
 
-const ApplicantCardWrapper = () => {
+const CandidateCardWrapper = () => {
   const [state, dispatch] = useReducer(reducer, {
     pageLoaded: false
   });
-  const [applicants, setApplicants] = useState([]);
-  const getAllApplicants = useEffect(() => {
-    getApiClient().getAllApplicants()
+  const [candidates, setCandidates] = useState([]);
+  // eslint-disable-next-line
+  const getAllCandidates = useEffect(() => {
+    getApiClient().getAllCandidates()
       .then(response => {
-        setApplicants(response.data);
+        setCandidates(response.data);
         dispatch({ type: 'page-loaded' });
       }).catch(error => {console.log(error)});
   }, []);
@@ -30,7 +31,7 @@ const ApplicantCardWrapper = () => {
         ? <div style={{ display: 'flex', flexDirection: 'column'}}>
             <h1 align='center' style={{ padding: '2rem' }}>Applicants</h1>
             <div className='card_wrapper'>
-              {applicants.map(applicant => <ApplicantCard key={applicant.id} applicant={applicant} />)}
+              {candidates.map(applicant => <CandidateCard key={applicant.id} applicant={applicant} />)}
             </div>
           </div>
         : <Spinner /> }
@@ -38,4 +39,4 @@ const ApplicantCardWrapper = () => {
   );
 };
 
-export default ApplicantCardWrapper;
+export default CandidateCardWrapper;
