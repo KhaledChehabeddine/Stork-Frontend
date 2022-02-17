@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import getApiClient from "../../api_client/getApiClient";
 import CandidateCard from "./CandidateCard";
+import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
@@ -29,6 +30,7 @@ const CandidateCardWrapper = () => {
     <>
       {state.pageLoaded === true
         ? <div style={{ display: 'flex', flexDirection: 'column'}}>
+          <NavBar/>
             <h1 align='center' style={{ padding: '2rem' }}>Applicants</h1>
             <div className='card_wrapper'>
               {candidates.map(applicant => <CandidateCard key={applicant.id} applicant={applicant} />)}
