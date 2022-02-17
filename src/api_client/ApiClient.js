@@ -36,7 +36,8 @@ class ApiClient extends ApiClientBase {
   addEmployee(endpoint, id, name, email, jobTitle, phone, imageUrl) {
     const data = {};
     data.id = id;
-    data.name = name;
+    data.firstName = name.split(' ')[0];
+    data.lastName = name.split(' ')[1];
     data.email = email;
     data.jobTitle = jobTitle;
     data.phone = phone;
@@ -62,7 +63,8 @@ class ApiClient extends ApiClientBase {
 
   addCandidate(endpoint, name, email, phone, resume, imageUrl) {
     const data = {};
-    data.name = name;
+    data.firstName = name.split(' ')[0];
+    data.lastName = name.split(' ')[1];
     data.email = email;
     data.phone = phone;
     data.resume = resume;
