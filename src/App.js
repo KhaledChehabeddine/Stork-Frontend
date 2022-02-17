@@ -37,8 +37,8 @@ function App() {
         <Route exact path='/home' element={<Home/>}/>
         <Route exact path='/employee/add' element={ <EmployeeForm /> } />
         <Route exact path='/employee/all' element={ <EmployeeCardWrapper /> } />
-        <Route exact path='/applicant/add' element={ <CandidateForm /> } />
-        <Route exact path='/applicant/all' element={ <CandidateCardWrapper />} />
+        <Route exact path='/candidate/add' element={ <CandidateForm /> } />
+        <Route exact path='/candidate/all' element={ <CandidateCardWrapper />} />
         <Route exact path='/interview/schedule' element={ <ScheduleForm /> } />
         {employees.map(employee =>
           <Route
@@ -51,7 +51,7 @@ function App() {
           <Route
             exact
             key={candidate.id}
-            path={`/applicant/${candidate.id}`}
+            path={`/candidate/${candidate.id}`}
             element={<ViewCandidatePage candidate={candidate} />}
           />)}
       </Routes>

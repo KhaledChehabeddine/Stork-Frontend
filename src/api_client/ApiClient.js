@@ -44,13 +44,13 @@ class ApiClient extends ApiClientBase {
   }
 
   getAllCandidates() {
-    return this.Get('/applicant/all');
+    return this.Get('/candidate/all');
   }
 
   getCandidate(id) {
     const params = {};
     params.id = id;
-    return this.Get('/applicant/find', params);
+    return this.Get('/candidate/find', params);
   }
 
   addCandidate(endpoint, name, email, phone, sex, imageUrl) {
@@ -60,13 +60,13 @@ class ApiClient extends ApiClientBase {
     data.append('phone', phone);
     data.append('sex', sex);
     data.append('imageUrl', imageUrl);
-    return this.Post('/applicant/add', data);
+    return this.Post('/candidate/add', data);
   }
 
   deleteCandidate(id) {
     const data = new FormData();
     data.append('id', id);
-    return this.Post('/applicant/delete', data);
+    return this.Post('/candidate/delete', data);
   }
 
   scheduleInterview(date, time, location, vacancyId, interviewers, candidateId) {

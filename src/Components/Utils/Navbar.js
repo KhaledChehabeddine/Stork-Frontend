@@ -17,7 +17,7 @@ const NavBar = () => {
             <Nav.Link as={Link} to="#">Recruit</Nav.Link>
           </Nav>
           <Nav className="navbar-link link2">
-            <Nav.Link as={Link} to="/applicant/all">Applicants</Nav.Link>
+            <Nav.Link as={Link} to="/candidate/all">Applicants</Nav.Link>
           </Nav>
           <Nav className="navbar-link link3">
             <Nav.Link as={Link} to="/employee/all">Employees</Nav.Link>

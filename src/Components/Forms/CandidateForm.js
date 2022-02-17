@@ -33,13 +33,13 @@ const CandidateForm = (props) => {
     setResume(event.target.files[0]);
   }, []);
 
-  const addApplicantHandler = useCallback(() => {
+  const addCandidateHandler = useCallback(() => {
     console.log(resume);
     dispatch({ type: 'adding-candidate' });
     getApiClient().addCandidate('/add', name, email, phone, resume, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'candidate-added' });
-        navigate(`/applicant/${response.data.id}`);
+        navigate(`/candidate/${response.data.id}`);
       }).catch(error => {
         console.log(error);
     });
@@ -58,7 +58,7 @@ const CandidateForm = (props) => {
             <Input onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
             <h3 align='left' style={{ textIndent: 35 }}>Add Resume:</h3>
             <input type='file' onChange={onFileChange} align='left' />
-            <Button onClick={addApplicantHandler}>Add Applicant</Button>
+            <Button onClick={addCandidateHandler}>Add Applicant</Button>
           </Form>
         </div>}
     </>

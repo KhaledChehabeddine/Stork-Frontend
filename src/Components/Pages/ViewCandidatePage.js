@@ -22,7 +22,7 @@ const ViewCandidatePage = ({ candidate }) => {
     dispatch({ type: 'deleting-candidate' });
     getApiClient().deleteCandidate(candidate.id)
       .then(response => {
-        navigate('/applicant/all');
+        navigate('/candidate/all');
       }).catch(error => console.log(error));
   }, [navigate, candidate]);
   return (

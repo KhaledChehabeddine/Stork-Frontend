@@ -33,7 +33,7 @@ const CandidateCardWrapper = () => {
           <NavBar/>
             <h1 align='center' style={{ padding: '2rem' }}>Applicants</h1>
             <div className='card_wrapper'>
-              {candidates.map(applicant => <CandidateCard key={applicant.id} applicant={applicant} />)}
+              {candidates.map(candidate => <CandidateCard key={candidate.id} candidate={candidate} />)}
             </div>
           </div>
         : <Spinner /> }
