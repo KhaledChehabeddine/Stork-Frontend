@@ -16,6 +16,13 @@ class ApiClient extends ApiClientBase {
     return this.Get(endpoint, params);
   }
    */
+  login(username, password) {
+    const data = new FormData();
+    data.append('username', username);
+    data.append('password', password);
+    return this.Post('/login', data);
+  }
+
   getAllEmployees() {
     return this.Get('/employee/all');
   }
