@@ -25,16 +25,11 @@ const NavBar = () => {
           <Nav className="navbar-link link4">
             <Nav.Link as={Link} to="#">Help</Nav.Link>
           </Nav>
-          <Nav className="ms-auto">
+          <Nav style={{marginLeft:"auto"}} className="navbar-profile">
             <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>
           </Nav>
-          <Nav className="nav-hamburger dropdown">
-            <div className = "nav-link dropdown-toggle" id = "navbarDropdownMenuLink-4" data-toggle = "dropdown" aria-haspopup="true" aria-expanded="false">
+          <Nav className="nav-hamburger">
               <Hamburger/>
-            </div>
-            <div className = "dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-              <Nav.Link className="dropdown-item" href="#">Sign Out</Nav.Link>
-            </div>
           </Nav>
         </Navbar.Collapse>
       </Container>

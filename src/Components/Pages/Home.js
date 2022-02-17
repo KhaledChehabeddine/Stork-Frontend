@@ -13,6 +13,7 @@ const Home = (props) => {
       <Button onClick={() => { navigate('/employee/all') }}>View Employees</Button>
       <Button onClick={() => { navigate('/applicant/add') }}>Add Applicants</Button>
       <Button onClick={() => { navigate('/applicant/all') }}>View Applicants</Button>
+      <Button onClick={() => { navigate('/interview/schedule') }}>Schedule an interview</Button>
     </div>
   );
 };

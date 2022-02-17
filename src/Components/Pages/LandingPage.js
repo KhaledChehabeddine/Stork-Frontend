@@ -1,10 +1,12 @@
 import React from 'react';
-import NavBar from "../Utils/Navbar";
+import LandingPageNavBar from "../Utils/LandingPageNavbar";
+import Jumbotron from "../Utils/Jumbotron";
 
 const LandingPage = (props) => {
   return (
-    <div>
-      <NavBar/>
+    <div className="landing-page">
+      <LandingPageNavBar/>
+      <Jumbotron/>
     </div>
     );
 }
