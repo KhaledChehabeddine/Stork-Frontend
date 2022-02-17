@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
+
+.landing-jumbotron {
+    padding-left: 130px;
+    color: white;
+}
+
+.landing-header {
+    font-family: ;
+    width: 300px;
+    font-size: 80px;
+}
+
+.landing-filler{
+    width: 300px;
+    font-size: 18px;
+}

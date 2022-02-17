@@ -3,6 +3,7 @@ import getApiClient from '../../api_client/getApiClient';
 import Button from '../Utils/Button';
 import Form from '../Utils/Form';
 import Input from '../Utils/Input';
+import NavBar from "../Utils/Navbar";
 
 const ApplicantForm = (props) => {
   const [name, setName] = useState('');
@@ -27,6 +28,7 @@ const ApplicantForm = (props) => {
 
   return (
     <div align='center'>
+      <NavBar/>
       <Form onSubmit={event => { event.preventDefault() }}>
         <h1 style={{padding: '1rem'}}>Applicant Form</h1>
         <Input onChange={event => { setName(event.target.value) }} placeholder='Name'/>

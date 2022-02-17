@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap');
+.landing-page {
+    background: linear-gradient(-45deg, #5b0607, #962424, #5a25c2, #06054b);
+    background-size: 400% 400%;
+    animation: gradient 7s ease infinite;
+    height: 1000px;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.landing-navbar {
+    border-bottom: 0!important;
+    height: 150px;
+}
+
+.landing-navbar-brand a {
+    text-align: center;
+    margin-left:60px!important;
+    color: white!important;
+    font-weight: 600;
+    font-size: 30px !important;
+    text-transform: uppercase;
+}
+
+.landing-navbar a {
+    color: white!important;
+}
+.landing-navbar-firstlink {
+    color: white!important;
+    margin-left:60px!important;
+    margin-right:20px!important;
+    font-weight: 350;
+    text-transform: uppercase;
+}
+.landing-navbar-link {
+    color: white!important;
+    margin-left: 20px!important;
+    margin-right: 20px!important;
+    font-weight: 350;
+    text-transform: uppercase;
+}
+
+.landing-navbar-login {
+    color: white!important;
+    padding-left: 20px!important;
+    padding-right: 40px!important;
+    font-weight: 350;
+    text-transform: uppercase;
+}
+.landing-navbar-register a {
+    width: 100px;
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #0014CC;
+    color: white!important;
+    border-radius: 50px;
+    box-sizing: border-box;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}

@@ -1,6 +1,7 @@
 import React, {useEffect, useReducer, useState} from "react";
 import EmployeeCard from "./EmployeeCard";
 import getApiClient from "../../api_client/getApiClient";
+import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
@@ -28,6 +29,7 @@ const EmployeeCardWrapper = () => {
     <>
       {state.pageLoaded === true
         ? <div style={{ display: 'flex', flexDirection: 'column'}}>
+          <NavBar/>
             <h1 align='center' style={{ padding: '2rem' }}>Employees</h1>
             <div className='card_wrapper'>
               {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} />)}
