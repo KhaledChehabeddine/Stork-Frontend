@@ -2,6 +2,7 @@ import React, {useEffect, useReducer, useState} from "react";
 import EmployeeCard from "./EmployeeCard";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
+import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -34,7 +35,7 @@ const EmployeeCardWrapper = () => {
               {employees.map(employee => <EmployeeCard key={employee.id} employee={employee} />)}
             </div>
           </div>
-        : <h1 align='center'>Loading...</h1>}
+        : <Spinner />}
     </>
   )
 }

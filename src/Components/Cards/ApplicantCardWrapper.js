@@ -2,6 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 import getApiClient from "../../api_client/getApiClient";
 import ApplicantCard from "./ApplicantCard";
 import NavBar from "../Utils/Navbar";
+import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -34,12 +35,9 @@ const ApplicantCardWrapper = () => {
               {applicants.map(applicant => <ApplicantCard key={applicant.id} applicant={applicant} />)}
             </div>
           </div>
-        : <h1 align='center'>Loading...</h1>}
+        : <Spinner /> }
     </>
-
-  )
-}
-
-
+  );
+};
 
 export default ApplicantCardWrapper;
