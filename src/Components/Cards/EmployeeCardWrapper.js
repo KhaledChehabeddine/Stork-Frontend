@@ -18,6 +18,7 @@ const EmployeeCardWrapper = () => {
     pageLoaded: false
   });
   const [employees, setEmployees] = useState([]);
+  // eslint-disable-next-line
   const getAllEmployees = useEffect(() => {
     getApiClient().getAllEmployees()
       .then(response => {
