@@ -11,6 +11,8 @@ import {useEffect, useState} from "react";
 import getApiClient from "./api_client/getApiClient";
 import ViewEmployeePage from "./Components/Pages/ViewEmployeePage";
 import ViewCandidatePage from "./Components/Pages/ViewCandidatePage";
+import ProtectedRoutes from "./ProtectedRoutes";
+import RegistrationForm from "./Components/Forms/RegistrationForm";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -34,12 +36,15 @@ function App() {
     <Router>
       <Routes>
         <Route exact path='/' element={<LandingPage/>}/>
-        <Route exact path='/home' element={<Home/>}/>
-        <Route exact path='/employee/add' element={ <EmployeeForm /> } />
-        <Route exact path='/employee/all' element={ <EmployeeCardWrapper /> } />
-        <Route exact path='/candidate/add' element={ <CandidateForm /> } />
-        <Route exact path='/candidate/all' element={ <CandidateCardWrapper />} />
-        <Route exact path='/interview/schedule' element={ <ScheduleForm /> } />
+        <Route exact path='/login' element={<RegistrationForm/>}/>
+        <Route element={<ProtectedRoutes />}>
+          <Route exact path='/home' element={<Home/>}/>
+          <Route exact path='/employee/add' element={ <EmployeeForm /> } />
+          <Route exact path='/employee/all' element={ <EmployeeCardWrapper /> } />
+          <Route exact path='/applicant/add' element={ <CandidateForm /> } />
+          <Route exact path='/applicant/all' element={ <CandidateCardWrapper />} />
+          <Route exact path='/interview/schedule' element={ <ScheduleForm /> } />
+        </Route>
         {employees.map(employee =>
           <Route
             exact
