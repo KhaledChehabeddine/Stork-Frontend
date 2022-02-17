@@ -11,7 +11,7 @@ import {useEffect, useState} from "react";
 import getApiClient from "./api_client/getApiClient";
 import ViewEmployeePage from "./Components/Pages/ViewEmployeePage";
 import ViewCandidatePage from "./Components/Pages/ViewCandidatePage";
-import RegistrationForm from "./Components/Forms/RegistrationForm";
+import LoginForm from "./Components/Forms/LoginForm";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -35,7 +35,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path='/' element={<LandingPage/>}/>
-        <Route exact path='/login' element={<RegistrationForm/>}/>
+        <Route exact path='/login' element={<LoginForm/>}/>
         <Route exact path='/home' element={<Home/>}/>
         <Route exact path='/employee/add' element={ <EmployeeForm /> } />
         <Route exact path='/employee/all' element={ <EmployeeCardWrapper /> } />

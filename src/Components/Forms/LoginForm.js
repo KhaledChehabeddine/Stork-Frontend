@@ -5,7 +5,7 @@ import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 
-const RegistrationForm = () => {
+const LoginForm = () => {
     const navigate = useNavigate();
     const [passwordShown, setPasswordShown] = useState(false);
     const [username, setUsername] = useState('');
@@ -36,4 +36,4 @@ const RegistrationForm = () => {
     );
 }
 
-export default RegistrationForm;
+export default LoginForm;
