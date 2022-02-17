@@ -53,12 +53,12 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(endpoint, name, email, phone, sex, imageUrl) {
+  addCandidate(endpoint, name, email, phone, resume, imageUrl) {
     const data = new FormData();
     data.append('name', name);
     data.append('email', email);
     data.append('phone', phone);
-    data.append('sex', sex);
+    data.append('resume', resume);
     data.append('imageUrl', imageUrl);
     return this.Post('/candidate/add', data);
   }
