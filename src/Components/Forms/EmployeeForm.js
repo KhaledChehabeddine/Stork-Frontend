@@ -35,11 +35,11 @@ const EmployeeForm = (props) => {
     getApiClient().addEmployee('/add', id, name, email, jobTitle, phone, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'employee-added' });
-        navigate(`/employee/${id}`);
+        navigate(`/employee/all`);
       }).catch(error => {
         console.log(error);
       })
-  }, [id, name, email, jobTitle, phone]);
+  }, [id, name, email, jobTitle, phone, navigate]);
 
   return (
     <>

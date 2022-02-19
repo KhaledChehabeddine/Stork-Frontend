@@ -3,33 +3,31 @@ import Button from '../Utils/Button';
 import Form from '../Utils/Form';
 import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
-import getApiClient from "../../api_client/getApiClient";
+import NavBar from "../Utils/Navbar";
 
 const LoginForm = () => {
     const navigate = useNavigate();
-    const [passwordShown, setPasswordShown] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const togglePassword = useCallback(() => {
-        setPasswordShown(!passwordShown);
-    }, [passwordShown]);
-
     const authLogin = useCallback(() => {
-        getApiClient().login(username, password)
-          .then(response => {
-              if (response.data.success) navigate('/home');
-          }).catch(error => console.log(error));
-    }, [username, password]);
+        if (username === 'admin' && password === 'password') {
+            window.localStorage.setItem('username', 'admin');
+            window.localStorage.setItem('password', 'password');
+            navigate('/home');
+            window.location.reload();
+        } else alert('Username and Password do not match');
+    }, [navigate, username, password]);
 
     return (
         <div align='center'>
+            <NavBar />
             <Form onSubmit={event => { event.preventDefault(); }}>
                 <h1 style={{ padding: '1rem' }}>Log-In</h1>
                 <Input onChange={event => { setUsername(event.target.value); }} placeholder='Username' />
-                <Input type={passwordShown ? "text" : "password"}
-                       onChange={event => { setPassword(event.target.value); }} placeholder='Password' />
-                <Button onClick={togglePassword}>Show Password</Button>
+                <Input type='password'
+                       onChange={event => { setPassword(event.target.value); }}
+                       placeholder='Password' />
                 <Button onClick={authLogin}>Log-In</Button>
             </Form>
         </div>

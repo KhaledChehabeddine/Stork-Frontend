@@ -4,6 +4,7 @@ import Form from '../Utils/Form';
 import Input from '../Utils/Input';
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
+import NavBar from "../Utils/Navbar";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -39,6 +40,7 @@ const ScheduleForm = (props) => {
       {state.schedulingInterview ? <Spinner />
         :
         <div align='center'>
+          <NavBar />
           <Form onSubmit={event => { event.preventDefault(); }}>
             <h1 style={{ padding: '1rem' }}>Scheduling an Interview</h1>
             <Input type='date' onChange={event => { setDate(event.target.value); }} placeholder='Date' />
