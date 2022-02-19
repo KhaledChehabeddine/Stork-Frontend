@@ -35,11 +35,13 @@ const CandidateForm = (props) => {
 
   const addCandidateHandler = useCallback(() => {
     console.log(resume);
+    const reader = new FileReader();
+    console.log('result: ' + reader.result);
     dispatch({ type: 'adding-candidate' });
-    getApiClient().addCandidate('/add', name, email, phone, resume, 'https://bootdey.com/img/Content/avatar/avatar3.png')
+    getApiClient().addCandidate('/add', name, email, phone, null, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'candidate-added' });
-        navigate(`/candidate/${response.data.id}`);
+        navigate(`/candidate/all`);
       }).catch(error => {
         console.log(error);
     });
@@ -52,13 +54,13 @@ const CandidateForm = (props) => {
         :
         <div align='center'>
           <Form onSubmit={event => { event.preventDefault() }}>
-            <h1 style={{padding: '1rem'}}>Applicant Form</h1>
+            <h1 style={{padding: '1rem'}}>Candidate Form</h1>
             <Input onChange={event => { setName(event.target.value) }} placeholder='Name'/>
             <Input onChange={event => { setEmail(event.target.value) }} placeholder='Email'/>
             <Input onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
             <h3 align='left' style={{ textIndent: 35 }}>Add Resume:</h3>
             <input type='file' onChange={onFileChange} align='left' />
-            <Button onClick={addCandidateHandler}>Add Applicant</Button>
+            <Button onClick={addCandidateHandler}>Apply</Button>
           </Form>
         </div>}
     </>
