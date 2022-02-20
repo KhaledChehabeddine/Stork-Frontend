@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
+.login-page {
+    background: linear-gradient(-45deg, #5b0607, #962424, #5a25c2, #06054b);
+    background-size: 400% 400%;
+    animation: gradient 7s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.login-logo {
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    float: left;
+}
+.login-box, .login-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form {
+    background-color: transparent!important;
+}
+
+.login-header {
+    padding-bottom: 15%;
+    color: white;
+    font-weight: bolder;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+}
+
+.login-reset {
+    text-decoration: none;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bolder;
+    color: white;
+}
+.login-reset:hover {
+    color: lightgrey;
+}
+
+.login-input {
+    margin: 0!important;
+    margin-bottom: 5%!important;
+    background-color: lightgrey;
+    opacity: 0.3;
+    width: 100% !important;
+    height: 40px!important;
+    border: 0!important;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 15px;
+    font-weight: bolder!important;
+    box-sizing: border-box!important;
+    border-radius: 5px!important;
+}
+
+.login-button {
+    color: white!important;
+    font-weight: bolder!important;
+    border: 1px solid white!important;
+    border-radius: 7px!important;
+    padding: 0!important;
+    height: 60px;
+    width: 100%;
+}
+
+.login-button:hover {
+    background: #0014CC!important;
+    border: 0!important;
+}

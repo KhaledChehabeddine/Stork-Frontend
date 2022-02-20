@@ -13,7 +13,9 @@ const Home = (props) => {
   return (
     <div align='center' id='home'>
       <NavBar/>
-      <h1>Welcome {window.localStorage.getItem('username')}!</h1>
+      <div className="form-header">
+        <h1>Welcome {window.localStorage.getItem('username')}!</h1>
+      </div>
       <Button onClick={() => { navigate('/employee/add') }}>Add Employees</Button>
       <Button onClick={() => { navigate('/employee/all') }}>View Employees</Button>
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>

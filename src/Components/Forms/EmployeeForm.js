@@ -6,6 +6,8 @@ import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
 import Spinner from '../Utils/Spinner';
 import NavBar from "../Utils/Navbar";
+import "../../Styles/FormStyle.css"
+import {Breadcrumb} from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -36,29 +38,37 @@ const EmployeeForm = (props) => {
     getApiClient().addEmployee('/add', id, firstName, lastName, email, jobTitle, phone, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'employee-added' });
-        navigate(`/employee/all`);
+        navigate(`/employee/${id}`);
       }).catch(error => {
         console.log(error);
       })
-  }, [id, firstName, lastName, email, jobTitle, phone, navigate]);
+  }, [id, firstName, lastName, email, jobTitle, phone]);
 
   return (
     <>
       <NavBar/>
+      <Breadcrumb className="form-breadcrumb">
+        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/employees">Employees</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Employee</Breadcrumb.Item>
+      </Breadcrumb>
+      <h1 className="form-header" style={{ padding: '1rem' }}>Employee Form</h1>
       {state.addingEmployee ? <Spinner />
         :
-          <div className = "employee-form" align='center'>
-            <Form onSubmit={event => { event.preventDefault(); }}>
-              <h1 style={{ padding: '1rem' }}>Employee Adder</h1>
-              <Input className="employee-form-ID" onChange={event => { setId(event.target.value); }} placeholder='ID' />
-              <Input className="employee-form-firstName" onChange={event => { setFirstName(event.target.value); }} placeholder='First Name' />
-              <Input className="employee-form-lastName" onChange={event => { setLastName(event.target.value); }} placeholder='Last Name' />
-              <Input className="employee-form-email" onChange={event => { setEmail(event.target.value); }} placeholder='Email' />
-              <Input className="employee-form-jobTitle" onChange={event => { setJobTitle(event.target.value); }} placeholder='Job Title' />
-              <Input className="employee-form-phone" onChange={event => { setPhone(event.target.value); }} placeholder='Phone Number' />
-              <Button className="employee-form-saveChanges" onClick={addEmployeeHandler}>Add Employee</Button>
-            </Form>
-          </div>}
+        <div className="form-container">
+          <Form className = "form flex-form" onSubmit={event => { event.preventDefault(); }}>
+            <Input className="form-input left" onChange={event => { setFirstName(event.target.value); }} placeholder='First Name' />
+            <Input className="form-input right" onChange={event => { setJobTitle(event.target.value); }} placeholder='Job Title' />
+            <Input className="form-input left" onChange={event => { setLastName(event.target.value); }} placeholder='Last Name' />
+            <Input className="form-input right" onChange={event => { setId(event.target.value); }} placeholder='ID Number' />
+            <Input className="form-input left" onChange={event => { setPhone(event.target.value); }} placeholder='Phone Number' />
+            <Input className="form-input right" onChange={event => { setEmail(event.target.value); }} placeholder='Email' />
+            <div style={{width:"100%", marginRight:'29px'}}>
+            <Button className="form-button right" onClick={addEmployeeHandler}>Add Employee</Button>
+            <Button className="form-button right" onClick={() => { navigate('/home') }}>Cancel</Button>
+            </div>
+          </Form>
+        </div>}
     </>
   )
 }

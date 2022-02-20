@@ -3,6 +3,7 @@ import getApiClient from "../../api_client/getApiClient";
 import CandidateCard from "./CandidateCard";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
+import {Breadcrumb} from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -31,7 +32,12 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ? <div style={{ display: 'flex', flexDirection: 'column'}}>
           <NavBar/>
-            <h1 align='center' style={{ padding: '2rem' }}>Applicants</h1>
+          <Breadcrumb className="form-breadcrumb">
+            <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+            <Breadcrumb.Item href="/candidates">Candidates</Breadcrumb.Item>
+            <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
+          </Breadcrumb>
+            <h1 className="form-header" style={{ padding: '1rem' }}>All Candidates</h1>
             <div className='card_wrapper'>
               {candidates.map(candidate => <CandidateCard key={candidate.id} candidate={candidate} />)}
             </div>
