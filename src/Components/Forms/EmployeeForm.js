@@ -38,7 +38,7 @@ const EmployeeForm = (props) => {
     getApiClient().addEmployee('/add', id, firstName, lastName, email, jobTitle, phone, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'employee-added' });
-        navigate(`/employee/${id}`);
+        navigate(`/employee/all`);
       }).catch(error => {
         console.log(error);
       })
@@ -60,7 +60,7 @@ const EmployeeForm = (props) => {
             <Input className="form-input left" onChange={event => { setFirstName(event.target.value); }} placeholder='First Name' />
             <Input className="form-input right" onChange={event => { setJobTitle(event.target.value); }} placeholder='Job Title' />
             <Input className="form-input left" onChange={event => { setLastName(event.target.value); }} placeholder='Last Name' />
-            <Input className="form-input right" onChange={event => { setId(event.target.value); }} placeholder='ID Number' />
+            <Input className="form-input right" onChange={event => { setId(event.target.value); }} placeholder='ID' />
             <Input className="form-input left" onChange={event => { setPhone(event.target.value); }} placeholder='Phone Number' />
             <Input className="form-input right" onChange={event => { setEmail(event.target.value); }} placeholder='Email' />
             <div style={{width:"100%", marginRight:'29px'}}>
