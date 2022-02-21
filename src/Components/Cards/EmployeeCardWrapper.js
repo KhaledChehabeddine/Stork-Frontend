@@ -3,7 +3,7 @@ import EmployeeCard from "./EmployeeCard";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-import {Breadcrumb, Navbar} from "react-bootstrap";
+import {Breadcrumb} from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch(action.type) {

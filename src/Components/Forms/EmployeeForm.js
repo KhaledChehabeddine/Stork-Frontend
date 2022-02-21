@@ -42,7 +42,7 @@ const EmployeeForm = (props) => {
       }).catch(error => {
         console.log(error);
       })
-  }, [id, firstName, lastName, email, jobTitle, phone]);
+  }, [id, firstName, lastName, email, jobTitle, phone, navigate]);
 
   return (
     <>

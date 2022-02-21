@@ -5,7 +5,9 @@ import Input from '../Utils/Input';
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
 import NavBar from "../Utils/Navbar";
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb} from "react-bootstrap"
+import '../../Styles/FormStyle.css';
+import {useNavigate} from "react-router-dom";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -17,6 +19,7 @@ const reducer = (state, action) => {
 }
 
 const ScheduleForm = (props) => {
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, {
     schedulingInterview: false
   });
@@ -38,29 +41,31 @@ const ScheduleForm = (props) => {
 
   return (
     <>
+      <NavBar />
+      <Breadcrumb className="form-breadcrumb">
+        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/candidates">Candidates</Breadcrumb.Item>
+        <Breadcrumb.Item active>Schedule Interview</Breadcrumb.Item>
+      </Breadcrumb>
       {state.schedulingInterview ? <Spinner />
         :
-        <div>
-          <NavBar />
-          <Breadcrumb className="form-breadcrumb">
-            <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="/candidates">Candidates</Breadcrumb.Item>
-            <Breadcrumb.Item active>Schedule Interview</Breadcrumb.Item>
-          </Breadcrumb>
+        <>
           <h1 className="form-header" style={{ padding: '1rem' }}>Schedule an Interview</h1>
-          <div align='center'>
-            <Form onSubmit={event => { event.preventDefault(); }}>
-              <h1 style={{ padding: '1rem' }}>Scheduling an Interview</h1>
-              <Input type='date' onChange={event => { setDate(event.target.value); }} placeholder='Date' />
-              <Input type='time' onChange={event => { setTime(event.target.value); }} placeholder='Time' />
-              <Input onChange={event => { setLocation(event.target.value); }} placeholder='Location' />
-              <Input onChange={event => { setVacancyId(event.target.value); }} placeholder='Vacancy ID' />
-              <Input onChange={event => { setInterviewers(event.target.value); }} placeholder='Interviewers' />
-              <Input onChange={event => { setCandidateId(event.target.value); }} placeholder='Candidate ID' />
-              <Button disabled onClick={onSubmitHandler}>Schedule</Button>
+          <div className="form-container">
+            <Form className = "form flex-form" onSubmit={event => { event.preventDefault(); }}>
+              <Input className="form-input left" type='date' onChange={event => { setDate(event.target.value); }} placeholder='Date' />
+              <Input className="form-input right" type='time' onChange={event => { setTime(event.target.value); }} placeholder='Time' />
+              <Input className="form-input left" onChange={event => { setVacancyId(event.target.value); }} placeholder='Vacancy Id' />
+              <Input className="form-input right" onChange={event => { setCandidateId(event.target.value); }} placeholder='Candidate Id' />
+              <Input className="form-input left" onChange={event => { setInterviewers(event.target.value); }} placeholder='Interviewers' />
+              <Input className="form-input right" onChange={event => { setLocation(event.target.value); }} placeholder='Location' />
+              <div style={{width:"100%", marginRight:'29px'}}>
+                <Button className="form-button right" onClick={onSubmitHandler}>Schedule</Button>
+                <Button className="form-button right" onClick={() => { navigate('/home') }}>Cancel</Button>
+              </div>
             </Form>
           </div>
-        </div>}
+        </>}
     </>
   );
 };

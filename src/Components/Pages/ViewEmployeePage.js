@@ -3,7 +3,7 @@ import Button from '../Utils/Button';
 import getApiClient from "../../api_client/getApiClient";
 import {useNavigate} from "react-router-dom";
 import Spinner from "../Utils/Spinner";
-import {Navbar} from "react-bootstrap";
+import Navbar from '../Utils/Navbar';
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -28,16 +28,19 @@ const ViewEmployeePage = ({ employee }) => {
   }, [navigate, employee]);
   return (
     <>
-    {state.deletingEmployee ? <Spinner />
-        :
-        <div align='center'>
-          <h1>{employee.id}</h1>
-          <h1>{employee.firstName + ' ' + employee.lastName}</h1>
-          <h1>{employee.email}</h1>
-          <h1>{employee.jobTitle}</h1>
-          <h1>{employee.phone}</h1>
-          <Button onClick={deleteEmployeeHandler}>Delete Employee</Button>
-        </div>}
+      <Navbar />
+      <div className='form-container'>
+        {state.deletingEmployee ? <Spinner />
+          :
+          <div className='form'>
+            <h1>{employee.id}</h1>
+            <h1>{employee.firstName + ' ' + employee.lastName}</h1>
+            <h1>{employee.email}</h1>
+            <h1>{employee.jobTitle}</h1>
+            <h1>{employee.phone}</h1>
+            <Button onClick={deleteEmployeeHandler}>Delete Employee</Button>
+          </div>}
+      </div>
     </>
   );
 };

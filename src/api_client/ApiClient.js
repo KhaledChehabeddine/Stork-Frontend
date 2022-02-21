@@ -33,11 +33,11 @@ class ApiClient extends ApiClientBase {
     return this.Get('/employee/find', data);
   }
 
-  addEmployee(endpoint, id, name, email, jobTitle, phone, imageUrl) {
+  addEmployee(endpoint, id, firstName, lastName, email, jobTitle, phone, imageUrl) {
     const data = {};
     data.id = id;
-    data.firstName = name.split(' ')[0];
-    data.lastName = name.split(' ')[1];
+    data.firstName = firstName;
+    data.lastName = lastName;
     data.email = email;
     data.jobTitle = jobTitle;
     data.phone = phone;
@@ -61,10 +61,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(endpoint, name, email, phone, resume, imageUrl) {
+  addCandidate(endpoint, firstName, lastName, email, phone, resume, imageUrl) {
     const data = {};
-    data.firstName = name.split(' ')[0];
-    data.lastName = name.split(' ')[1];
+    data.firstName = firstName;
+    data.lastName = lastName;
     data.email = email;
     data.phone = phone;
     data.resume = resume;
