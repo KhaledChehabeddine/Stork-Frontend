@@ -3,35 +3,46 @@ import Button from '../Utils/Button';
 import Form from '../Utils/Form';
 import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
-import NavBar from "../Utils/Navbar";
+import "../../Styles/LoginPageStyle.css"
 
 const LoginForm = () => {
-    const navigate = useNavigate();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-    const authLogin = useCallback(() => {
-        if (username === 'admin' && password === 'password') {
-            window.localStorage.setItem('username', 'admin');
-            window.localStorage.setItem('password', 'password');
-            navigate('/home');
-            window.location.reload();
-        } else alert('Username and Password do not match');
-    }, [navigate, username, password]);
+  const authLogin = useCallback(() => {
+    if (username === 'admin' && password === 'password') {
+      window.localStorage.setItem('username', 'admin');
+      window.localStorage.setItem('password', 'password');
+      navigate('/home');
+      window.location.reload();
+    } else alert('Username and Password do not match');
+  }, [navigate, username, password]);
 
-    return (
-        <div align='center'>
-            <NavBar />
-            <Form onSubmit={event => { event.preventDefault(); }}>
-                <h1 style={{ padding: '1rem' }}>Log-In</h1>
-                <Input onChange={event => { setUsername(event.target.value); }} placeholder='Username' />
-                <Input type='password'
-                       onChange={event => { setPassword(event.target.value); }}
-                       placeholder='Password' />
-                <Button onClick={authLogin}>Log-In</Button>
-            </Form>
+  return (
+    <>
+      <div className="login-page full-height full-width">
+        <div className="login-brand full-height" style={{width:'50%', float:'left'}}>
+          <div className="login-brand full-width" style={{height:'60%', float:'left', borderRight:'0.5px solid white' }}>
+            <a style={{fontSize:'80px', color:'white'}} href="/" className="login-logo">STOЯK</a>
+          </div>
         </div>
-    );
+        <div className="login-box full-height" style={{ width:'50%', float:'right' }}>
+          <Form style={{width:'50%'}} className = "login-form" onSubmit={event => { event.preventDefault(); }}>
+            <div >
+              <h1 style={{textAlign:'center'}} className = "login-header">Log In</h1>
+              <Input className = "login-input" onChange={event => { setUsername(event.target.value); }} placeholder='Username' />
+              <Input className = "login-input" type='password' onChange={event => { setPassword(event.target.value); }} placeholder='Password' />
+              <a style={{float:'right'}} className = "login-reset" href="/resetpassword">Forgot Password?</a>
+              <Button style={{width:'100%', margin:'15px 0 15px 0'}} className = "login-button" onClick={authLogin}>Sign In</Button>
+            </div>
+          </Form>
+        </div>
+      </div>
+    </>
+  );
 }
+
+
 
 export default LoginForm;

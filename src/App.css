@@ -8,9 +8,22 @@
   padding: 0;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   font-family: 'Titillium Web', sans-serif;
   margin: 2rem;
+}
+
+.full-height{
+  height: 100%;
+}
+
+.full-width{
+  width: 100%;
 }
 
 

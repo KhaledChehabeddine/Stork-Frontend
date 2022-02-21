@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Input = styled.input`
-  font-family: inherit;
+  font-family: 'Josefin Sans', sans-serif;
   margin: 1rem;
   height: 30px;
   width: 300px;
