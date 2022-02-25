@@ -32,17 +32,18 @@ const EmployeeForm = (props) => {
   const [email, setEmail] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   
   const addEmployeeHandler = useCallback(() => {
     dispatch({ type: 'adding-employee' });
-    getApiClient().addEmployee('/add', id, firstName, lastName, email, jobTitle, phone, 'https://bootdey.com/img/Content/avatar/avatar3.png')
+    getApiClient().addEmployee('/add', id, firstName, lastName, email, jobTitle, phone, address, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'employee-added' });
         navigate(`/employee/all`);
       }).catch(error => {
         console.log(error);
       })
-  }, [id, firstName, lastName, email, jobTitle, phone, navigate]);
+  }, [id, firstName, lastName, email, jobTitle, phone, address,  navigate]);
 
   return (
     <>
@@ -62,6 +63,7 @@ const EmployeeForm = (props) => {
             <Input className="form-input left" onChange={event => { setLastName(event.target.value); }} placeholder='Last Name' />
             <Input className="form-input right" onChange={event => { setId(event.target.value); }} placeholder='ID' />
             <Input className="form-input left" onChange={event => { setPhone(event.target.value); }} placeholder='Phone Number' />
+            <Input className="form-input left" onChange={event => { setAddress(event.target.value); }} placeholder='Address' />
             <Input className="form-input right" onChange={event => { setEmail(event.target.value); }} placeholder='Email' />
             <div style={{width:"100%", marginRight:'29px'}}>
             <Button className="form-button right" onClick={addEmployeeHandler}>Add Employee</Button>
