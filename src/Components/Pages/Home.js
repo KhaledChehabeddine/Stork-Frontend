@@ -21,6 +21,8 @@ const Home = (props) => {
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>
       <Button onClick={() => { navigate('/candidate/all') }}>View Candidates</Button>
       <Button onClick={() => { navigate('/interview/schedule') }}>Schedule an interview</Button>
+      <Button onClick={() => { navigate('/vacancy/post') }}>Post Vacancy</Button>
+      <Button onClick={() => { navigate('/vacancy/all') }}>View Vacancies</Button>
       <Button onClick={signOutHandler}>Sign out</Button>
     </div>
   );

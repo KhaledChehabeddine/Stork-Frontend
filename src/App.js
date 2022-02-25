@@ -14,6 +14,9 @@ import ViewCandidatePage from "./Components/Pages/ViewCandidatePage";
 import LoginForm from "./Components/Forms/LoginForm";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
+import VacancyForm from './Components/Forms/VacancyForm';
+import VacanciesPage from "./Components/Pages/VacanciesPage";
+import EmployeesPage from "./Components/Pages/EmployeesPage";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -46,10 +49,12 @@ function App() {
           <>
             <Route exact path='/home' element={<Home/>}/>
             <Route exact path='/employee/add' element={<EmployeeForm />} />
-            <Route exact path='/employee/all' element={<EmployeeCardWrapper />} />
+            <Route exact path='/employee/all' element={<EmployeesPage />} />
             <Route exact path='/candidate/add' element={<CandidateForm />} />
             <Route exact path='/candidate/all' element={<CandidateCardWrapper />} />
             <Route exact path='/interview/schedule' element={<ScheduleForm />} />
+            <Route exact path='/vacancy/post' element={<VacancyForm />} />
+            <Route exact path='/vacancy/all' element={<VacanciesPage />} />
             {employees.map(employee =>
               <Route
               exact
