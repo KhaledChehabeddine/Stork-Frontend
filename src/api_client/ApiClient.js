@@ -89,6 +89,19 @@ class ApiClient extends ApiClientBase {
     return this.Post('/interview/schedule', data);
   }
 
+  addVacancy(jobTitle, country, city, jobDescription) {
+    const data = {};
+    data.jobTitle = jobTitle;
+    data.country = country;
+    data.city = city;
+    data.jobDescription = jobDescription;
+    return this.Post('/vacancy/add', data);
+  }
+
+  getAllVacancies() {
+    return this.Get('/vacancy/all');
+  }
+
 }
 
 export default ApiClient;
