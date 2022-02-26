@@ -71,6 +71,8 @@ class ApiClient extends ApiClientBase {
     data.address = address;
     data.resume = resume;
     data.imageUrl = imageUrl;
+    let date = Date().toString().split(' ');
+    data.date = date[3] + '/' + date[2] + ' at ' + date[4];
     return this.Post('/candidate/add', data);
   }
 

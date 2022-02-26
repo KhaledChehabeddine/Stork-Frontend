@@ -3,7 +3,6 @@ import getApiClient from "../../api_client/getApiClient";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import NavBar from "../Utils/Navbar";
 import {tableStyle} from "../Utils/styles";
-import Header from "../Utils/Header";
 import VacancyRow from "../Tables/VacancyRow";
 import Spinner from "../Utils/Spinner";
 import {Breadcrumb} from "react-bootstrap";
@@ -47,12 +46,12 @@ const VacanciesPage = (props) => {
                   <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                   <CTableHeaderCell scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">View</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Apply</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {vacancies.map(vacancy =>
-                  <VacancyRow vacancy={vacancy} />)}
+                  <VacancyRow key={vacancy.id} vacancy={vacancy} id={vacancy.id} />)}
               </CTableBody>
             </CTable>
           </>
