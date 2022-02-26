@@ -47,6 +47,7 @@ const CandidateForm = (props) => {
       .then(response => {
         dispatch({ type: 'candidate-added' });
         navigate(`/candidate/all`);
+        document.location.reload();
       }).catch(error => {
         console.log(error);
     });
@@ -86,4 +87,3 @@ const CandidateForm = (props) => {
 }
 
 export default CandidateForm;
-
