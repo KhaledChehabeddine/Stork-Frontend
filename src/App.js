@@ -4,13 +4,11 @@ import LandingPage from './Components/Pages/LandingPage';
 import Home from './Components/Pages/Home';
 import CandidateForm from './Components/Forms/CandidateForm'
 import EmployeeForm from './Components/Forms/EmployeeForm';
-import EmployeeCardWrapper from './Components/Cards/EmployeeCardWrapper';
 import CandidateCardWrapper from "./Components/Cards/CandidateCardWrapper";
 import ScheduleForm from './Components/Forms/ScheduleForm';
 import {useCallback, useEffect, useState} from "react";
 import getApiClient from "./api_client/getApiClient";
 import ViewEmployeePage from "./Components/Pages/ViewEmployeePage";
-import ViewCandidatePage from "./Components/Pages/ViewCandidatePage";
 import LoginForm from "./Components/Forms/LoginForm";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
@@ -18,6 +16,7 @@ import VacancyForm from './Components/Forms/VacancyForm';
 import VacanciesPage from "./Components/Pages/VacanciesPage";
 import EmployeesPage from "./Components/Pages/EmployeesPage";
 import ProfileCard from './Components/Cards/ProfileCard';
+import {getHashCode} from "./Components/Utils/utils";
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -56,7 +55,6 @@ function App() {
             <Route exact path='/interview/schedule' element={<ScheduleForm />} />
             <Route exact path='/vacancy/post' element={<VacancyForm />} />
             <Route exact path='/vacancy/all' element={<VacanciesPage />} />
-            <Route exact path='/profilecard' element={<ProfileCard candidate={{firstName: "Jacob", lastName: "Henfry", email: "jac@gmail.com", phone: "+961 76 878 787", address: "Beirut, Lebanon", resume: "Resume"}} />} />
             {employees.map(employee =>
               <Route
               exact
@@ -68,8 +66,8 @@ function App() {
               <Route
               exact
               key={candidate.id}
-              path={`/candidate/${candidate.id}`}
-              element={<ViewCandidatePage candidate={candidate} />}
+              path={`/candidate/${getHashCode(candidate.id)}`}
+              element={<ProfileCard candidate={candidate} />}
               />)}
           </>
           :
