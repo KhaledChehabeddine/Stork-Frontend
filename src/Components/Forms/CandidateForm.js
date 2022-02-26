@@ -30,7 +30,9 @@ const CandidateForm = (props) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   const [resume, setResume] = useState(null);
+
 
   const onFileChange = useCallback(event => {
     setResume(event.target.files[0]);
@@ -41,14 +43,14 @@ const CandidateForm = (props) => {
     const reader = new FileReader();
     console.log('result: ' + reader.result);
     dispatch({ type: 'adding-candidate' });
-    getApiClient().addCandidate('/add', firstName, lastName, email, phone, null, 'https://bootdey.com/img/Content/avatar/avatar3.png')
+    getApiClient().addCandidate('/add', firstName, lastName, email, phone, address, null, 'https://bootdey.com/img/Content/avatar/avatar3.png')
       .then(response => {
         dispatch({ type: 'candidate-added' });
         navigate(`/candidate/all`);
       }).catch(error => {
         console.log(error);
     });
-  }, [firstName, lastName, email, phone, resume, navigate]);
+  }, [firstName, lastName, email, phone, address, resume, navigate]);
 
   return (
     <>
@@ -68,6 +70,7 @@ const CandidateForm = (props) => {
               <Input className="form-input right" onChange={event => { setEmail(event.target.value) }} placeholder='Email'/>
               <Input className="form-input left" onChange={event => { setLastName(event.target.value) }} placeholder='Last Name'/>
               <Input className="form-input right" onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
+              <Input className="form-input right" onChange={event => { setAddress(event.target.value) }} placeholder='Address'/>
             </div>
             <hr/>
             <div style={{display:'flex', alignItems:'baseline'}}>

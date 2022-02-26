@@ -17,6 +17,7 @@ import NavigateToAfter from "./Components/Pages/NavigateToAfter";
 import VacancyForm from './Components/Forms/VacancyForm';
 import VacanciesPage from "./Components/Pages/VacanciesPage";
 import EmployeesPage from "./Components/Pages/EmployeesPage";
+import ProfileCard from './Components/Cards/ProfileCard';
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -55,6 +56,7 @@ function App() {
             <Route exact path='/interview/schedule' element={<ScheduleForm />} />
             <Route exact path='/vacancy/post' element={<VacancyForm />} />
             <Route exact path='/vacancy/all' element={<VacanciesPage />} />
+            <Route exact path='/profilecard' element={<ProfileCard candidate={{firstName: "Jacob", lastName: "Henfry", email: "jac@gmail.com", phone: "+961 76 878 787", address: "Beirut, Lebanon", resume: "Resume"}} />} />
             {employees.map(employee =>
               <Route
               exact
