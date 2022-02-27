@@ -19,5 +19,11 @@ const getSearchParams = (search) => {
   return params;
 };
 
+const getCurrentDate = () => {
+  const arr = Date().split(' ');
+  const date = arr[0] + ', ' + arr[2] + ' ' + arr[1] + ' ' + arr[3] + ' ' + arr[4] + ' GMT';
+  return date;
+}
 
-export { getHashCode, getSearchParams };
+
+export { getHashCode, getSearchParams, getCurrentDate };

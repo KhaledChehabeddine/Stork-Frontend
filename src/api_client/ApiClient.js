@@ -1,4 +1,5 @@
 import ApiClientBase from "./ApiClientBase";
+import {getCurrentDate, getDateFormat} from "../Components/Utils/utils";
 
 class ApiClient extends ApiClientBase {
   /* Post method example
@@ -71,8 +72,7 @@ class ApiClient extends ApiClientBase {
     data.address = address;
     data.resume = resume;
     data.imageUrl = imageUrl;
-    let date = Date().toString().split(' ');
-    data.date = date[3] + '/' + date[2] + ' at ' + date[4];
+    data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
   }
 
@@ -93,12 +93,14 @@ class ApiClient extends ApiClientBase {
     return this.Post('/interview/schedule', data);
   }
 
-  addVacancy(jobTitle, country, city, jobDescription) {
+  addVacancy(jobTitle, country, city, jobDescription, deadline) {
     const data = {};
     data.jobTitle = jobTitle;
     data.country = country;
     data.city = city;
     data.jobDescription = jobDescription;
+    data.datePosted = getCurrentDate();
+    data.deadline = deadline
     return this.Post('/vacancy/add', data);
   }
 

@@ -13,6 +13,7 @@ const VacancyForm = (props) => {
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [jobDescription, setJobDescription] = useState('');
+  const [deadline, setDeadline] = useState(null);
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -26,13 +27,15 @@ const VacancyForm = (props) => {
     if (!country) return;
     if (!city) return;
     if(!jobDescription) return;
-    getApiClient().addVacancy(jobTitle, country, city, jobDescription)
+    if (!deadline) return;
+    getApiClient().addVacancy(jobTitle, country, city, jobDescription, deadline)
       .then(response => {
         alert('New Vacancy has been added successfully!');
+        console.log(response.data);
         navigate('/home');
       }).catch(error => console.log(error));
     navigate('/home');
-  }, [jobTitle, country, city, jobDescription]);
+  }, [jobTitle, country, city, jobDescription, deadline]);
   return (
     <div>
       <NavBar />
@@ -44,7 +47,7 @@ const VacancyForm = (props) => {
         onSubmit={handleSubmit}
         style={formStyle}
       >
-        <CCol md={5}>
+        <CCol md={7}>
           <CFormLabel htmlFor="validationCustom01">Job Title</CFormLabel>
           <CFormInput type="text" id="validationCustom01" placeholder="Software Engineer" required
             onChange={(event) => {setJobTitle(event.target.value)}} />
@@ -52,17 +55,24 @@ const VacancyForm = (props) => {
           <CFormFeedback invalid>Please provide a job title.</CFormFeedback>
         </CCol>
 
-        <CCol md={4}>
+        <CCol md={5}>
           <CFormLabel htmlFor="validationCustom03">Country</CFormLabel>
           <CFormInput type="text" id="validationCustom03" placeholder="Lebanon" required
                       onChange={(event) => {setCountry(event.target.value)}}/>
           <CFormFeedback valid>Looks good!</CFormFeedback>
           <CFormFeedback invalid>Please provide a valid country.</CFormFeedback>
         </CCol>
-        <CCol md={3}>
+        <CCol md={7}>
           <CFormLabel htmlFor="validationCustom05">City</CFormLabel>
           <CFormInput type="text" id="validationCustom05" placeholder="Beirut" required
                       onChange={(event) => {setCity(event.target.value)}}/>
+          <CFormFeedback valid>Looks good!</CFormFeedback>
+          <CFormFeedback invalid>Please provide a valid city.</CFormFeedback>
+        </CCol>
+        <CCol md={5}>
+          <CFormLabel htmlFor="validationCustom05">Deadline</CFormLabel>
+          <CFormInput type="date" id="validationCustom05" required
+                      onChange={(event) => {console.log(event.target.value); setDeadline(event.target.value)}}/>
           <CFormFeedback valid>Looks good!</CFormFeedback>
           <CFormFeedback invalid>Please provide a valid city.</CFormFeedback>
         </CCol>
