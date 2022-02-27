@@ -1,86 +1,170 @@
-import React, {useCallback, useReducer, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import getApiClient from '../../api_client/getApiClient';
-import Button from '../Utils/Button';
-import Form from '../Utils/Form';
-import Input from '../Utils/Input';
-import {useNavigate} from "react-router-dom";
-import Spinner from "../Utils/Spinner";
-import NavBar from "../Utils/Navbar";
-import {Breadcrumb} from "react-bootstrap";
-import '../../Styles/FormStyle.css'
+import {useNavigate} from 'react-router-dom';
+import NavBar from '../Utils/Navbar';
+import {
+  CAlert,
+  CButton,
+  CCol,
+  CForm,
+  CFormFeedback,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+} from '@coreui/react';
+import Header from '../Utils/Header';
+import {candidateForm} from '../Utils/Styles';
 
-const reducer = (state, action) => {
-  switch(action.type) {
-    case 'adding-candidate':
-      return { ...state, addingCandidate: true };
-    case 'candidate-added':
-      return { ...state, candidateAdded: true, addingCandidate: false };
-    default:
-      return { ...state };
-  }
-}
+const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina',
+  'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados',
+  'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',
+  'Botswana', 'Brazil', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi',
+  'Cambodia', 'Cameroon', 'Cape Verde', 'Cayman Islands', 'Chad', 'Chile', 'China', 'Colombia', 'Congo',
+  'Cook Islands', 'Costa Rica', 'Cote D Ivoire', 'Croatia', 'Cruise Ship', 'Cuba', 'Cyprus',
+  'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt',
+  'El Salvador', 'Equatorial Guinea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Fiji',
+  'Finland', 'France', 'French Polynesia', 'French West Indies', 'Gabon', 'Gambia', 'Georgia', 'Germany',
+  'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guam', 'Guatemala', 'Guernsey', 'Guinea',
+  'Guinea Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia',
+  'Iran', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan',
+  'Kazakhstan', 'Kenya', 'Kuwait', 'Kyrgyz Republic', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia',
+  'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau', 'Macedonia', 'Madagascar', 'Malawi',
+  'Malaysia', 'Maldives', 'Mali', 'Malta', 'Mauritania', 'Mauritius', 'Mexico', 'Moldova', 'Monaco',
+  'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Namibia', 'Nepal', 'Netherlands',
+  'Netherlands Antilles', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Norway',
+  'Oman', 'Pakistan', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines',
+  'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Romania', 'Russia', 'Rwanda',
+  'Saint Pierre and Miquelon', 'Samoa', 'San Marino', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles',
+  'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'South Africa', 'South Korea', 'Spain', 'Sri Lanka',
+  'St Kitts and Nevis', 'St Lucia', 'St Vincent', 'St. Lucia', 'Sudan', 'Suriname', 'Swaziland', 'Sweden',
+  'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor L\'Este', 'Togo', 'Tonga',
+  'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos', 'Uganda', 'Ukraine',
+  'United Arab Emirates', 'United Kingdom', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam',
+  'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'];
+const sexes = ['Male', 'Female'];
 
-const CandidateForm = (props) => {
+const CandidateForm = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reducer, {
-    addingCandidate: false,
-    candidateAdded: false
-  });
+  const [valid, setValid] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [country, setCountry] = useState(null);
+  const [sex, setSex] = useState(null);
   const [phone, setPhone] = useState('');
-  const [resume, setResume] = useState(null);
+  // const [resume, setResume] = useState(null);
 
-  const onFileChange = useCallback(event => {
-    setResume(event.target.files[0]);
-  }, []);
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    } setValid(true);
+  };
 
-  const addCandidateHandler = useCallback(() => {
-    console.log(resume);
-    const reader = new FileReader();
-    console.log('result: ' + reader.result);
-    dispatch({ type: 'adding-candidate' });
-    getApiClient().addCandidate('/add', firstName, lastName, email, phone, null, 'https://bootdey.com/img/Content/avatar/avatar3.png')
-      .then(response => {
-        dispatch({ type: 'candidate-added' });
-        navigate(`/candidate/all`);
-      }).catch(error => {
-        console.log(error);
-    });
-  }, [firstName, lastName, email, phone, resume, navigate]);
+  const onSubmit = useCallback( () => {
+    const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
+    const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
+    const phoneRegex = new RegExp('^\\d{10}$');
+    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) return;
+    if (!emailRegex.test(email)) return;
+    if (country === null) return;
+    if (sex === null) return;
+    if (!phoneRegex.test(phone)) return;
+    // if (resume === null) return;
+    // alert(
+    //   <>
+    //     <CAlert color="success" dismissible visible={visible}
+    //           onClose={() => {
+    //             setVisible(false);
+    //             navigate('/home');
+    //           }}
+    //     >
+    //       Your application has been successfully submitted!
+    //     </CAlert>
+    //   </>);
+  //   getApiClient().addCandidate(firstName, lastName, email, country, sex, phone/*, resume*/)
+  //     .then(() => {
+  //       alert('Your application has been successfully submitted!')
+  //       navigate('/home');
+  //     }).catch(error => console.log(error));
+  //   navigate('/home');
+  }, [firstName, lastName, country, sex, email, phone,/* resume,*/ navigate]);
 
   return (
-    <>
-      <NavBar/>
-      <Breadcrumb className="form-breadcrumb">
-        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/employees">Candidates</Breadcrumb.Item>
-        <Breadcrumb.Item active>Apply</Breadcrumb.Item>
-      </Breadcrumb>
-      <h1 className="form-header" style={{ padding: '1rem' }}>Application Form</h1>
-      {state.addingCandidate ? <Spinner />
-        :
-        <div className="form-container" align='center'>
-          <Form className="form" onSubmit={event => { event.preventDefault() }}>
-            <div className="flex-form" align='center'>
-              <Input className="form-input left" onChange={event => { setFirstName(event.target.value) }} placeholder='First Name'/>
-              <Input className="form-input right" onChange={event => { setEmail(event.target.value) }} placeholder='Email'/>
-              <Input className="form-input left" onChange={event => { setLastName(event.target.value) }} placeholder='Last Name'/>
-              <Input className="form-input right" onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
-            </div>
-            <hr/>
-            <div style={{display:'flex', alignItems:'baseline'}}>
-            <h3 className="form-text" style={{ textIndent: 20, paddingRight:'110px' }}>Resume</h3>
-            <input className="form-input" type='file' onChange={onFileChange} align='left' />
-            </div>
-            <hr/>
-            <Button className="form-button" onClick={addCandidateHandler}>Apply</Button>
-          </Form>
-        </div>}
-    </>
+    <div>
+      <NavBar />
+      <Header text='Candidate Form'/>
+      <CForm
+        className='row g-3 needs-validation'
+        noValidate
+        validated={valid}
+        onSubmit={handleSubmit}
+        style={candidateForm}
+      >
+        <legend className='text-center' style={{fontWeight: 'bold'}}>Thank you for applying!</legend>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
+          <CFormLabel htmlFor='validationServer01'>First Name</CFormLabel>
+          <CFormInput type='text' placeholder='ex: Jonathon' id='validationServer01' required
+                      onChange={(event) => {setFirstName(event.target.value)}}
+          />
+          <CFormFeedback tooltip invalid>Invalid first name</CFormFeedback>
+        </CCol>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
+          <CFormLabel htmlFor='validationServer02'>Last Name</CFormLabel>
+          <CFormInput type='text' placeholder='ex: Walker' id='validationServer02' required
+                      onChange={(event) => {setLastName(event.target.value)}}
+          />
+          <CFormFeedback tooltip invalid>Invalid last name</CFormFeedback>
+        </CCol>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
+          <CFormLabel htmlFor='validationServer05'>Country</CFormLabel>
+          <CFormSelect id='validationServer05' required
+                       onChange={(event) => {setCountry(event.target.value)}}
+          >
+            <option selected disabled value=''>Choose...</option>
+            {countries.map(country => <option key={country}>{country}</option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
+        </CCol>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
+          <CFormLabel htmlFor='validationServer06'>Sex</CFormLabel>
+          <CFormSelect id='validationServer06' required
+                       onChange={(event) => {setSex(event.target.value)}}
+          >
+            <option selected disabled value=''>Choose...</option>
+            {sexes.map(sex => <option key={sex}>{sex}</option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid sex</CFormFeedback>
+        </CCol>
+        <CCol style={{marginBottom: "0.7rem"}} md={7} className="position-relative">
+          <CFormLabel htmlFor='validationServer03'>Email Address</CFormLabel>
+          <CFormInput type='email' placeholder='ex: example@email.com' id='validationServer03' required
+                      onChange={(event) => {setEmail(event.target.value)}}
+          />
+          <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
+        </CCol>
+        <CCol style={{marginBottom: "0.7rem"}} md={5} className="position-relative">
+          <CFormLabel htmlFor='validationServer04'>Phone Number</CFormLabel>
+          <CFormInput type='tel' placeholder='ex: 1234567890' id='validationServer04' required
+                      onChange={(event) => {setPhone(event.target.value)}}
+          />
+          <CFormFeedback tooltip invalid>Invalid phone number</CFormFeedback>
+        </CCol>
+        {/*<CCol style={{marginBottom: "0.7rem"}} md={12} className="position-relative">
+          <CFormLabel htmlFor='validationServer07'>Resume</CFormLabel>
+          <CFormInput type='file' id='validationServer07' accept='.pdf' aria-label='file example' required
+                      onChange={(event) => {setResume(event.target.files[0])}}
+          />
+          <CFormFeedback tooltip invalid>Invalid resume</CFormFeedback>
+        </CCol>*/}
+        <CCol xs={12}>
+          <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
+        </CCol>
+      </CForm>
+    </div>
   );
 }
 
 export default CandidateForm;
-

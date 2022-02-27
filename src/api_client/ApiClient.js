@@ -9,7 +9,7 @@ class ApiClient extends ApiClientBase {
     return this.Post(endpoint, data);
   }
     Get method example
-  GetExample(enpoint, arg1, arg2) {
+  GetExample(endpoint, arg1, arg2) {
     const params = {};
     params.arg1 = arg1;
     params.arg2 = arg2;
@@ -61,14 +61,15 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(endpoint, firstName, lastName, email, phone, resume, imageUrl) {
+  addCandidate(endpoint, firstName, lastName, email, country, sex, phone/*, resume*/) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
     data.email = email;
+    data.country = country;
+    data.sex = sex;
     data.phone = phone;
-    data.resume = resume;
-    data.imageUrl = imageUrl;
+    // data.resume = resume;
     return this.Post('/candidate/add', data);
   }
 
