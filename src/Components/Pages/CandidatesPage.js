@@ -7,12 +7,31 @@ import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@core
 import CIcon from "@coreui/icons-react";
 import {cilPeople} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
+import Input from "../Utils/Input";
 
-const sortingState = 2;
+const filterCandidates = (candidates, input) => {
+  let filter, value, i, name, filteredCandidates = [];
+  filter = input.value.toUpperCase();
+  for (i = 0; i < candidates.length; i++) {
+    name = candidates[i].firstName+' '+candidates[i].lastName;
+    value = name || name.innerText;
+    if (value.toUpperCase().indexOf(filter) > -1) {
+      filteredCandidates.push(candidates[i]);
+    }
+  }
+  return filteredCandidates;
+}
 
-const sortByName = candidates => candidates.sort((a, b) => a.lastName.localeCompare(b.lastName)).sort((a,b) => a.firstName.localeCompare(b.firstName))
-const sortByDate = candidates => candidates.sort((a, b) => a.date.localeCompare(b.date))
+const sortingState = 1;
 
+const sortByDate = candidates => candidates.sort(function(a,b){
+  return new Date(b.date) - new Date(a.date);
+});
+
+const sortByName = candidates => candidates.sort((a, b) => {
+  const result = a.firstName.localeCompare(b.firstName);
+  return result !== 0 ? result : a.lastName.localeCompare(b.lastName);
+})
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -23,20 +42,23 @@ const reducer = (state, action) => {
   }
 }
 
-
 const CandidateCardWrapper = () => {
   const [state, dispatch] = useReducer(reducer, {
     pageLoaded: false
   });
   const [candidates, setCandidates] = useState([]);
-  // eslint-disable-next-line
-  const getAllCandidates = useEffect(() => {
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  useEffect(() => {
     getApiClient().getAllCandidates()
       .then(response => {
         setCandidates(response.data);
+        setFilteredCandidates(response.data);
         dispatch({ type: 'page-loaded' });
       }).catch(error => {console.log(error)});
   }, []);
+
+
+
   return (
     <>
       <NavBar/>
@@ -47,23 +69,26 @@ const CandidateCardWrapper = () => {
             <Breadcrumb.Item href="/candidates/all">Candidates</Breadcrumb.Item>
             <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
           </Breadcrumb>
-
-          <CTable align="middle" className="mb-0 border" hover responsive>
+          <h1 className="form-header" style={{ padding: '1rem' }}>Candidates</h1>
+          <Input type="text" id="searchInput" onKeyUp={event => setFilteredCandidates(filterCandidates(candidates, event.target))} placeholder="Search For Candidates.."/>
+          <CTable id="candidatesTable" align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell className="text-center">
                   <CIcon icon={cilPeople} />
                 </CTableHeaderCell>
-                <CTableHeaderCell>User</CTableHeaderCell>
+                <CTableHeaderCell>Candidate</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Email</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Date Applied</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {sortingState === 1 && sortByDate(candidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
-              {sortingState === 2 && sortByName(candidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
+              {sortingState === 1 && sortByDate(filteredCandidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
+              {sortingState === 2 && sortByName(filteredCandidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
             </CTableBody>
           </CTable>
-        </div>
+          </div>
         : <Spinner />}
     </>
   )
