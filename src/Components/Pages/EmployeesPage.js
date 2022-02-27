@@ -5,7 +5,7 @@ import Spinner from '../Utils/Spinner';
 import {Breadcrumb} from "react-bootstrap";
 import EmployeeRow from "../Tables/EmployeeRow";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
-import {tableStyle} from "../Utils/styles";
+import {tableStyle} from "../Utils/Styles";
 
 const reducer = (state, action) => {
   switch(action.type) {

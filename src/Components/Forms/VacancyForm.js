@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {CForm, CCol, CFormLabel, CFormInput, CFormFeedback, CButton, CFormTextarea} from '@coreui/react';
 import NavBar from "../Utils/Navbar";
 import Header from "../Utils/Header";
-import { formStyle } from "../Utils/styles";
+import { formStyle } from "../Utils/Styles";
 import getApiClient from "../../api_client/getApiClient";
 import {useNavigate} from "react-router-dom";
 
