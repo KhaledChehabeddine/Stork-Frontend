@@ -3,7 +3,6 @@ import getApiClient from '../../api_client/getApiClient';
 import {useNavigate} from 'react-router-dom';
 import NavBar from '../Utils/Navbar';
 import {
-  CAlert,
   CButton,
   CCol,
   CForm,
@@ -46,14 +45,13 @@ const sexes = ['Male', 'Female'];
 const CandidateForm = () => {
   const navigate = useNavigate();
   const [valid, setValid] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [country, setCountry] = useState(null);
   const [sex, setSex] = useState(null);
   const [phone, setPhone] = useState('');
-  // const [resume, setResume] = useState(null);
+  const [resume, setResume] = useState(null);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -69,28 +67,20 @@ const CandidateForm = () => {
     const phoneRegex = new RegExp('^\\d{10}$');
     if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) return;
     if (!emailRegex.test(email)) return;
-    if (country === null) return;
-    if (sex === null) return;
+    if (!country) return;
+    if (!sex) return;
     if (!phoneRegex.test(phone)) return;
-    // if (resume === null) return;
-    // alert(
-    //   <>
-    //     <CAlert color="success" dismissible visible={visible}
-    //           onClose={() => {
-    //             setVisible(false);
-    //             navigate('/home');
-    //           }}
-    //     >
-    //       Your application has been successfully submitted!
-    //     </CAlert>
-    //   </>);
-  //   getApiClient().addCandidate(firstName, lastName, email, country, sex, phone/*, resume*/)
-  //     .then(() => {
-  //       alert('Your application has been successfully submitted!')
-  //       navigate('/home');
-  //     }).catch(error => console.log(error));
-  //   navigate('/home');
-  }, [firstName, lastName, country, sex, email, phone,/* resume,*/ navigate]);
+    if (!resume) return;
+    getApiClient().addCandidate(firstName, lastName, email, phone, country, sex)
+      .then(response => {
+        getApiClient().addResume(resume, response.data.id)
+          .then(response => {
+            console.log(response.data);
+          }).catch(error => console.log(error));
+        alert('Your application has been successfully submitted!');
+      }).catch(error => console.log(error));
+    navigate('/home');
+  }, [firstName, lastName, email, phone, country, sex, resume, navigate]);
 
   return (
     <div>
@@ -102,6 +92,7 @@ const CandidateForm = () => {
         validated={valid}
         onSubmit={handleSubmit}
         style={candidateForm}
+        encType="multipart/form-data"
       >
         <legend className='text-center' style={{fontWeight: 'bold'}}>Thank you for applying!</legend>
         <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
@@ -152,13 +143,13 @@ const CandidateForm = () => {
           />
           <CFormFeedback tooltip invalid>Invalid phone number</CFormFeedback>
         </CCol>
-        {/*<CCol style={{marginBottom: "0.7rem"}} md={12} className="position-relative">
+        <CCol style={{marginBottom: "0.7rem"}} md={12} className="position-relative">
           <CFormLabel htmlFor='validationServer07'>Resume</CFormLabel>
           <CFormInput type='file' id='validationServer07' accept='.pdf' aria-label='file example' required
                       onChange={(event) => {setResume(event.target.files[0])}}
           />
           <CFormFeedback tooltip invalid>Invalid resume</CFormFeedback>
-        </CCol>*/}
+        </CCol>
         <CCol xs={12}>
           <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
         </CCol>

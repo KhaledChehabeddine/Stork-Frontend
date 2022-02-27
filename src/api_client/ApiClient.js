@@ -1,4 +1,5 @@
 import ApiClientBase from "./ApiClientBase";
+import {getCurrentDate, getDateFormat} from "../Components/Utils/utils";
 
 class ApiClient extends ApiClientBase {
   /* Post method example
@@ -9,7 +10,7 @@ class ApiClient extends ApiClientBase {
     return this.Post(endpoint, data);
   }
     Get method example
-  GetExample(endpoint, arg1, arg2) {
+  GetExample(enpoint, arg1, arg2) {
     const params = {};
     params.arg1 = arg1;
     params.arg2 = arg2;
@@ -33,7 +34,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/employee/find', data);
   }
 
-  addEmployee(endpoint, id, firstName, lastName, email, jobTitle, phone, imageUrl) {
+  addEmployee(endpoint, id, firstName, lastName, email, jobTitle, phone, address, imageUrl) {
     const data = {};
     data.id = id;
     data.firstName = firstName;
@@ -41,6 +42,7 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.jobTitle = jobTitle;
     data.phone = phone;
+    data.address = address;
     data.imageUrl = imageUrl;
     return this.Post('/employee' + endpoint, data);
   }
@@ -61,16 +63,29 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(endpoint, firstName, lastName, email, country, sex, phone/*, resume*/) {
+  addCandidate(firstName, lastName, email, phone, address, country, sex) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
     data.email = email;
+    data.phone = phone;
     data.country = country;
     data.sex = sex;
-    data.phone = phone;
-    // data.resume = resume;
+    data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
+  }
+
+  addResume(resume, id) {
+    const data = new FormData();
+    data.append('resume', resume);
+    data.append('id', id);
+    return this.Post('/resume/add', data);
+  }
+
+  findResume(id) {
+    const data = {};
+    data.id = id;
+    return this.Get('/resume/find', data);
   }
 
   deleteCandidate(id) {
@@ -90,12 +105,14 @@ class ApiClient extends ApiClientBase {
     return this.Post('/interview/schedule', data);
   }
 
-  addVacancy(jobTitle, country, city, jobDescription) {
+  addVacancy(jobTitle, country, city, jobDescription, deadline) {
     const data = {};
     data.jobTitle = jobTitle;
     data.country = country;
     data.city = city;
     data.jobDescription = jobDescription;
+    data.datePosted = getCurrentDate();
+    data.deadline = deadline
     return this.Post('/vacancy/add', data);
   }
 
