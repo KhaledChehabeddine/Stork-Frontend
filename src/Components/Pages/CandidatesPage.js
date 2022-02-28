@@ -71,14 +71,18 @@ const CandidateCardWrapper = () => {
             <Breadcrumb.Item href="/candidates/all">Candidates</Breadcrumb.Item>
             <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
           </Breadcrumb>
-          <h1 className="form-header" style={{ padding: '1rem' }}>Candidates</h1>
-          <button className="view-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
-          <button className="view-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
-          <div style={{marginLeft:"auto"}}>
+          <h1 className="form-header" style={{padding:"1rem"}}>Candidates</h1>
+          <div className="utils-bar" style={{display: "flex", justifyContent:"space-between"}}>
+            <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
+            <button className="filter-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
+            <button className="filter-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
+          </div>
+            <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
             <CIcon className="search-icon" icon={cilSearch} />
             <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
               dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
             } placeholder="Search For Candidates"/>
+            </div>
           </div>
           <CTable id="candidatesTable" align="middle" className="mb-0 border candidatesTable" hover responsive>
             <CTableHead color="light">
