@@ -1,0 +1,55 @@
+.candidatesTable {
+}
+
+.header-row {
+    font-family: 'Raleway', sans-serif!important;
+    text-transform: uppercase;
+}
+
+.table-body {
+    font-family: 'Raleway', sans-serif!important;
+    font-weight: bolder;
+}
+
+.view-button {
+    border: 1px solid!important;
+    font-family: 'Raleway', sans-serif!important;
+    font-size: 80% !important;
+}
+
+.utils-bar{
+    border-top: 0.5px solid black;
+}
+
+.search-icon{
+    display: inline-block;
+    vertical-align: middle;
+}
+.search-bar{
+    font-family: 'Josefin Sans', sans-serif;
+    border: 1px solid black!important;
+    border-radius: 5px!important;
+    float: right;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.filter-button{
+    font-family: 'Josefin Sans', sans-serif!important;
+    color: grey;
+    font-weight: normal;
+    margin: 1%;
+    background-color: white;
+    border: 1px solid!important;
+    border-radius: 5px;
+    padding: 2px;
+    width: 40%;
+    font-size: 100% !important;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.filter-button:hover {
+    background: -webkit-linear-gradient(to right, #0f0e77, #D91114);
+    background: linear-gradient(to right, #0f0e77, #D91114);
+    color: white;
+    transform: scale(1.02);
+}

@@ -13,6 +13,7 @@ import {
 } from '@coreui/react';
 import Header from '../Utils/Header';
 import {candidateForm} from '../Utils/Styles';
+import {Breadcrumb} from "react-bootstrap";
 
 const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina',
   'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados',
@@ -85,7 +86,12 @@ const CandidateForm = () => {
   return (
     <div>
       <NavBar />
-      <Header text='Candidate Form'/>
+      <Breadcrumb className="form-breadcrumb">
+        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/candidates/all">Candidates</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Candidates</Breadcrumb.Item>
+      </Breadcrumb>
+      <h1 className="form-header" style={{ padding: '1rem' }}>Candidate Form</h1>
       <CForm
         className='row g-3 needs-validation'
         noValidate
