@@ -5,9 +5,10 @@ import Spinner from '../Utils/Spinner';
 import {Breadcrumb} from "react-bootstrap";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import {cilPeople} from "@coreui/icons";
+import {cilPeople, cilSearch} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
+import '../../Styles/CandidateTable.css'
 
 const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
@@ -22,8 +23,6 @@ const filterCandidates = (candidates, input) => {
   return filteredCandidates;
 }
 
-const sortingState = 1;
-
 const sortByDate = candidates => candidates.sort(function(a,b){
   return new Date(b.date) - new Date(a.date);
 });
@@ -35,8 +34,14 @@ const sortByName = candidates => candidates.sort((a, b) => {
 
 const reducer = (state, action) => {
   switch(action.type) {
+    case 'set-candidates':
+      return { ...state, filteredCandidates: action.candidates };
+    case 'sort-by-name':
+      return { ...state, filteredCandidates: sortByName(state.candidates) };
+    case 'sort-by-date':
+      return { ...state, filteredCandidates: sortByDate(state.candidates) };
     case 'page-loaded':
-      return { pageLoaded: true };
+      return { ...state, pageLoaded: true, candidates: action.candidates, filteredCandidates: action.filteredCandidates };
     default:
       return { ...state };
   }
@@ -44,20 +49,17 @@ const reducer = (state, action) => {
 
 const CandidateCardWrapper = () => {
   const [state, dispatch] = useReducer(reducer, {
-    pageLoaded: false
+    pageLoaded: false,
+    candidates: [],
+    filteredCandidates: []
   });
-  const [candidates, setCandidates] = useState([]);
-  const [filteredCandidates, setFilteredCandidates] = useState([]);
   useEffect(() => {
     getApiClient().getAllCandidates()
       .then(response => {
-        setCandidates(response.data);
-        setFilteredCandidates(response.data);
-        dispatch({ type: 'page-loaded' });
+        dispatch({ type: 'page-loaded', candidates: response.data, filteredCandidates: response.data });
+        console.log(state.filteredCandidates);
       }).catch(error => {console.log(error)});
   }, []);
-
-
 
   return (
     <>
@@ -70,25 +72,31 @@ const CandidateCardWrapper = () => {
             <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
           </Breadcrumb>
           <h1 className="form-header" style={{ padding: '1rem' }}>Candidates</h1>
-          <Input type="text" id="searchInput" onKeyUp={event => setFilteredCandidates(filterCandidates(candidates, event.target))} placeholder="Search For Candidates.."/>
-          <CTable id="candidatesTable" align="middle" className="mb-0 border" hover responsive>
+          <button className="view-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
+          <button className="view-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
+          <div style={{marginLeft:"auto"}}>
+            <CIcon className="search-icon" icon={cilSearch} />
+            <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
+              dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
+            } placeholder="Search For Candidates"/>
+          </div>
+          <CTable id="candidatesTable" align="middle" className="mb-0 border candidatesTable" hover responsive>
             <CTableHead color="light">
-              <CTableRow>
+              <CTableRow className="header-row">
                 <CTableHeaderCell className="text-center">
                   <CIcon icon={cilPeople} />
                 </CTableHeaderCell>
                 <CTableHeaderCell>Candidate</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Email</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Date Applied</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
+                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
-            <CTableBody>
-              {sortingState === 1 && sortByDate(filteredCandidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
-              {sortingState === 2 && sortByName(filteredCandidates).map(candidate => <CandidateRow key={candidate.id} candidate={candidate} />)}
+            <CTableBody className="table-body">
+              {state.filteredCandidates.map(candidate => <CandidateRow key={candidate.id} candidate={candidate} /> )}
             </CTableBody>
           </CTable>
-          </div>
+        </div>
         : <Spinner />}
     </>
   )

@@ -21,9 +21,11 @@ const getSearchParams = (search) => {
 
 const getCurrentDate = () => {
   const arr = Date().split(' ');
-  const date = arr[0] + ', ' + arr[2] + ' ' + arr[1] + ' ' + arr[3] + ' ' + arr[4] + ' GMT';
-  return date;
+  return arr[0] + ', ' + arr[2] + ' ' + arr[1] + ' ' + arr[3] + ' ' + arr[4] + ' GMT';
+};
+
+const formatDate = (date) => {
+  return date.substring(0, 16).split('T').join(' at ');
 }
 
-
-export { getHashCode, getSearchParams, getCurrentDate };
+export { getHashCode, getSearchParams, getCurrentDate, formatDate };

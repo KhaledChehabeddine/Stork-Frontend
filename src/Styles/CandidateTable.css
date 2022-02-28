@@ -1,0 +1,28 @@
+.candidatesTable {
+}
+
+.header-row {
+    font-family: 'Raleway', sans-serif!important;
+    text-transform: uppercase;
+}
+.table-body {
+    font-family: 'Raleway', sans-serif!important;
+    font-weight: bolder;
+}
+
+.view-button {
+    border: 1px solid!important;
+    font-family: 'Raleway', sans-serif!important;
+    font-size: 80% !important;
+}
+
+.search-icon{
+    display: inline-block;
+    vertical-align: middle;
+}
+.search-bar{
+    font-family: 'Josefin Sans', sans-serif;
+    border: 1px solid black!important;
+    border-radius: 5px!important;
+    float: right;
+}
