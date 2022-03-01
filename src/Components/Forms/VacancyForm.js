@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import {CForm, CCol, CFormLabel, CFormInput, CFormFeedback, CButton, CFormTextarea} from '@coreui/react';
 import NavBar from "../Utils/Navbar";
-import Header from "../Utils/Header";
 import { formStyle } from "../Utils/Styles";
 import getApiClient from "../../api_client/getApiClient";
 import {useNavigate} from "react-router-dom";
+import {Breadcrumb} from "react-bootstrap";
 
 const VacancyForm = (props) => {
   const navigate = useNavigate();
@@ -35,11 +35,16 @@ const VacancyForm = (props) => {
         navigate('/home');
       }).catch(error => console.log(error));
     navigate('/home');
-  }, [jobTitle, country, city, jobDescription, deadline]);
+  }, [jobTitle, country, city, jobDescription, deadline, navigate]);
   return (
     <div>
       <NavBar />
-      <Header text={'New Vacancy'} />
+      <Breadcrumb className="form-breadcrumb">
+        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/vacancy/all">Vacancy</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Vacancy</Breadcrumb.Item>
+      </Breadcrumb>
+      <h1 className="form-header" style={{ padding: '1rem' }}>Vacancy Form</h1>
       <CForm
         className="row g-3 needs-validation"
         noValidate
@@ -47,7 +52,8 @@ const VacancyForm = (props) => {
         onSubmit={handleSubmit}
         style={formStyle}
       >
-        <CCol md={7}>
+        <legend className='text-center' style={{fontWeight: 'bold'}}>Thank you for applying!</legend>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom01">Job Title</CFormLabel>
           <CFormInput type="text" id="validationCustom01" placeholder="Software Engineer" required
             onChange={(event) => {setJobTitle(event.target.value)}} />
@@ -55,21 +61,21 @@ const VacancyForm = (props) => {
           <CFormFeedback invalid>Please provide a job title.</CFormFeedback>
         </CCol>
 
-        <CCol md={5}>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom03">Country</CFormLabel>
           <CFormInput type="text" id="validationCustom03" placeholder="Lebanon" required
                       onChange={(event) => {setCountry(event.target.value)}}/>
           <CFormFeedback valid>Looks good!</CFormFeedback>
           <CFormFeedback invalid>Please provide a valid country.</CFormFeedback>
         </CCol>
-        <CCol md={7}>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom05">City</CFormLabel>
           <CFormInput type="text" id="validationCustom05" placeholder="Beirut" required
                       onChange={(event) => {setCity(event.target.value)}}/>
           <CFormFeedback valid>Looks good!</CFormFeedback>
           <CFormFeedback invalid>Please provide a valid city.</CFormFeedback>
         </CCol>
-        <CCol md={5}>
+        <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom05">Deadline</CFormLabel>
           <CFormInput type="date" id="validationCustom05" required
                       onChange={(event) => {console.log(event.target.value); setDeadline(event.target.value)}}/>
@@ -85,9 +91,7 @@ const VacancyForm = (props) => {
           <CFormFeedback invalid>Please provide job description.</CFormFeedback>
         </div>
         <CCol xs={12}>
-          <CButton color="primary" type="submit" onClick={onSubmit}>
-            Submit
-          </CButton>
+          <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
         </CCol>
       </CForm>
     </div>

@@ -11,8 +11,7 @@ import {
   CFormLabel,
   CFormSelect,
 } from '@coreui/react';
-import Header from '../Utils/Header';
-import {candidateForm} from '../Utils/Styles';
+import {formStyle} from '../Utils/Styles';
 import {Breadcrumb} from "react-bootstrap";
 
 const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina',
@@ -88,7 +87,7 @@ const CandidateForm = () => {
       <NavBar />
       <Breadcrumb className="form-breadcrumb">
         <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/candidates/all">Candidates</Breadcrumb.Item>
+        <Breadcrumb.Item href="/candidate/all">Candidates</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Candidates</Breadcrumb.Item>
       </Breadcrumb>
       <h1 className="form-header" style={{ padding: '1rem' }}>Candidate Form</h1>
@@ -97,7 +96,7 @@ const CandidateForm = () => {
         noValidate
         validated={valid}
         onSubmit={handleSubmit}
-        style={candidateForm}
+        style={formStyle}
         encType="multipart/form-data"
       >
         <legend className='text-center' style={{fontWeight: 'bold'}}>Thank you for applying!</legend>

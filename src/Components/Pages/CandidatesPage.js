@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useReducer} from "react";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
@@ -57,7 +57,6 @@ const CandidateCardWrapper = () => {
     getApiClient().getAllCandidates()
       .then(response => {
         dispatch({ type: 'page-loaded', candidates: response.data, filteredCandidates: response.data });
-        console.log(state.filteredCandidates);
       }).catch(error => {console.log(error)});
   }, []);
 
@@ -65,23 +64,23 @@ const CandidateCardWrapper = () => {
     <>
       <NavBar/>
       {state.pageLoaded === true
-        ? <div style={{ display: 'flex', flexDirection: 'column'}}>
+        ?
+        <div style={{ display: 'flex', flexDirection: 'column'}}>
           <Breadcrumb className="form-breadcrumb">
             <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="/candidates/all">Candidates</Breadcrumb.Item>
-            <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
+            <Breadcrumb.Item active>Candidates</Breadcrumb.Item>
           </Breadcrumb>
           <h1 className="form-header" style={{padding:"1rem"}}>Candidates</h1>
           <div className="utils-bar" style={{display: "flex", justifyContent:"space-between"}}>
             <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
-            <button className="filter-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
-            <button className="filter-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
-          </div>
+              <button className="filter-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
+              <button className="filter-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
+            </div>
             <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
-            <CIcon className="search-icon" icon={cilSearch} />
-            <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
-              dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
-            } placeholder="Search For Candidates"/>
+              <CIcon className="search-icon" icon={cilSearch} />
+              <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
+                dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
+              } placeholder="Search For Candidates"/>
             </div>
           </div>
           <CTable id="candidatesTable" align="middle" className="mb-0 border candidatesTable" hover responsive>

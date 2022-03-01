@@ -3,36 +3,25 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import LandingPage from './Components/Pages/LandingPage';
 import Home from './Components/Pages/Home';
 import CandidateForm from './Components/Forms/CandidateForm'
-import EmployeeForm from './Components/Forms/EmployeeForm';
 import ScheduleForm from './Components/Forms/ScheduleForm';
 import {useCallback, useEffect, useState} from "react";
 import getApiClient from "./api_client/getApiClient";
-import ViewEmployeePage from "./Components/Pages/ViewEmployeePage";
 import LoginForm from "./Components/Forms/LoginForm";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
 import VacancyForm from './Components/Forms/VacancyForm';
 import VacanciesPage from "./Components/Pages/VacanciesPage";
-import EmployeesPage from "./Components/Pages/EmployeesPage";
 import CandidatesPage from "./Components/Pages/CandidatesPage";
 import ProfileCard from './Components/Cards/ProfileCard';
 import {getHashCode} from "./Components/Utils/utils";
 
 function App() {
-  const [employees, setEmployees] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const isLoggedIn = useCallback(() => {
     if (window.localStorage.getItem('username')) return true; else return false;
   }, []);
-  // eslint-disable-next-line
-  const getAllEmployees = useEffect(() => {
-    getApiClient().getAllEmployees()
-      .then(response => {
-        setEmployees(response.data);
-      }).catch(error => {console.log(error)});
-  }, []);
-  // eslint-disable-next-line
-  const getAllCandidates = useEffect(() => {
+
+  useEffect(() => {
     getApiClient().getAllCandidates()
       .then(response => {
         setCandidates(response.data);
@@ -48,20 +37,11 @@ function App() {
         {isLoggedIn() ?
           <>
             <Route exact path='/home' element={<Home/>}/>
-            <Route exact path='/employee/add' element={<EmployeeForm />} />
-            <Route exact path='/employee/all' element={<EmployeesPage />} />
             <Route exact path='/candidate/add' element={<CandidateForm />} />
             <Route exact path='/candidate/all' element={<CandidatesPage />} />
             <Route exact path='/interview/schedule' element={<ScheduleForm />} />
             <Route exact path='/vacancy/post' element={<VacancyForm />} />
             <Route exact path='/vacancy/all' element={<VacanciesPage />} />
-            {employees.map(employee =>
-              <Route
-              exact
-              key={employee.id}
-              path={`/employee/${employee.id}`}
-              element={<ViewEmployeePage employee={employee} />}
-              />)}
             {candidates.map(candidate =>
               <Route
               exact
