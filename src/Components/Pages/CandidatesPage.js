@@ -8,7 +8,7 @@ import CIcon from "@coreui/icons-react";
 import {cilPeople, cilSearch} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
-import '../../Styles/CandidateTable.css'
+import '../../Styles/CandidateTable.css';
 
 const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
