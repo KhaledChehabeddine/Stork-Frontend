@@ -24,29 +24,6 @@ class ApiClient extends ApiClientBase {
     return this.Post('/login', data);
   }
 
-  getAllEmployees() {
-    return this.Get('/employee/all');
-  }
-
-  getEmployee(id) {
-    const data = new FormData();
-    data.append('id', id);
-    return this.Get('/employee/find', data);
-  }
-
-  addEmployee(endpoint, id, firstName, lastName, email, jobTitle, phone, address, imageUrl) {
-    const data = {};
-    data.id = id;
-    data.firstName = firstName;
-    data.lastName = lastName;
-    data.email = email;
-    data.jobTitle = jobTitle;
-    data.phone = phone;
-    data.address = address;
-    data.imageUrl = imageUrl;
-    return this.Post('/employee' + endpoint, data);
-  }
-
   deleteEmployee(id) {
     const data = new FormData();
     data.append('id', id);

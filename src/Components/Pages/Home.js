@@ -16,8 +16,6 @@ const Home = (props) => {
       <div className="form-header">
         <h1>Welcome {window.localStorage.getItem('username')}!</h1>
       </div>
-      <Button onClick={() => { navigate('/employee/add') }}>Add Employees</Button>
-      <Button onClick={() => { navigate('/employee/all') }}>View Employees</Button>
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>
       <Button onClick={() => { navigate('/candidate/all') }}>View Candidates</Button>
       <Button onClick={() => { navigate('/interview/schedule') }}>Schedule an interview</Button>
