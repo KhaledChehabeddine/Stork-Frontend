@@ -1,5 +1,5 @@
 import ApiClientBase from "./ApiClientBase";
-import {getCurrentDate, getDateFormat} from "../Components/Utils/utils";
+import {getCurrentDate} from "../Components/Utils/utils";
 
 class ApiClient extends ApiClientBase {
   /* Post method example

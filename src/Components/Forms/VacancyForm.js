@@ -1,10 +1,11 @@
 import React, {useCallback, useState} from 'react';
-import {CForm, CCol, CFormLabel, CFormInput, CFormFeedback, CButton, CFormTextarea} from '@coreui/react';
+import {CForm, CCol, CFormLabel, CFormInput, CFormFeedback, CButton, CFormTextarea, CFormSelect} from '@coreui/react';
 import NavBar from "../Utils/Navbar";
 import { formStyle } from "../Utils/Styles";
 import getApiClient from "../../api_client/getApiClient";
 import {useNavigate} from "react-router-dom";
 import {Breadcrumb} from "react-bootstrap";
+import {countries} from "../Utils/utils";
 
 const VacancyForm = (props) => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const VacancyForm = (props) => {
         <Breadcrumb.Item href="/vacancy/all">Vacancy</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Vacancy</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="form-header" style={{ padding: '1rem' }}>Vacancy Form</h1>
+      <h1 className="form-header">Vacancy Form</h1>
       <CForm
         className="row g-3 needs-validation"
         noValidate
@@ -52,7 +53,6 @@ const VacancyForm = (props) => {
         onSubmit={handleSubmit}
         style={formStyle}
       >
-        <legend className='text-center' style={{fontWeight: 'bold'}}>Thank you for applying!</legend>
         <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom01">Job Title</CFormLabel>
           <CFormInput type="text" id="validationCustom01" placeholder="Software Engineer" required
@@ -62,12 +62,16 @@ const VacancyForm = (props) => {
         </CCol>
 
         <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
-          <CFormLabel htmlFor="validationCustom03">Country</CFormLabel>
-          <CFormInput type="text" id="validationCustom03" placeholder="Lebanon" required
-                      onChange={(event) => {setCountry(event.target.value)}}/>
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-          <CFormFeedback invalid>Please provide a valid country.</CFormFeedback>
+          <CFormLabel htmlFor='validationServer05'>Country</CFormLabel>
+          <CFormSelect id='validationServer05' required
+                       onChange={(event) => {setCountry(event.target.value)}}
+          >
+            <option selected disabled value=''>Choose...</option>
+            {countries.map(country => <option key={country}>{country}</option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor="validationCustom05">City</CFormLabel>
           <CFormInput type="text" id="validationCustom05" placeholder="Beirut" required
