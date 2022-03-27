@@ -1,4 +1,3 @@
-
 const getHashCode = (id) => {
   const arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
   let hash = "";
@@ -55,4 +54,6 @@ const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'An
   'United Arab Emirates', 'United Kingdom', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam',
   'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'];
 
-export { getHashCode, getSearchParams, getCurrentDate, formatDate, countries };
+const genders = ['Male', 'Female']
+
+export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders};

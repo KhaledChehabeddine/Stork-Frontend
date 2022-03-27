@@ -1,11 +1,11 @@
 import '../../Styles/FormStyle.css';
-import { Breadcrumb } from "react-bootstrap"
-import { CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from "@coreui/react";
-import { formStyle } from "../Utils/Styles";
-import { useNavigate } from "react-router-dom";
+import {Breadcrumb} from "react-bootstrap"
+import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect, CFormTextarea} from "@coreui/react";
+import {formStyle} from "../Utils/Styles";
+import {useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
-import React, { useReducer, useEffect, useCallback } from 'react';
+import React, {useReducer, useEffect, useCallback} from 'react';
 import Spinner from '../Utils/Spinner';
 
 const initialState = {
