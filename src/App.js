@@ -2,8 +2,8 @@ import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import LandingPage from './Components/Pages/LandingPage';
 import Home from './Components/Pages/Home';
-import CandidateForm from './Components/Forms/CandidateForm'
-import ScheduleForm from './Components/Forms/ScheduleForm';
+import CandidateForm from './Components/Forms/CandidateForm';
+import InterviewForm from './Components/Forms/InterviewForm';
 import {useCallback, useEffect, useState} from "react";
 import getApiClient from "./api_client/getApiClient";
 import LoginForm from "./Components/Forms/LoginForm";
@@ -18,7 +18,7 @@ import {getHashCode} from "./Components/Utils/utils";
 function App() {
   const [candidates, setCandidates] = useState([]);
   const isLoggedIn = useCallback(() => {
-    if (window.localStorage.getItem('username')) return true; else return false;
+    return window.localStorage.getItem('username');
   }, []);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ function App() {
             <Route exact path='/home' element={<Home/>}/>
             <Route exact path='/candidate/add' element={<CandidateForm />} />
             <Route exact path='/candidate/all' element={<CandidatesPage />} />
-            <Route exact path='/interview/schedule' element={<ScheduleForm />} />
             <Route exact path='/vacancy/post' element={<VacancyForm />} />
             <Route exact path='/vacancy/all' element={<VacanciesPage />} />
+            <Route exact path='/interview/add' element={<InterviewForm />} />
             {candidates.map(candidate =>
               <Route
               exact
