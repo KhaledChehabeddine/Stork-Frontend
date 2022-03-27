@@ -40,22 +40,21 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, email, phone, address, country, sex) {
+  addCandidate(firstName, lastName, country, gender, email, phone) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
+    data.country = country;
+    data.gender = gender;
     data.email = email;
     data.phone = phone;
-    data.country = country;
-    data.sex = sex;
-    data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
   }
 
-  addResume(resume, id) {
+  addResume(id, resume) {
     const data = new FormData();
-    data.append('resume', resume);
     data.append('id', id);
+    data.append('resume', resume);
     return this.Post('/resume/add', data);
   }
 
