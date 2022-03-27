@@ -3,7 +3,7 @@ import Button from '../Utils/Button';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../Utils/Navbar";
 
-const Home = (props) => {
+const Home = () => {
   const navigate = useNavigate();
   const signOutHandler = useCallback(() => {
     window.localStorage.clear();
@@ -20,6 +20,7 @@ const Home = (props) => {
       <Button onClick={() => { navigate('/candidate/all') }}>View Candidates</Button>
       <Button onClick={() => { navigate('/vacancy/post') }}>Post Vacancy</Button>
       <Button onClick={() => { navigate('/vacancy/all') }}>View Vacancies</Button>
+      <Button onClick={() => { navigate('/interview/add') }}>Add Interview</Button>
       <Button onClick={signOutHandler}>Sign out</Button>
     </div>
   );
