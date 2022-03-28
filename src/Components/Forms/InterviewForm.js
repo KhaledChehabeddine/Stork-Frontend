@@ -100,7 +100,7 @@ const InterviewForm = () => {
                            )}
               >
                 <option selected disabled value=''>Choose...</option>
-                {state.candidates.map(candidate => <option value={candidate.id}>
+                {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
                   {candidate.firstName + ' ' + candidate.lastName}
                 </option>)}
               </CFormSelect>
@@ -114,7 +114,7 @@ const InterviewForm = () => {
                            )}
               >
                 <option selected disabled value=''>Choose...</option>
-                {state.vacancies.map(vacancy => <option value={vacancy.id}>
+                {state.vacancies.map(vacancy => <option key={vacancy.id} value={vacancy.id}>
                   {vacancy.jobTitle + ' (' + vacancy.country + ')'}
                 </option>)}
               </CFormSelect>
