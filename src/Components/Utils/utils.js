@@ -27,7 +27,8 @@ const formatDate = (date) => {
   return date.substring(0, 16).split('T').join(' at ');
 }
 
-const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina',
+const countries = [
+  'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Anguilla', 'Antigua and Barbuda', 'Argentina',
   'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados',
   'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',
   'Botswana', 'Brazil', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi',
@@ -52,8 +53,11 @@ const countries = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'An
   'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor L\'Este', 'Togo', 'Tonga',
   'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos', 'Uganda', 'Ukraine',
   'United Arab Emirates', 'United Kingdom', 'Uruguay', 'Uzbekistan', 'Venezuela', 'Vietnam',
-  'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'];
+  'Virgin Islands (US)', 'Yemen', 'Zambia', 'Zimbabwe'
+];
 
-const genders = ['Male', 'Female']
+const genders = [
+  'Male', 'Female'
+]
 
 export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders};

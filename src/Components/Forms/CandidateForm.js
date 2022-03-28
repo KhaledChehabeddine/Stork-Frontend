@@ -2,10 +2,10 @@ import {Breadcrumb} from "react-bootstrap";
 import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect} from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
-import React, {useCallback, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
+import React, {useCallback, useState} from 'react';
 
 const CandidateForm = () => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const CandidateForm = () => {
       <Breadcrumb className="form-breadcrumb">
         <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
         <Breadcrumb.Item href="/candidate/all">Candidates</Breadcrumb.Item>
-        <Breadcrumb.Item active>Add Candidates</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
       </Breadcrumb>
       <h1 className="form-header">Candidate Form</h1>
       <CForm
@@ -83,7 +83,7 @@ const CandidateForm = () => {
                        onChange={(event) => setCountry(event.target.value)}
           >
             <option selected disabled value=''>Choose...</option>
-            {countries.map(country => <option value={country}>{country}</option>)}
+            {countries.map(country => <option key={country} value={country}>{country}</option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
         </CCol>
@@ -93,9 +93,9 @@ const CandidateForm = () => {
                        onChange={(event) => setGender(event.target.value)}
           >
             <option selected disabled value=''>Choose...</option>
-            {genders.map(gender => <option value={gender}>{gender}</option>)}
+            {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
           </CFormSelect>
-          <CFormFeedback tooltip invalid>Invalid sex</CFormFeedback>
+          <CFormFeedback tooltip invalid>Invalid gender</CFormFeedback>
         </CCol>
         <CCol style={{marginBottom: "0.7rem"}} md={7} className="position-relative">
           <CFormLabel htmlFor='validationServer03'>Email Address</CFormLabel>
