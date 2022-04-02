@@ -10,10 +10,10 @@ import React, {useCallback, useState} from 'react';
 const CandidateForm = () => {
   const navigate = useNavigate();
   const [valid, setValid] = useState(false);
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [country, setCountry] = useState(null);
-  const [gender, setGender] = useState(null);
+  const [sex, setSex] = useState(null);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [resume, setResume] = useState(null);
@@ -28,23 +28,27 @@ const CandidateForm = () => {
   };
 
   const onSubmit = useCallback( () => {
-    const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
-    const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
-    const phoneRegex = new RegExp('^\\d{10}$');
-    if (!nameRegex.test(first_name)) return;
-    if (!nameRegex.test(last_name)) return;
-    if (!emailRegex.test(email)) return;
+    //const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
+    //const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
+    //const phoneRegex = new RegExp('^\\d{10}$');
+    //if (!nameRegex.test(firstName)) return;
+    //if (!nameRegex.test(lastName)) return;
+    //if (!emailRegex.test(email)) return;
+    if (!firstName) return;
+    if (!lastName) return;
+    if (!email) return;
     if (!country) return;
-    if (!gender) return;
-    if (!phoneRegex.test(phone)) return;
+    if (!sex) return;
+    if (!phone) return;
+    //if (!phoneRegex.test(phone)) return;
     if (!resume) return;
-    getApiClient().addCandidate(first_name, last_name, country, gender, email, phone)
+    getApiClient().addCandidate(firstName, lastName, country, sex, email, phone)
       .then(response =>
         getApiClient().addResume(response.data.id, resume).catch(error => console.log(error))
       ).catch(error => console.log(error));
     alert('Your application has been successfully submitted!');
     navigate('/home');
-  }, [first_name, last_name, country, gender, email, phone, resume, navigate]);
+  }, [firstName, lastName, country, sex, email, phone, resume, navigate]);
 
   return (
     <div>
@@ -59,7 +63,6 @@ const CandidateForm = () => {
         className='row g-3 needs-validation'
         noValidate
         validated={valid}
-        onSubmit={handleSubmit}
         style={formStyle}
         encType="multipart/form-data"
       >
@@ -90,7 +93,7 @@ const CandidateForm = () => {
         <CCol style={{marginBottom: "0.7rem"}} md={6} className="position-relative">
           <CFormLabel htmlFor='validationServer06'>Gender</CFormLabel>
           <CFormSelect id='validationServer06' required
-                       onChange={(event) => setGender(event.target.value)}
+                       onChange={(event) => setSex(event.target.value)}
           >
             <option selected disabled value=''>Choose...</option>
             {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
