@@ -6,6 +6,9 @@ import getApiClient from "../../api_client/getApiClient";
 import {useNavigate} from "react-router-dom";
 import {Breadcrumb} from "react-bootstrap";
 import {countries} from "../Utils/utils";
+import '../../Styles/Breadcrumbs.css'
+import '../../Styles/FormStyle.css'
+import Button from "../Utils/Button";
 
 const VacancyForm = (props) => {
   const navigate = useNavigate();
@@ -40,14 +43,14 @@ const VacancyForm = (props) => {
   return (
     <div>
       <NavBar />
-      <Breadcrumb className="form-breadcrumb">
+      <Breadcrumb className="breadcrumb">
         <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/vacancy/all">Vacancy</Breadcrumb.Item>
+        <Breadcrumb.Item href="/vacancies">Vacancies</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Vacancy</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="form-header">Vacancy Form</h1>
+      <h1 className="page-header">Vacancy Form</h1>
       <CForm
-        className="row g-3 needs-validation"
+        className="form row g-3 needs-validation"
         noValidate
         validated={validated}
         onSubmit={handleSubmit}
@@ -95,7 +98,7 @@ const VacancyForm = (props) => {
           <CFormFeedback invalid>Please provide job description.</CFormFeedback>
         </div>
         <CCol xs={12}>
-          <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
+          <center><Button className='form-button' color='dark' type='submit' onClick={onSubmit}>Submit</Button></center>
         </CCol>
       </CForm>
     </div>

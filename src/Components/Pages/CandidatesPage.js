@@ -9,6 +9,7 @@ import {cilPeople, cilSearch} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
 import '../../Styles/CandidateTable.css';
+import '../../Styles/Breadcrumbs.css'
 
 const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
@@ -66,11 +67,12 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ?
         <div style={{ display: 'flex', flexDirection: 'column'}}>
-          <Breadcrumb className="form-breadcrumb">
+          <Breadcrumb className="breadcrumb">
             <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-            <Breadcrumb.Item active>Candidates</Breadcrumb.Item>
+            <Breadcrumb.Item href="/candidate">Candidates</Breadcrumb.Item>
+            <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
           </Breadcrumb>
-          <h1 className="form-header" style={{padding:"1rem"}}>Candidates</h1>
+          <h1 className="page-header" style={{padding:"1rem"}}>Candidates</h1>
           <div className="utils-bar" style={{display: "flex", justifyContent:"space-between"}}>
             <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
               <button className="filter-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
