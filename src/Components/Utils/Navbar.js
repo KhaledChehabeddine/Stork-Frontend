@@ -20,7 +20,7 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/candidate/all">Candidates</Nav.Link>
           </Nav>
           <Nav className="navbar-link link3">
-            <Nav.Link as={Link} to="/employee/all">Employees</Nav.Link>
+            <Nav.Link as={Link} to="/vacancy/all">Vacancies</Nav.Link>
           </Nav>
           <Nav className="navbar-link link4">
             <Nav.Link as={Link} to="#">Help</Nav.Link>

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Button from '../Utils/Button';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../Utils/Navbar";
+import '../../Styles/Breadcrumbs.css'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Home = () => {
   return (
     <div align='center' id='home'>
       <NavBar/>
-      <div className="form-header">
+      <div className="page-header">
         <h1>Welcome {window.localStorage.getItem('username')}!</h1>
       </div>
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>

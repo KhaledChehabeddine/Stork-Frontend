@@ -1,10 +1,11 @@
 import React from 'react';
+import '../../Styles/ProfileCard.css'
 import { CCard, CCardBody, CCardTitle, CListGroup, CListGroupItem, CCardLink, CFormCheck, CForm, CFormTextarea, CFormLabel } from "@coreui/react";
 
 const ProfileCard = ({ candidate }) => {
   return (
     <div style={{ display: "flex", justifyContent: "space-around" }}>
-      <div style={{ width: "40vw", padding: "32px", backgroundColor: "#ff5f5e"}}>
+      <div className='profile-sidebar'>
         <CCard align="center">
           <CCardBody align="center">
             <CCardTitle>{candidate.firstName + " " + candidate.lastName}</CCardTitle>
