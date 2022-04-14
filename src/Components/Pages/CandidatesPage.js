@@ -2,7 +2,6 @@ import React, {useEffect, useReducer} from "react";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-import {Breadcrumb} from "react-bootstrap";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import {cilPeople, cilSearch} from "@coreui/icons";
@@ -15,7 +14,7 @@ const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
   filter = input.value.toUpperCase();
   for (i = 0; i < candidates.length; i++) {
-    name = candidates[i].firstName+' '+candidates[i].lastName;
+    name = candidates[i].firstName+' '+candidates[i].lastName+' '+candidates[i].email+' '+candidates[i].phone;
     value = name || name.innerText;
     if (value.toUpperCase().indexOf(filter) > -1) {
       filteredCandidates.push(candidates[i]);
@@ -67,34 +66,24 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ?
         <div style={{ display: 'flex', flexDirection: 'column'}}>
-          <Breadcrumb className="breadcrumb">
-            <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="/candidate">Candidates</Breadcrumb.Item>
-            <Breadcrumb.Item active>View Candidates</Breadcrumb.Item>
-          </Breadcrumb>
-          <h1 className="page-header" style={{padding:"1rem"}}>Candidates</h1>
-          <div className="utils-bar" style={{display: "flex", justifyContent:"space-between"}}>
-            <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
-              <button className="filter-button" onClick={() => dispatch({ type: 'sort-by-name'})}>Filter By Name</button>
-              <button className="filter-button" onClick={() => dispatch(({ type: 'sort-by-date'}))}>Filter By Date</button>
-            </div>
-            <div style={{marginLeft:"1%",width:"25%", display:"flex", alignItems:"center"}}>
-              <CIcon className="search-icon" icon={cilSearch} />
-              <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
-                dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
-              } placeholder="Search For Candidates"/>
-            </div>
-          </div>
-          <CTable id="candidatesTable" align="middle" className="mb-0 border candidatesTable" hover responsive>
+          <CTable id="candidatesTable" align="middle" className="mb-0 candidatesTable" hover responsive>
             <CTableHead color="light">
               <CTableRow className="header-row">
-                <CTableHeaderCell className="text-center">
-                  <CIcon icon={cilPeople} />
+                <CTableHeaderCell className="text-center icon-cell">
+                    <CIcon icon={cilPeople}/>
                 </CTableHeaderCell>
-                <CTableHeaderCell>Candidate</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Email</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Date Applied</CTableHeaderCell>
-                <CTableHeaderCell className="text-center"> </CTableHeaderCell>
+                <CTableHeaderCell className="header-cell">Candidates</CTableHeaderCell>
+                <CTableHeaderCell className="text-center header-cell">Email</CTableHeaderCell>
+                <CTableHeaderCell className="text-center header-cell">Phone Number</CTableHeaderCell>
+                <CTableHeaderCell className="text-center header-cell">Date Applied</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">
+                  <div style={{display:"flex",  alignItems:"center", float:"right"}}>
+                  <CIcon className="search-icon" icon={cilSearch} />
+                  <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
+                    dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
+                  } placeholder="Search For Candidates"/>
+                </div>
+                </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody className="table-body">

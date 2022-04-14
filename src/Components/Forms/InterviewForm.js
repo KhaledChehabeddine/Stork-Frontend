@@ -78,7 +78,7 @@ const InterviewForm = () => {
       <NavBar/>
       {state.pageLoaded ?
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <Breadcrumb className='form-breadcrumb'>
+          <Breadcrumb className='form-breadcrumb' style={{marginTop:"50px"}}>
             <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
             <Breadcrumb.Item href='/interview/all'>Interviews</Breadcrumb.Item>
             <Breadcrumb.Item active>Add Interview</Breadcrumb.Item>

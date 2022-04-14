@@ -6,7 +6,7 @@ import Hamburger from "./Hamburger";
 
 const NavBar = () => {
   return (
-    <Navbar className="navbar" sticky="top" style={{backgroundColor:"#D9E3FB",marginBottom:"50px"}} expand="lg">
+    <Navbar className="navbar" sticky="top" style={{backgroundColor:"#2e2e2e",marginBottom:"5px"}} expand="lg">
       <Container>
         <Nav className="navbar-brand">
           <Navbar.Brand as={Link} to="/home">STOЯK</Navbar.Brand>
@@ -14,12 +14,9 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="navbar-firstlink">
-            <Nav.Link as={Link} to="#">Recruit</Nav.Link>
-          </Nav>
-          <Nav className="navbar-link link2">
             <Nav.Link as={Link} to="/candidate/all">Candidates</Nav.Link>
           </Nav>
-          <Nav className="navbar-link link3">
+          <Nav className="navbar-link link2">
             <Nav.Link as={Link} to="/vacancy/all">Vacancies</Nav.Link>
           </Nav>
           <Nav className="navbar-link link4">

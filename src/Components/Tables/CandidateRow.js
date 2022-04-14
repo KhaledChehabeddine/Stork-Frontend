@@ -17,6 +17,7 @@ const CandidateRow = ({ candidate }) => {
         <div>{candidate.firstName+' '+candidate.lastName}</div>
       </CTableDataCell>
       <CTableDataCell className="text-center">{candidate.email}</CTableDataCell>
+      <CTableDataCell className="text-center">{candidate.phone}</CTableDataCell>
       <CTableDataCell className="text-center">{formatDate(candidate.date)}</CTableDataCell>
       <CTableDataCell className="text-center">
         <Button className="view-button" style={{margin:0, padding: "10px"}} onClick={() => navigate(`/candidate/${getHashCode(candidate.id)}`)}>View</Button>

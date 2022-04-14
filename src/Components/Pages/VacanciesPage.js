@@ -36,7 +36,7 @@ const VacanciesPage = (props) => {
       {state.vacanciesLoaded
         ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
-            <Breadcrumb className="breadcrumb">
+            <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
               <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
               <Breadcrumb.Item href="/vacancies">Vacancies</Breadcrumb.Item>
               <Breadcrumb.Item active="/vacancies/all">View Vacancies</Breadcrumb.Item>
