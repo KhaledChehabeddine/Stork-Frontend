@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Button from '../Utils/Button';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../Utils/Navbar";
+import '../../Styles/Breadcrumbs.css'
 
 const Home = () => {
   const navigate = useNavigate();

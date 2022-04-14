@@ -6,7 +6,8 @@ import VacancyRow from "../Tables/VacancyRow";
 import Spinner from "../Utils/Spinner";
 import {Breadcrumb} from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
-import {cilPeople} from "@coreui/icons";
+import {cilBuilding} from "@coreui/icons";
+import '../../Styles/Breadcrumbs.css'
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -37,19 +38,20 @@ const VacanciesPage = (props) => {
           <div style={{ display: 'flex', flexDirection: 'column'}}>
             <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
               <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item active>Vacancies</Breadcrumb.Item>
+              <Breadcrumb.Item href="/vacancies">Vacancies</Breadcrumb.Item>
+              <Breadcrumb.Item active="/vacancies/all">View Vacancies</Breadcrumb.Item>
             </Breadcrumb>
-            <h1 className="form-header" style={{padding:"1rem"}}>Vacancies</h1>
+            <h1 className="page-header" style={{padding:"1rem"}}>Vacancies</h1>
             <CTable align="middle" className="mb-0 border" hover responsive>
               <CTableHead color="light">
                 <CTableRow className="header-row">
                   <CTableHeaderCell className="text-center">
-                    <CIcon icon={cilPeople} />
+                    <CIcon icon={cilBuilding}/>
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                   <CTableHeaderCell scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Apply</CTableHeaderCell>
+                  <CTableHeaderCell scope="col"> </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody className="table-body">

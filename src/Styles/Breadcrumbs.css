@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
+
+
+.breadcrumb {
+    margin-left: 3%;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 12px;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: black;
+}
+
+.page-header {
+    font-family: 'Raleway', sans-serif;
+    margin-left: 6%!important;
+    padding-bottom: 40px!important;
+}

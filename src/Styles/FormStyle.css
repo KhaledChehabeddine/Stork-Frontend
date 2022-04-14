@@ -1,73 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap');
-
-.form-text {
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-.form-breadcrumb {
-    margin-left: 60px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 12px;
-    font-weight: bolder;
-    text-transform: uppercase;
-}
-
-.form-breadcrumb a {
-    text-decoration: none;
-    color: black;
-}
-
-.form-header {
-    font-family: 'Raleway', sans-serif;
-    font-weight: bold;
-    padding-left: 60px!important;
-    padding-bottom: 40px!important;
-}
-
-
-.form-container {
-    display: flex;
-    justify-content: center;
-}
-
-.flex-form {
-    display: flex;
-    flex-wrap: wrap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
 .form {
-    background-color: #F5F5F5!important;
-    margin-bottom: 100px;
-    width: 50% !important;
-    justify-content: center;
-}
-
-
-.form-input {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 15px;
-    font-weight: bolder!important;
-    border: 2px solid #000000!important;
-    box-sizing: border-box!important;
-    border-radius: 7px!important;
-}
-
-.left {
-    float: left;
-}
-
-.right {
-    float: right;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bolder;
 }
 
 .form-button {
-    font-size: small!important;
-    margin-left: 10px!important;
-    margin-right: auto!important;
-    border-radius: 7px!important;
-    padding: 0!important;
-    height: 30px;
-    width: 145px;
+    border: 1px solid black !important;
+
+    font-weight: lighter!important;
 }

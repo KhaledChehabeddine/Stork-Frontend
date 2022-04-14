@@ -1,3 +1,4 @@
+import React, {useCallback, useState} from 'react';
 import {Breadcrumb} from "react-bootstrap";
 import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect} from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
@@ -5,7 +6,8 @@ import {formStyle} from '../Utils/Styles';
 import {useNavigate} from 'react-router-dom';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
-import React, {useCallback, useState} from 'react';
+import '../../Styles/Breadcrumbs.css'
+import '../../Styles/FormStyle.css'
 
 const CandidateForm = () => {
   const navigate = useNavigate();
@@ -23,8 +25,7 @@ const CandidateForm = () => {
     if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
-    }
-    setValid(true);
+    } setValid(true);
   };
 
   const onSubmit = useCallback( () => {
@@ -58,9 +59,9 @@ const CandidateForm = () => {
         <Breadcrumb.Item href="/candidate/all">Candidates</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="form-header">Candidate Form</h1>
+      <h1 className="page-header">Candidate Form</h1>
       <CForm
-        className='row g-3 needs-validation'
+        className='form row g-3 needs-validation'
         noValidate
         validated={valid}
         style={formStyle}
