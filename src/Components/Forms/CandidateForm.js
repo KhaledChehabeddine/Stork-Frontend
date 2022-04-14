@@ -53,7 +53,7 @@ const CandidateForm = () => {
   return (
     <div>
       <NavBar />
-      <Breadcrumb className="form-breadcrumb">
+      <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
         <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
         <Breadcrumb.Item href="/candidate/all">Candidates</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>

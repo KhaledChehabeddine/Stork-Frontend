@@ -16,10 +16,8 @@ const Button = styled.button`
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   transition: background 200ms ease-in, color 200ms ease-in, border 200ms ease-in, transform 200ms ease-in;
   &:hover {
-    background: -webkit-linear-gradient(to right, #0f0e77, #D91114);
-    background: linear-gradient(to right, #0f0e77, #D91114);
-    color: white;
-    transform: scale(1.02);
+    color: black;
+    transform: scale(1.03);
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   }
 `

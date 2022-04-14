@@ -40,7 +40,7 @@ const VacancyForm = (props) => {
   return (
     <div>
       <NavBar />
-      <Breadcrumb className="form-breadcrumb">
+      <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
         <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
         <Breadcrumb.Item href="/vacancy/all">Vacancy</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Vacancy</Breadcrumb.Item>

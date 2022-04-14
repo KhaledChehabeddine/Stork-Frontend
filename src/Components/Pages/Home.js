@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div align='center' id='home'>
       <NavBar/>
-      <div className="form-header">
+      <div className="form-header" style={{ marginTop:"50px"}}>
         <h1>Welcome {window.localStorage.getItem('username')}!</h1>
       </div>
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>
