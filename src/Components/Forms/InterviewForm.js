@@ -68,9 +68,16 @@ const InterviewForm = () => {
     if (!state.vacancy) return;
     if (!state.date_time) return;
     getApiClient().addInterview(state.candidate, state.vacancy, state.date_time, state.description)
-      .catch(error => console.log(error));
-    alert('Your interview has been successfully scheduled!');
-    navigate('/home');
+      .then(response => {
+        //alert('Your interview has been successfully scheduled!');
+        console.log(response.data);
+        // const index = getApiClient().getNumInterviewsPerCandidate(state.candidate.id);
+        // getApiClient().updateStatus(state.candidate.id, `Interview #${index+1} scheduled`)
+        //   .then(response => {
+        //     alert('Candidate status has been successfully updated');
+        //     navigate('/home');
+        //   }).catch(error => console.log(error));
+      }).catch(error => console.log(error));
   }, [state.candidate, state.vacancy, state.date_time, state.description, navigate]);
 
   return (

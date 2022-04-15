@@ -76,9 +76,9 @@ class ApiClient extends ApiClientBase {
 
   addInterview(candidate_id, vacancy_id, date_time, description) {
     const data = {};
-    data.candidate_id = candidate_id;
-    data.vacancy_id = vacancy_id;
-    data.date_time = date_time;
+    data.candidateId = candidate_id;
+    data.vacancyId = vacancy_id;
+    data.dateTime = date_time;
     data.description = description;
     return this.Post('/interview/add', data);
   }
@@ -117,6 +117,23 @@ class ApiClient extends ApiClientBase {
     return this.Get('/action/all', params);
   }
 
+  updateStatus(candidate, status) {
+    candidate.status = status;
+    return this.Put('/candidate/update', candidate);
+  }
+
+  getInterviewsByCandidateId(candidateId) {
+    const params = {};
+    params.candidateId = candidateId;
+    return this.Get('/interview/candidate', params);
+  }
+
+  getNumInterviewsPerCandidate(candidateId) {
+    this.getInterviewsByCandidateId(candidateId)
+      .then(response => {return response.data.length})
+      .catch(error => console.log(error));
+    return 0;
+  }
 }
 
 export default ApiClient;
