@@ -10,18 +10,21 @@ class ApiClient extends ApiClientBase {
     return this.Post(endpoint, data);
   }
     Get method example
-  GetExample(enpoint, arg1, arg2) {
+  GetExample(endpoint, arg1, arg2) {
     const params = {};
     params.arg1 = arg1;
     params.arg2 = arg2;
     return this.Get(endpoint, params);
   }
    */
-  login(username, password) {
-    const data = {};
-    data.username = username;
-    data.password = password;
-    return this.Post('/login', data);
+  authenticateUser(username, password) {
+    return {
+      data : {
+        username: 'Ahmad Zaaroura',
+        email: 'asz07@mail.aub.edu',
+        id: 41
+      }
+    }
   }
 
   deleteEmployee(id) {
@@ -93,6 +96,25 @@ class ApiClient extends ApiClientBase {
 
   getAllVacancies() {
     return this.Get('/vacancy/all');
+  }
+
+  addAction(title) {
+    const data = {};
+    data.title = title;
+    data.date = getCurrentDate();
+    return this.Post('/action/add', data);
+  }
+
+  getAction(id) {
+    const params = {};
+    params.id = id;
+    return this.Get('/action/find', params);
+  }
+
+  getActionsByCandidateId(candidateId) {
+    const params = {};
+    params.candidateId = candidateId;
+    return this.Get('/action/all', params);
   }
 
 }
