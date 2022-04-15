@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb} from 'react-bootstrap';
 import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect} from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -16,14 +16,14 @@ const phoneRegex = new RegExp('^\\d{5,12}$');
 const initialState = {
   country: null,
   countryPhone: null,
-  email: "",
-  firstName: "",
+  email: '',
+  firstName: '',
   gender: null,
   jobPosition: null,
   jobPositions: [],
-  lastName: "",
+  lastName: '',
   pageLoaded: false,
-  phone: "",
+  phone: '',
   resumeFile: null,
   valid: false
 };
@@ -88,11 +88,11 @@ const CandidateForm = () => {
     if (!state.jobPosition) return;
     if (!state.resumeFile) return;
     getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone,
-                                state.gender, state.email, state.phone, state.jobPosition)
+                                state.gender, state.email, state.phone, state.jobPosition, 'Pending')
       .then(response =>
         getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error))
       ).catch(error => console.log(error));
-    alert('Your application has been successfully submitted!');
+    alert('Candidate has been successfully added!');
     navigate('/home');
   }, [state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
             state.email, state.phone, state.jobPosition, state.resumeFile, navigate]);
@@ -100,105 +100,138 @@ const CandidateForm = () => {
   return (
     <div>
       <NavBar />
-      <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
-        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/candidate/all">Candidates</Breadcrumb.Item>
+      <Breadcrumb className='form-breadcrumb' style={{marginTop:'50px'}}>
+        <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href='/candidate/all'>Candidates</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="page-header">Candidate Form</h1>
+      <h1 className='page-header'>Candidate Form</h1>
       <CForm
         className='form row g-3 needs-validation'
-        encType="multipart/form-data"
+        encType='multipart/form-data'
         noValidate
         onSubmit={handleSubmit}
         style={formStyle}
-        validated={state.valid}
-      >
+        validated={state.valid}>
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer01'>First Name</CFormLabel>
-          <CFormInput type='text' placeholder='ex: Jonathon' id='validationServer01' required
-                      onChange={(event) => dispatch(
-                        {type: 'set-first-name', firstName: event.target.value}
-                      )}
-          />
+          <CFormInput
+            id='validationServer01'
+            type='text'
+            placeholder='ex: Jonathon'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-first-name', firstName: event.target.value}
+            )}/>
           <CFormFeedback tooltip invalid>Invalid first name</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer02'>Last Name</CFormLabel>
-          <CFormInput type='text' placeholder='ex: Walker' id='validationServer02' required
-                      onChange={(event) => dispatch(
-                        {type: 'set-last-name', lastName: event.target.value}
-                      )}
-          />
+          <CFormInput
+            id='validationServer02'
+            type='text'
+            placeholder='ex: Walker'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-last-name', lastName: event.target.value}
+            )}/>
           <CFormFeedback tooltip invalid>Invalid last name</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer05'>Country</CFormLabel>
-          <CFormSelect id='validationServer05' defaultValue={'DEFAULT'} required
-                       onChange={(event) => dispatch(
-                         {type: 'set-country', country: event.target.value, countryPhone: countries[event.target.value]}
-                       )}
-          >
-            <option value='DEFAULT' disabled>Choose...</option>
+          <CFormSelect
+            id='validationServer05'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-country', country: event.target.value, countryPhone: countries[event.target.value]}
+            )}>
+            <option value='' disabled>Choose...</option>
             {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer06'>Gender</CFormLabel>
-          <CFormSelect id='validationServer06' defaultValue={'DEFAULT'} required
-                       onChange={(event) => dispatch(
-                         {type: 'set-gender', gender: event.target.value}
-                       )}
-          >
-            <option value='DEFAULT' disabled>Choose...</option>
+          <CFormSelect
+            id='validationServer06'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-gender', gender: event.target.value}
+            )}>
+            <option value='' disabled>Choose...</option>
             {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid gender</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={7} className='position-relative'>
           <CFormLabel htmlFor='validationServer03'>Email Address</CFormLabel>
-          <CFormInput type='email' placeholder='ex: example@email.com' id='validationServer03' required
-                      onChange={(event) => dispatch(
-                        {type: 'set-email', email: event.target.value}
-                      )}
-          />
+          <CFormInput
+            id='validationServer03'
+            type='email'
+            placeholder='ex: example@email.com'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-email', email: event.target.value}
+            )}/>
           <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={5} className='position-relative'>
           <CFormLabel htmlFor='validationServer04'>Phone Number</CFormLabel>
-          <CFormInput type='tel' placeholder='ex: 12345678' id='validationServer04' required
-                      onChange={(event) => dispatch(
-                        {type: 'set-phone', phone: event.target.value}
-                      )}
-          />
+          <CFormInput
+            id='validationServer04'
+            type='tel'
+            placeholder='ex: 12345678'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-phone', phone: event.target.value}
+            )}/>
           <CFormFeedback tooltip invalid>Invalid phone number</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
           <CFormLabel htmlFor='validationServer07'>Job Position</CFormLabel>
-          <CFormSelect id='validationServer07' defaultValue={'DEFAULT'} required
-                       onChange={(event) => dispatch(
-                         {type: 'set-job-position', jobPosition: event.target.value}
-                       )}
-          >
-            <option value='DEFAULT' disabled>Choose...</option>
+          <CFormSelect
+            id='validationServer07'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-job-position', jobPosition: event.target.value}
+            )}>
+            <option value='' disabled>Choose...</option>
             {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
               {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
             </option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid job position</CFormFeedback>
         </CCol>
+
         <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
           <CFormLabel htmlFor='validationServer08'>Resume</CFormLabel>
-          <CFormInput type='file' id='validationServer08' accept='.pdf' aria-label='file example' required
-                      onChange={(event) => dispatch(
-                        {type: 'set-resume-file', resumeFile: event.target.files[0]}
-                      )}
-          />
+          <CFormInput
+            id='validationServer08'
+            type='file'
+            accept='.pdf'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-resume-file', resumeFile: event.target.files[0]}
+            )}/>
           <CFormFeedback tooltip invalid>Invalid resume</CFormFeedback>
         </CCol>
+
         <CCol xs={12}>
-          <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
+          <center>
+            <CButton
+              color='dark'
+              type='submit'
+              onClick={onSubmit}>Submit</CButton>
+          </center>
         </CCol>
       </CForm>
     </div>
