@@ -43,7 +43,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -53,6 +53,7 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.phone = phone;
     data.jobPosition = jobPosition;
+    data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
   }
@@ -85,14 +86,15 @@ class ApiClient extends ApiClientBase {
     return this.Post('/interview/add', data);
   }
 
-  addVacancy(jobTitle, country, city, jobDescription, deadline) {
+  addVacancy(jobTitle, country, city, workType, employmentType, notes) {
     const data = {};
     data.jobTitle = jobTitle;
     data.country = country;
     data.city = city;
-    data.jobDescription = jobDescription;
+    data.workType = workType;
+    data.employmentType = employmentType;
+    data.notes = notes;
     data.datePosted = getCurrentDate();
-    data.deadline = deadline
     return this.Post('/vacancy/add', data);
   }
 
