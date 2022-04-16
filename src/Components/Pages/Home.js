@@ -16,6 +16,32 @@ const Home = (props) => {
       <div className="form-header">
         <h1>Welcome {window.localStorage.getItem('username')}!</h1>
       </div>
+      <div> 
+        <div style={{display: "flex"}}>
+          <div style={{width: "50%"}}>
+          <p>
+            1a
+          </p>
+          </div>
+          <div style={{width: "50%"}}>
+          <p>
+            1b
+          </p>
+          </div>
+        </div>
+
+        <div>
+          <p>
+            2
+          </p>
+        </div>
+
+        <div>
+          <p>
+            3
+          </p>
+        </div>
+      </div>
       <Button onClick={() => { navigate('/employee/add') }}>Add Employees</Button>
       <Button onClick={() => { navigate('/employee/all') }}>View Employees</Button>
       <Button onClick={() => { navigate('/candidate/add') }}>Add Candidate</Button>
