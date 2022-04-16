@@ -8,25 +8,14 @@ import NavBar from "../Utils/Navbar";
 import React, {useReducer, useEffect, useCallback} from 'react';
 import Spinner from '../Utils/Spinner';
 
-const initialState = {
-  candidate: null,
-  candidates: [],
-  date_time: null,
-  description: "",
-  pageLoaded: false,
-  vacancy: null,
-  vacancies: [],
-  valid: false
-};
-
 const reducer = (state, action) => {
   switch(action.type) {
     case 'page-loaded':
       return {...state, candidates: action.candidates, pageLoaded: true, vacancies: action.vacancies};
     case 'set-valid':
       return {...state, valid: true};
-    case 'set-candidate':
-      return {...state, candidate: action.candidate};
+    case 'set-candidate-id':
+      return {...state, candidateId: action.candidateId};
     case 'set-vacancy':
       return {...state, vacancy: action.vacancy};
     case 'set-date-time':
@@ -40,17 +29,30 @@ const reducer = (state, action) => {
 
 const InterviewForm = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    candidateId: null,
+    candidates: [],
+    date_time: null,
+    description: "",
+    pageLoaded: false,
+    vacancy: null,
+    vacancies: [],
+    valid: false
+  });
 
   useEffect(() => {
-    getApiClient().getAllCandidates().then(candidate_list =>
-      getApiClient().getAllVacancies().then(vacancy_list =>
-        dispatch({
-          type: 'page-loaded',
-          candidates: candidate_list.data,
-          vacancies: vacancy_list.data
-        })
-      ).catch(error => console.log(error))
+    getApiClient().getAllCandidates()
+      .then(response1 => {
+        getApiClient().getAllVacancies()
+          .then(response2 => {
+            dispatch({
+              type: 'page-loaded',
+              candidates: response1.data,
+              vacancies: response2.data
+            })
+          }
+        ).catch(error => console.log(error))
+      }
     ).catch(error => console.log(error))
   }, []);
 
@@ -64,14 +66,28 @@ const InterviewForm = () => {
   };
 
   const onSubmit = useCallback(() => {
-    if (!state.candidate) return;
+    if (!state.candidateId) return;
+    let candidate = null;
+    for (let c in state.candidates) {
+      if (state.candidates[c].id === parseInt(state.candidateId)) {
+        candidate = state.candidates[c];
+        break;
+      }
+    }
+    if (!candidate) return;
     if (!state.vacancy) return;
     if (!state.date_time) return;
-    getApiClient().addInterview(state.candidate, state.vacancy, state.date_time, state.description)
-      .catch(error => console.log(error));
-    alert('Your interview has been successfully scheduled!');
-    navigate('/home');
-  }, [state.candidate, state.vacancy, state.date_time, state.description, navigate]);
+    getApiClient().addInterview(state.candidateId, state.vacancy, state.date_time, state.description)
+      .then(response => {
+        alert('Your interview has been successfully scheduled!');
+        const index = getApiClient().getNumInterviewsPerCandidate(state.candidateId);
+        getApiClient().updateStatus(candidate, `Interview #${index+1} scheduled`)
+          .then(response => {
+            alert('Candidate status has been successfully updated to "' + response.data.status + '"');
+            window.location.reload();
+          }).catch(error => console.log(error));
+      }).catch(error => console.log(error));
+  }, [state.candidateId, state.vacancy, state.date_time, state.description, navigate]);
 
   return (
     <div>
@@ -88,18 +104,22 @@ const InterviewForm = () => {
             className='row g-3 needs-validation'
             noValidate
             validated={state.valid}
-            onSubmit={handleSubmit}
+            //onSubmit={handleSubmit}
+            onSubmit={event => event.preventDefault()}
             style={formStyle}
             encType="multipart/form-data"
           >
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
               <CFormLabel htmlFor='validationServer01'>Candidate</CFormLabel>
-              <CFormSelect id='validationServer01' required
-                           onChange={(event) => dispatch(
-                             {type: 'set-candidate', candidate: event.target.value}
-                           )}
+              <CFormSelect
+                id='validationServer01'
+                defaultValue='Choose...'
+                required
+                onChange={(event) => dispatch(
+                  {type: 'set-candidate-id', candidateId: event.target.value}
+                )}
               >
-                <option selected disabled value=''>Choose...</option>
+                <option disabled value='Choose...'>Choose...</option>
                 {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
                   {candidate.firstName + ' ' + candidate.lastName}
                 </option>)}
@@ -108,12 +128,15 @@ const InterviewForm = () => {
             </CCol>
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
               <CFormLabel htmlFor='validationServer02'>Vacancy</CFormLabel>
-              <CFormSelect id='validationServer02' required
-                           onChange={(event) => dispatch(
-                             {type: 'set-vacancy', vacancy: event.target.value}
-                           )}
+              <CFormSelect
+                id='validationServer02'
+                defaultValue='Choose...'
+                required
+                onChange={(event) => dispatch(
+                  {type: 'set-vacancy', vacancy: event.target.value}
+                )}
               >
-                <option selected disabled value=''>Choose...</option>
+                <option disabled value='Choose...'>Choose...</option>
                 {state.vacancies.map(vacancy => <option key={vacancy.id} value={vacancy.id}>
                   {vacancy.jobTitle + ' (' + vacancy.country + ')'}
                 </option>)}

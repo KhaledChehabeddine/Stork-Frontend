@@ -48,11 +48,10 @@ class ApiClient extends ApiClientBase {
     data.firstName = firstName;
     data.lastName = lastName;
     data.country = country;
-    data.countryPhone = countryPhone;
-    data.gender = gender;
+    data.sex = gender;
     data.email = email;
-    data.phone = phone;
-    data.jobPosition = jobPosition;
+    data.phone = '+' + countryPhone + phone;
+    // data.jobPosition = jobPosition;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
@@ -77,11 +76,11 @@ class ApiClient extends ApiClientBase {
     return this.Post('/candidate/delete', data);
   }
 
-  addInterview(candidate_id, vacancy_id, date_time, description) {
+  addInterview(candidateId, vacancyId, dateTime, description) {
     const data = {};
-    data.candidate_id = candidate_id;
-    data.vacancy_id = vacancy_id;
-    data.date_time = date_time;
+    data.candidateId = candidateId;
+    data.vacancyId = vacancyId;
+    data.dateTime = dateTime;
     data.description = description;
     return this.Post('/interview/add', data);
   }
@@ -93,7 +92,7 @@ class ApiClient extends ApiClientBase {
     data.city = city;
     data.workType = workType;
     data.employmentType = employmentType;
-    data.notes = notes;
+    data.jobDescription = notes;
     data.datePosted = getCurrentDate();
     return this.Post('/vacancy/add', data);
   }
@@ -121,6 +120,23 @@ class ApiClient extends ApiClientBase {
     return this.Get('/action/all', params);
   }
 
+  updateStatus(candidate, status) {
+    candidate.status = status;
+    return this.Put('/candidate/update', candidate);
+  }
+
+  getInterviewsByCandidateId(candidateId) {
+    const params = {};
+    params.candidateId = candidateId;
+    return this.Get('/interview/candidate', params);
+  }
+
+  getNumInterviewsPerCandidate(candidateId) {
+    this.getInterviewsByCandidateId(candidateId)
+      .then(response => {return response.data.length})
+      .catch(error => console.log(error));
+    return 0;
+  }
 }
 
 export default ApiClient;

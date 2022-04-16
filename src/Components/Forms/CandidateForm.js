@@ -169,7 +169,7 @@ const CandidateForm = () => {
           <CFormFeedback tooltip invalid>Invalid gender</CFormFeedback>
         </CCol>
 
-        <CCol style={{marginBottom: '1rem'}} md={7} className='position-relative'>
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer03'>Email Address</CFormLabel>
           <CFormInput
             id='validationServer03'
@@ -182,7 +182,17 @@ const CandidateForm = () => {
           <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
         </CCol>
 
-        <CCol style={{marginBottom: '1rem'}} md={5} className='position-relative'>
+        <CCol style={{marginBottom: '1rem'}} md={2} className='position-relative'>
+          <CFormLabel htmlFor='validationServer03'>CCode</CFormLabel>
+          <CFormInput
+            id='validationServer03'
+            type='tel'
+            defaultValue={'+' + state.countryPhone}
+            readOnly/>
+          <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={4} className='position-relative'>
           <CFormLabel htmlFor='validationServer04'>Phone Number</CFormLabel>
           <CFormInput
             id='validationServer04'

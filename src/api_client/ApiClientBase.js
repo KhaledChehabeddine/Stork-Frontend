@@ -12,6 +12,11 @@ class ApiClientBase {
     if (!data) data = new FormData();
     return axios.post(this.apiBaseUrl + endpoint, data);
   }
+
+  Put(endpoint, data) {
+    if (!data) data = new FormData();
+    return axios.put(this.apiBaseUrl + endpoint, data);
+  }
 }
 
 export default ApiClientBase;
