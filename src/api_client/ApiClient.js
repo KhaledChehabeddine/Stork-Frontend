@@ -121,6 +121,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/action/all', params);
   }
 
+  getAllInterviews() {
+    return this.Get('/interview/all');
+  }
+
 }
 
 export default ApiClient;
