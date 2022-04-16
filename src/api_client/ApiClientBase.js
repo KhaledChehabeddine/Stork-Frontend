@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class ApiClientBase {
   //apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://storkrecruit-api.herokuapp.com';
-  apiBaseUrl = 'https://storkrecruit-api.herokuapp.com';
+  apiBaseUrl = 'http://localhost:8080';
   Get(endpoint, params) {
     const config = {};
     if (params) config.params = params;
@@ -11,6 +11,11 @@ class ApiClientBase {
   Post(endpoint, data) {
     if (!data) data = new FormData();
     return axios.post(this.apiBaseUrl + endpoint, data);
+  }
+
+  Put(endpoint, data) {
+    if (!data) data = new FormData();
+    return axios.put(this.apiBaseUrl + endpoint, data);
   }
 }
 
