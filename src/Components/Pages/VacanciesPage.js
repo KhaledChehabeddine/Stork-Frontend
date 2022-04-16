@@ -2,11 +2,12 @@ import React, {useState, useEffect, useReducer} from 'react';
 import getApiClient from "../../api_client/getApiClient";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import NavBar from "../Utils/Navbar";
-import {tableStyle} from "../Utils/styles";
-import Header from "../Utils/Header";
 import VacancyRow from "../Tables/VacancyRow";
 import Spinner from "../Utils/Spinner";
 import {Breadcrumb} from "react-bootstrap";
+import CIcon from "@coreui/icons-react";
+import {cilBuilding} from "@coreui/icons";
+import '../../Styles/Breadcrumbs.css'
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -30,35 +31,37 @@ const VacanciesPage = (props) => {
       }).catch(error => console.log(error));
   }, []);
   return (
-    <div>
+    <>
       <NavBar />
       {state.vacanciesLoaded
         ?
-          <>
-            <Breadcrumb className="form-breadcrumb">
+          <div style={{ display: 'flex', flexDirection: 'column'}}>
+            <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
               <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item active>Vacancies</Breadcrumb.Item>
+              <Breadcrumb.Item href="/vacancies">Vacancies</Breadcrumb.Item>
+              <Breadcrumb.Item active="/vacancies/all">View Vacancies</Breadcrumb.Item>
             </Breadcrumb>
-            <h1 className="form-header" style={{ padding: '1%' }}>Vacancies</h1>
-            <CTable style={tableStyle}>
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col">#</CTableHeaderCell>
+            <h1 className="page-header" style={{padding:"1rem"}}>Vacancies</h1>
+            <CTable align="middle" className="mb-0 border" hover responsive>
+              <CTableHead color="light">
+                <CTableRow className="header-row">
+                  <CTableHeaderCell className="text-center">
+                    <CIcon icon={cilBuilding}/>
+                  </CTableHeaderCell>
                   <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Country</CTableHeaderCell>
                   <CTableHeaderCell scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">View</CTableHeaderCell>
+                  <CTableHeaderCell scope="col"> </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
-              <CTableBody>
+              <CTableBody className="table-body">
                 {vacancies.map(vacancy =>
-                  <VacancyRow vacancy={vacancy} />)}
+                  <VacancyRow key={vacancy.id} vacancy={vacancy} id={vacancy.id} />)}
               </CTableBody>
             </CTable>
-          </>
+          </div>
         : <Spinner />}
-
-    </div>
+    </>
   );
 };
 

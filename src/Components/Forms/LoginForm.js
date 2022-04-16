@@ -4,6 +4,7 @@ import Form from '../Utils/Form';
 import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
 import "../../Styles/LoginPageStyle.css"
+import getApiClient from "../../api_client/getApiClient";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -11,12 +12,13 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const authLogin = useCallback(() => {
-    if (username === 'admin' && password === 'password') {
-      window.localStorage.setItem('username', 'admin');
-      window.localStorage.setItem('password', 'password');
-      navigate('/home');
-      window.location.reload();
-    } else alert('Username and Password do not match');
+    const response = getApiClient().authenticateUser(username, password);
+    //  .then(response => {
+        window.localStorage.setItem('username', response.data.username);
+        window.localStorage.setItem('password', response.data.password);
+        navigate('/home');
+        window.location.reload();
+    //  }).catch(error => console.log(error));
   }, [navigate, username, password]);
 
   return (

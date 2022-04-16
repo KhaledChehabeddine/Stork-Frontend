@@ -6,7 +6,7 @@ class ApiClientBase {
   Get(endpoint, params) {
     const config = {};
     if (params) config.params = params;
-    return axios.get(this.apiBaseUrl + endpoint);
+    return axios.get(this.apiBaseUrl + endpoint, config);
   }
   Post(endpoint, data) {
     if (!data) data = new FormData();

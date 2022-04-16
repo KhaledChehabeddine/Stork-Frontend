@@ -1,86 +1,241 @@
-import React, {useCallback, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer} from 'react';
+import {Breadcrumb} from 'react-bootstrap';
+import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect} from '@coreui/react';
+import {countries, genders} from '../Utils/utils';
+import {formStyle} from '../Utils/Styles';
+import {useNavigate} from 'react-router-dom';
 import getApiClient from '../../api_client/getApiClient';
-import Button from '../Utils/Button';
-import Form from '../Utils/Form';
-import Input from '../Utils/Input';
-import {useNavigate} from "react-router-dom";
-import Spinner from "../Utils/Spinner";
-import NavBar from "../Utils/Navbar";
-import {Breadcrumb} from "react-bootstrap";
+import NavBar from '../Utils/Navbar';
+import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
+
+const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
+const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
+const phoneRegex = new RegExp('^\\d{5,12}$');
+
+const initialState = {
+  country: null,
+  countryPhone: null,
+  email: '',
+  firstName: '',
+  gender: null,
+  jobPosition: null,
+  jobPositions: [],
+  lastName: '',
+  pageLoaded: false,
+  phone: '',
+  resumeFile: null,
+  valid: false
+};
 
 const reducer = (state, action) => {
   switch(action.type) {
-    case 'adding-candidate':
-      return { ...state, addingCandidate: true };
-    case 'candidate-added':
-      return { ...state, candidateAdded: true, addingCandidate: false };
+    case 'set-country':
+      return {...state, country: action.country, countryPhone: action.countryPhone};
+    case 'set-email':
+      return {...state, email: action.email};
+    case 'set-first-name':
+      return {...state, firstName: action.firstName};
+    case 'set-gender':
+      return {...state, gender: action.gender};
+    case 'set-job-position':
+      return {...state, jobPosition: action.jobPosition};
+    case 'set-last-name':
+      return {...state, lastName: action.lastName};
+    case 'page-loaded':
+      return {...state, jobPositions: action.jobPositions, pageLoaded: action.pageLoaded};
+    case 'set-phone':
+      return {...state, phone: action.phone};
+    case 'set-resume-file':
+      return {...state, resumeFile: action.resumeFile};
+    case 'set-valid':
+      return {...state, valid: true};
     default:
-      return { ...state };
+      return {...state};
   }
-}
+};
 
-const CandidateForm = (props) => {
+const CandidateForm = () => {
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reducer, {
-    addingCandidate: false,
-    candidateAdded: false
-  });
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [resume, setResume] = useState(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const onFileChange = useCallback(event => {
-    setResume(event.target.files[0]);
+  useEffect(() => {
+    getApiClient().getAllVacancies().then(job_positions =>
+      dispatch({
+        type: 'page-loaded',
+        jobPositions: job_positions.data
+      })
+    ).catch(error => console.log(error))
   }, []);
 
-  const addCandidateHandler = useCallback(() => {
-    console.log(resume);
-    const reader = new FileReader();
-    console.log('result: ' + reader.result);
-    dispatch({ type: 'adding-candidate' });
-    getApiClient().addCandidate('/add', firstName, lastName, email, phone, null, 'https://bootdey.com/img/Content/avatar/avatar3.png')
-      .then(response => {
-        dispatch({ type: 'candidate-added' });
-        navigate(`/candidate/all`);
-      }).catch(error => {
-        console.log(error);
-    });
-  }, [firstName, lastName, email, phone, resume, navigate]);
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    dispatch({type: 'set-valid'});
+  }
+
+  const onSubmit = useCallback( () => {
+    if (!nameRegex.test(state.firstName)) return;
+    if (!nameRegex.test(state.lastName)) return;
+    if (!state.country) return;
+    if (!state.countryPhone) return;
+    if (!state.gender) return;
+    if (!emailRegex.test(state.email)) return;
+    if (!phoneRegex.test(state.phone)) return;
+    if (!state.jobPosition) return;
+    if (!state.resumeFile) return;
+    getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone,
+                                state.gender, state.email, state.phone, state.jobPosition, 'Pending')
+      .then(response =>
+        getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error))
+      ).catch(error => console.log(error));
+    alert('Candidate has been successfully added!');
+    navigate('/home');
+  }, [state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
+            state.email, state.phone, state.jobPosition, state.resumeFile, navigate]);
 
   return (
-    <>
-      <NavBar/>
-      <Breadcrumb className="form-breadcrumb">
-        <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-        <Breadcrumb.Item href="/employees">Candidates</Breadcrumb.Item>
-        <Breadcrumb.Item active>Apply</Breadcrumb.Item>
+    <div>
+      <NavBar />
+      <Breadcrumb className='form-breadcrumb' style={{marginTop:'50px'}}>
+        <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href='/candidate/all'>Candidates</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className="form-header" style={{ padding: '1rem' }}>Application Form</h1>
-      {state.addingCandidate ? <Spinner />
-        :
-        <div className="form-container" align='center'>
-          <Form className="form" onSubmit={event => { event.preventDefault() }}>
-            <div className="flex-form" align='center'>
-              <Input className="form-input left" onChange={event => { setFirstName(event.target.value) }} placeholder='First Name'/>
-              <Input className="form-input right" onChange={event => { setEmail(event.target.value) }} placeholder='Email'/>
-              <Input className="form-input left" onChange={event => { setLastName(event.target.value) }} placeholder='Last Name'/>
-              <Input className="form-input right" onChange={event => { setPhone(event.target.value) }} placeholder='Phone'/>
-            </div>
-            <hr/>
-            <div style={{display:'flex', alignItems:'baseline'}}>
-            <h3 className="form-text" style={{ textIndent: 20, paddingRight:'110px' }}>Resume</h3>
-            <input className="form-input" type='file' onChange={onFileChange} align='left' />
-            </div>
-            <hr/>
-            <Button className="form-button" onClick={addCandidateHandler}>Apply</Button>
-          </Form>
-        </div>}
-    </>
+      <h1 className='page-header'>Candidate Form</h1>
+      <CForm
+        className='form row g-3 needs-validation'
+        encType='multipart/form-data'
+        noValidate
+        onSubmit={handleSubmit}
+        style={formStyle}
+        validated={state.valid}>
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer01'>First Name</CFormLabel>
+          <CFormInput
+            id='validationServer01'
+            type='text'
+            placeholder='ex: Jonathon'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-first-name', firstName: event.target.value}
+            )}/>
+          <CFormFeedback tooltip invalid>Invalid first name</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer02'>Last Name</CFormLabel>
+          <CFormInput
+            id='validationServer02'
+            type='text'
+            placeholder='ex: Walker'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-last-name', lastName: event.target.value}
+            )}/>
+          <CFormFeedback tooltip invalid>Invalid last name</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer05'>Country</CFormLabel>
+          <CFormSelect
+            id='validationServer05'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-country', country: event.target.value, countryPhone: countries[event.target.value]}
+            )}>
+            <option value='' disabled>Choose...</option>
+            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer06'>Gender</CFormLabel>
+          <CFormSelect
+            id='validationServer06'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-gender', gender: event.target.value}
+            )}>
+            <option value='' disabled>Choose...</option>
+            {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid gender</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={7} className='position-relative'>
+          <CFormLabel htmlFor='validationServer03'>Email Address</CFormLabel>
+          <CFormInput
+            id='validationServer03'
+            type='email'
+            placeholder='ex: example@email.com'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-email', email: event.target.value}
+            )}/>
+          <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={5} className='position-relative'>
+          <CFormLabel htmlFor='validationServer04'>Phone Number</CFormLabel>
+          <CFormInput
+            id='validationServer04'
+            type='tel'
+            placeholder='ex: 12345678'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-phone', phone: event.target.value}
+            )}/>
+          <CFormFeedback tooltip invalid>Invalid phone number</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
+          <CFormLabel htmlFor='validationServer07'>Job Position</CFormLabel>
+          <CFormSelect
+            id='validationServer07'
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-job-position', jobPosition: event.target.value}
+            )}>
+            <option value='' disabled>Choose...</option>
+            {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
+              {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
+            </option>)}
+          </CFormSelect>
+          <CFormFeedback tooltip invalid>Invalid job position</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
+          <CFormLabel htmlFor='validationServer08'>Resume</CFormLabel>
+          <CFormInput
+            id='validationServer08'
+            type='file'
+            accept='.pdf'
+            required
+            onChange={(event) => dispatch(
+              {type: 'set-resume-file', resumeFile: event.target.files[0]}
+            )}/>
+          <CFormFeedback tooltip invalid>Invalid resume</CFormFeedback>
+        </CCol>
+
+        <CCol xs={12}>
+          <center>
+            <CButton
+              color='dark'
+              type='submit'
+              onClick={onSubmit}>Submit</CButton>
+          </center>
+        </CCol>
+      </CForm>
+    </div>
   );
-}
+};
 
 export default CandidateForm;
-

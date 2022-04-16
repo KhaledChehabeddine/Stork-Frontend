@@ -1,36 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap');
 
 .navbar {
-    border-bottom: 0.5px solid black;
+    border-bottom: 1px solid black;
 }
 .navbar-brand a {
-    color: black;
+    color: white!important;
+    margin-right: 30px ;
     font-weight: 600;
     font-size: 25px;
     text-transform: uppercase;
 }
 .navbar-firstlink{
-    border-left: 0.5px solid black;
+    border-left: 0.5px solid white;
 }
 .navbar-firstlink a {
-    margin-left:40px!important;
-    margin-right:20px!important;
+    color: white!important;
+    margin-left:50px!important;
+    margin-right:30px!important;
     font-weight: 350;
     text-transform: uppercase;
 }
 .navbar-link a {
-    margin-left: 20px!important;
-    margin-right: 20px!important;
+    color: white!important;
+    margin-left: 30px!important;
+    margin-right: 30px!important;
     font-weight: 350;
     text-transform: uppercase;
 }
 .navbar-profile a {
     text-transform: uppercase;
     text-align: center;
-    background: -webkit-linear-gradient(to right, #0f0e77, #D91114);
-    background: linear-gradient(to right, #0f0e77, #D91114);
     color: white;
-    border: 1px solid black;
+    border: 1px solid white!important;
     border-radius: 50px;
     box-sizing: border-box;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));

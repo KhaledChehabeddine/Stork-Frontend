@@ -1,83 +1,152 @@
 import React, {useCallback, useState} from 'react';
-import {CForm, CCol, CFormLabel, CFormInput, CFormFeedback, CButton, CFormTextarea} from '@coreui/react';
-import NavBar from "../Utils/Navbar";
-import Header from "../Utils/Header";
-import { formStyle } from "../Utils/styles";
-import getApiClient from "../../api_client/getApiClient";
-import {useNavigate} from "react-router-dom";
+import {Breadcrumb} from 'react-bootstrap';
+import {
+  CForm,
+  CCol,
+  CFormLabel,
+  CFormInput,
+  CFormFeedback,
+  CFormTextarea,
+  CFormSelect,
+  CButton
+} from '@coreui/react';
+import {countries} from '../Utils/utils';
+import {formStyle} from '../Utils/Styles';
+import {useNavigate} from 'react-router-dom'
+import getApiClient from '../../api_client/getApiClient';
+import NavBar from '../Utils/Navbar';
+import '../../Styles/Breadcrumbs.css'
+import '../../Styles/FormStyle.css'
 
-const VacancyForm = (props) => {
+const VacancyForm = () => {
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
+  const [valid, setValid] = useState(false);
   const [jobTitle, setJobTitle] = useState('');
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
+  const [workType, setWorkType] = useState(null);
+  const [employmentType, setEmploymentType] = useState(null);
+  const [notes, setNotes] = useState('');
+
   const handleSubmit = (event) => {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
     }
-    setValidated(true);
+    setValid(true);
   }
+
   const onSubmit = useCallback(() => {
     if (!jobTitle) return;
     if (!country) return;
     if (!city) return;
-    if(!jobDescription) return;
-    getApiClient().addVacancy(jobTitle, country, city, jobDescription)
-      .then(response => {
-        alert('New Vacancy has been added successfully!');
-        navigate('/home');
-      }).catch(error => console.log(error));
+    if (!workType) return;
+    if (!employmentType) return;
+    getApiClient().addVacancy(jobTitle, country, city, workType, employmentType, notes)
+      .catch(error => console.log(error));
+    alert('Job position has been successfully added!');
     navigate('/home');
-  }, [jobTitle, country, city, jobDescription]);
+  }, [jobTitle, country, city, workType, employmentType, notes, navigate]);
+
   return (
     <div>
       <NavBar />
-      <Header text={'New Vacancy'} />
+      <Breadcrumb className='form-breadcrumb' style={{marginTop:'50px'}}>
+        <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
+        <Breadcrumb.Item href='/vacancies'>Job Positions</Breadcrumb.Item>
+        <Breadcrumb.Item active>Add Job Position</Breadcrumb.Item>
+      </Breadcrumb>
+      <h1 className='page-header'>Job Position Form</h1>
       <CForm
-        className="row g-3 needs-validation"
+        className='row g-3 needs-validation'
         noValidate
-        validated={validated}
         onSubmit={handleSubmit}
         style={formStyle}
-      >
-        <CCol md={5}>
-          <CFormLabel htmlFor="validationCustom01">Job Title</CFormLabel>
-          <CFormInput type="text" id="validationCustom01" placeholder="Software Engineer" required
-            onChange={(event) => {setJobTitle(event.target.value)}} />
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-          <CFormFeedback invalid>Please provide a job title.</CFormFeedback>
+        validated={valid}>
+        <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
+          <CFormLabel htmlFor='validationServer01'>Job Title</CFormLabel>
+          <CFormInput
+            id='validationServer01'
+            type='text'
+            placeholder='ex: Software Engineer'
+            required
+            onChange={(event) => setJobTitle(event.target.value)}/>
+          <CFormFeedback invalid tooltip>Invalid job title.</CFormFeedback>
         </CCol>
 
-        <CCol md={4}>
-          <CFormLabel htmlFor="validationCustom03">Country</CFormLabel>
-          <CFormInput type="text" id="validationCustom03" placeholder="Lebanon" required
-                      onChange={(event) => {setCountry(event.target.value)}}/>
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-          <CFormFeedback invalid>Please provide a valid country.</CFormFeedback>
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer03'>Country</CFormLabel>
+          <CFormSelect
+            id='validationServer03'
+            defaultValue={''}
+            required
+            onChange={(event) => {setCountry(event.target.value)}}>
+            <option value='' disabled>Choose...</option>
+            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
+          </CFormSelect>
+          <CFormFeedback invalid tooltip>Invalid country</CFormFeedback>
         </CCol>
-        <CCol md={3}>
-          <CFormLabel htmlFor="validationCustom05">City</CFormLabel>
-          <CFormInput type="text" id="validationCustom05" placeholder="Beirut" required
-                      onChange={(event) => {setCity(event.target.value)}}/>
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-          <CFormFeedback invalid>Please provide a valid city.</CFormFeedback>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer04'>City</CFormLabel>
+          <CFormInput
+            id='validationServer04'
+            type='text'
+            placeholder='ex: Beirut'
+            required
+            onChange={(event) => setCity(event.target.value)}/>
+          <CFormFeedback invalid tooltip>Invalid city.</CFormFeedback>
         </CCol>
-        <div className="mb-3">
-          <CFormLabel htmlFor="exampleFormControlTextarea1">Job Description</CFormLabel>
-          <CFormTextarea id="exampleFormControlTextarea1" rows="4" required
-                         onChange={(event) => {setJobDescription(event.target.value)}}>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer05'>Workplace Type</CFormLabel>
+          <CFormSelect
+            id='validationServer05'
+            defaultValue={''}
+            required
+            onChange={(event) => setWorkType(event.target.value)}>
+            <option value='' disabled>Choose...</option>
+            <option key='On-site' value='On-site'>On-site</option>
+            <option key='Hybrid' value='Hybrid'>Hybrid</option>
+            <option key='Remote' value='Remote'>Remote</option>
+          </CFormSelect>
+          <CFormFeedback invalid tooltip>Invalid workplace type.</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer06'>Employment Type</CFormLabel>
+          <CFormSelect
+            id='validationServer06'
+            defaultValue={''}
+            required
+            onChange={(event) => setEmploymentType(event.target.value)}>
+            <option value='' disabled>Choose...</option>
+            <option key='Full-time' value='Full-time'>Full-time</option>
+            <option key='Part-time' value='Part-time'>Part-time</option>
+            <option key='Contract' value='Contract'>Contract</option>
+            <option key='Temporary' value='Temporary'>Temporary</option>
+            <option key='Volunteer' value='Volunteer'>Volunteer</option>
+            <option key='Internship' value='Internship'>Internship</option>
+          </CFormSelect>
+          <CFormFeedback invalid tooltip>Invalid employment type.</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
+          <CFormLabel>Notes</CFormLabel>
+          <CFormTextarea
+            rows='4'
+            onChange={(event) => setNotes(event.target.value)}>
           </CFormTextarea>
-          <CFormFeedback valid>Looks good!</CFormFeedback>
-          <CFormFeedback invalid>Please provide job description.</CFormFeedback>
-        </div>
+        </CCol>
+
         <CCol xs={12}>
-          <CButton color="primary" type="submit" onClick={onSubmit}>
-            Submit
-          </CButton>
+          <center>
+            <CButton
+              color='dark'
+              type='submit'
+              onClick={onSubmit}>Submit</CButton>
+          </center>
         </CCol>
       </CForm>
     </div>

@@ -1,4 +1,5 @@
 import ApiClientBase from "./ApiClientBase";
+import {getCurrentDate} from "../Components/Utils/utils";
 
 class ApiClient extends ApiClientBase {
   /* Post method example
@@ -9,40 +10,21 @@ class ApiClient extends ApiClientBase {
     return this.Post(endpoint, data);
   }
     Get method example
-  GetExample(enpoint, arg1, arg2) {
+  GetExample(endpoint, arg1, arg2) {
     const params = {};
     params.arg1 = arg1;
     params.arg2 = arg2;
     return this.Get(endpoint, params);
   }
    */
-  login(username, password) {
-    const data = {};
-    data.username = username;
-    data.password = password;
-    return this.Post('/login', data);
-  }
-
-  getAllEmployees() {
-    return this.Get('/employee/all');
-  }
-
-  getEmployee(id) {
-    const data = new FormData();
-    data.append('id', id);
-    return this.Get('/employee/find', data);
-  }
-
-  addEmployee(endpoint, id, firstName, lastName, email, jobTitle, phone, imageUrl) {
-    const data = {};
-    data.id = id;
-    data.firstName = firstName;
-    data.lastName = lastName;
-    data.email = email;
-    data.jobTitle = jobTitle;
-    data.phone = phone;
-    data.imageUrl = imageUrl;
-    return this.Post('/employee' + endpoint, data);
+  authenticateUser(username, password) {
+    return {
+      data : {
+        username: 'Ahmad Zaaroura',
+        email: 'asz07@mail.aub.edu',
+        id: 41
+      }
+    }
   }
 
   deleteEmployee(id) {
@@ -61,15 +43,32 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(endpoint, firstName, lastName, email, phone, resume, imageUrl) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
+    data.country = country;
+    data.countryPhone = countryPhone;
+    data.gender = gender;
     data.email = email;
     data.phone = phone;
-    data.resume = resume;
-    data.imageUrl = imageUrl;
+    data.jobPosition = jobPosition;
+    data.status = status;
+    data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
+  }
+
+  addResume(id, resume) {
+    const data = new FormData();
+    data.append('id', id);
+    data.append('resume', resume);
+    return this.Post('/resume/add', data);
+  }
+
+  findResume(id) {
+    const data = {};
+    data.id = id;
+    return this.Get('/resume/find', data);
   }
 
   deleteCandidate(id) {
@@ -78,28 +77,48 @@ class ApiClient extends ApiClientBase {
     return this.Post('/candidate/delete', data);
   }
 
-  scheduleInterview(date, time, location, vacancyId, interviewers, candidateId) {
+  addInterview(candidate_id, vacancy_id, date_time, description) {
     const data = {};
-    data.date = date;
-    data.time = time;
-    data.location = location;
-    data.vacancyId = vacancyId;
-    data.interviewers = interviewers;
-    data.candidateId = candidateId;
-    return this.Post('/interview/schedule', data);
+    data.candidate_id = candidate_id;
+    data.vacancy_id = vacancy_id;
+    data.date_time = date_time;
+    data.description = description;
+    return this.Post('/interview/add', data);
   }
 
-  addVacancy(jobTitle, country, city, jobDescription) {
+  addVacancy(jobTitle, country, city, workType, employmentType, notes) {
     const data = {};
     data.jobTitle = jobTitle;
     data.country = country;
     data.city = city;
-    data.jobDescription = jobDescription;
+    data.workType = workType;
+    data.employmentType = employmentType;
+    data.notes = notes;
+    data.datePosted = getCurrentDate();
     return this.Post('/vacancy/add', data);
   }
 
   getAllVacancies() {
     return this.Get('/vacancy/all');
+  }
+
+  addAction(title) {
+    const data = {};
+    data.title = title;
+    data.date = getCurrentDate();
+    return this.Post('/action/add', data);
+  }
+
+  getAction(id) {
+    const params = {};
+    params.id = id;
+    return this.Get('/action/find', params);
+  }
+
+  getActionsByCandidateId(candidateId) {
+    const params = {};
+    params.candidateId = candidateId;
+    return this.Get('/action/all', params);
   }
 
 }
