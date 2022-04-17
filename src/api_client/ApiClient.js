@@ -120,6 +120,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/action/all', params);
   }
 
+  getAllInterviews() {
+    return this.Get('/interview/all');
+  }
+
   updateStatus(candidate, status) {
     candidate.status = status;
     return this.Put('/candidate/update', candidate);
