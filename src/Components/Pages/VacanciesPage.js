@@ -1,18 +1,50 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import getApiClient from "../../api_client/getApiClient";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import NavBar from "../Utils/Navbar";
 import VacancyRow from "../Tables/VacancyRow";
 import Spinner from "../Utils/Spinner";
-import {Breadcrumb} from "react-bootstrap";
 import CIcon from "@coreui/icons-react";
-import {cilBuilding} from "@coreui/icons";
-import '../../Styles/Breadcrumbs.css'
+import {cilBriefcase, cilSearch, cilSwapVertical} from "@coreui/icons";
+import Input from "../Utils/Input";
+
+const filterPositions = (vacancies, input) => {
+  let filter, value, i, title, filteredPositions = [];
+  filter = input.value.toUpperCase();
+  for (i = 0; i < vacancies.length; i++) {
+    title = vacancies[i].jobTitle;
+    value = title || title.innerText;
+    if (value.toUpperCase().indexOf(filter) > -1) {
+      filteredPositions.push(vacancies[i]);
+    }
+  }
+  return filteredPositions;
+}
+
+const sortByTitle = vacancies => vacancies.sort((a, b) => {
+  return a.jobTitle.localeCompare(b.jobTitle);
+})
+
+const sortByCountry = vacancies => vacancies.sort((a, b) => {
+  return a.country.localeCompare(b.country);
+})
+
+const sortByCity = vacancies => vacancies.sort((a, b) => {
+  return a.city.localeCompare(b.city);
+})
 
 const reducer = (state, action) => {
   switch(action.type) {
     case 'vacancies-loaded':
-      return { ...state, vacanciesLoaded: true }
+      return { ...state, vacanciesLoaded: true, vacancies: action.vacancies, filteredPositions: action.filteredPositions }
+    case 'set-positions':
+      return { ...state, filteredPositions: action.vacancies };
+    case 'sort-by-title':
+      return { ...state, filteredPositions: sortByTitle(state.vacancies) };
+    case 'sort-by-country':
+      return { ...state, filteredPositions: sortByCountry(state.vacancies) };
+    case 'sort-by-city':
+      return { ...state, filteredPositions: sortByCity(state.vacancies) };
     default:
       return { ...state }
   }
@@ -20,14 +52,14 @@ const reducer = (state, action) => {
 
 const VacanciesPage = (props) => {
   const [state, dispatch] = useReducer(reducer, {
-    vacanciesLoaded: false
+    vacanciesLoaded: false,
+    vacancies: [],
+    filteredPositions: []
   });
-  const [vacancies, setVacancies] = useState([]);
   useEffect(() => {
     getApiClient().getAllVacancies()
       .then(response => {
-        setVacancies(response.data);
-        dispatch({ type: 'vacancies-loaded' });
+        dispatch({ type: 'vacancies-loaded', vacancies: response.data, filteredPositions: response.data });
       }).catch(error => console.log(error));
   }, []);
   return (
@@ -36,27 +68,48 @@ const VacanciesPage = (props) => {
       {state.vacanciesLoaded
         ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
-            <Breadcrumb className="form-breadcrumb" style={{marginTop:"50px"}}>
-              <Breadcrumb.Item href="/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item href="/vacancies">Vacancies</Breadcrumb.Item>
-              <Breadcrumb.Item active="/vacancies/all">View Vacancies</Breadcrumb.Item>
-            </Breadcrumb>
-            <h1 className="page-header" style={{padding:"1rem"}}>Vacancies</h1>
-            <CTable align="middle" className="mb-0 border" hover responsive>
+            <CTable align="middle" className="mb-0" hover responsive>
               <CTableHead color="light">
                 <CTableRow className="header-row">
-                  <CTableHeaderCell className="text-center">
-                    <CIcon icon={cilBuilding}/>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <CIcon icon={cilBriefcase}/>
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Job Title</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Country</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell scope="col"> </CTableHeaderCell>
+                  <CTableHeaderCell className="header-cell">
+                    <div style={{display:"flex",  alignItems:"center"}}>
+                      Job Title
+                      <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
+                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      </button>
+                    </div>
+                  </CTableHeaderCell>
+                  <CTableHeaderCell className="header-cell">
+                    <div style={{display:"flex",  alignItems:"center"}}>
+                      Country
+                      <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
+                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      </button>
+                    </div>
+                  </CTableHeaderCell>
+                  <CTableHeaderCell className="header-cell">
+                    <div style={{display:"flex",  alignItems:"center"}}>
+                      City
+                      <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
+                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      </button>
+                    </div>
+                  </CTableHeaderCell>
+                  <CTableHeaderCell className="header-cell">
+                    <div style={{display:"flex",  alignItems:"center", float:"right"}}>
+                      <CIcon className="search-icon" icon={cilSearch} />
+                      <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
+                        dispatch({type: 'set-positions', vacancies: (filterPositions(state.vacancies, event.target))})
+                      } placeholder="Search For Positions"/>
+                    </div>
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody className="table-body">
-                {vacancies.map(vacancy =>
-                  <VacancyRow key={vacancy.id} vacancy={vacancy} id={vacancy.id} />)}
+                {state.filteredPositions.map(vacancy => <VacancyRow key={vacancy.id} vacancy={vacancy} vacancies={state.filteredPositions}/>)}
               </CTableBody>
             </CTable>
           </div>
