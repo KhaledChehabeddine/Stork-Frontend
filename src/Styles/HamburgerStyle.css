@@ -1,16 +1,29 @@
 .hamburger {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    justify-content: space-around;
-    flex-flow: column nowrap;
-    z-index: 10;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
-.burger{
-    width: 2rem;
-    height: 2px;
-    border-radius: 5px;
-    background-color: white;
-    transform-origin: 1px;
-    transition: all 0.3s linear;
+.hamburger .line{
+    display: block;
+    width: 40px;
+    height: 3px;
+    background-color: white!important;
+    margin-block: 10px;
+    border-radius: 4px;
+    transition: transform .5s;
+}
+
+.hamburger.active .line:nth-child(1) {
+    transform: translateY(13px)
+    rotate(45deg);
+}
+
+.hamburger.active .line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .line:nth-child(3) {
+    transform: translateY(-13px)
+    rotate(-45deg);
 }
