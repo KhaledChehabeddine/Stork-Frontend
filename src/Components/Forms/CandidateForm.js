@@ -1,6 +1,16 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
 import {Breadcrumb} from 'react-bootstrap';
-import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect} from '@coreui/react';
+import {
+  CButton,
+  CCol,
+  CContainer,
+  CForm,
+  CFormFeedback,
+  CFormInput,
+  CFormLabel,
+  CFormSelect, CRow,
+  CTooltip
+} from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
 import {useNavigate} from 'react-router-dom';
@@ -8,6 +18,8 @@ import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
+import CIcon from '@coreui/icons-react';
+import {cilInfo} from '@coreui/icons'
 
 const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
 const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
@@ -99,13 +111,15 @@ const CandidateForm = () => {
 
   return (
     <div>
-      <NavBar />
+      <NavBar/>
       <Breadcrumb className='form-breadcrumb' style={{marginTop:'50px'}}>
         <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
         <Breadcrumb.Item href='/candidate/all'>Candidates</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className='page-header'>Candidate Form</h1>
+
+      <h1 className='page-header' align='center'>Candidate Form</h1>
+
       <CForm
         className='form row g-3 needs-validation'
         encType='multipart/form-data'
@@ -183,12 +197,19 @@ const CandidateForm = () => {
         </CCol>
 
         <CCol style={{marginBottom: '1rem'}} md={2} className='position-relative'>
-          <CFormLabel htmlFor='validationServer03'>CCode</CFormLabel>
-          <CFormInput
+          <CFormLabel htmlFor='validationServer03'>Prefix</CFormLabel>
+          <CFormSelect
             id='validationServer03'
             type='tel'
-            defaultValue={'+' + state.countryPhone}
-            readOnly/>
+            defaultValue={''}
+            required
+            onChange={(event) => dispatch(
+
+            )}>
+            <option value='' disabled>+</option>
+            {Object.keys(countries).map(country =>
+              <option key={countries[country]} value={countries[country]}>{'+' + countries[country]}</option>)}
+          </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
         </CCol>
 
@@ -197,7 +218,7 @@ const CandidateForm = () => {
           <CFormInput
             id='validationServer04'
             type='tel'
-            placeholder='ex: 12345678'
+            placeholder='ex: 44521276'
             required
             onChange={(event) => dispatch(
               {type: 'set-phone', phone: event.target.value}
