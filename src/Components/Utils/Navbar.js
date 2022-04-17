@@ -26,7 +26,7 @@ const NavBar = () => {
             <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>
           </Nav>
           <Nav className="nav-hamburger">
-              <Hamburger/>
+              <Hamburger />
           </Nav>
         </Navbar.Collapse>
       </Container>
