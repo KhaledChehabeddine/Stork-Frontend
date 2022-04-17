@@ -7,8 +7,6 @@ import CIcon from "@coreui/icons-react";
 import {cilPeople, cilSearch, cilSwapVertical} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
-import '../../Styles/CandidateTable.css';
-import '../../Styles/Breadcrumbs.css'
 
 const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
@@ -89,7 +87,7 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ?
         <div style={{ display: 'flex', flexDirection: 'column'}}>
-          <CTable id="candidatesTable" align="middle" className="mb-0 candidatesTable" hover responsive>
+          <CTable id="candidatesTable" align="middle" className="mb-0" hover responsive>
             <CTableHead color="light">
               <CTableRow className="header-row">
                 <CTableHeaderCell className="text-center icon-cell">
