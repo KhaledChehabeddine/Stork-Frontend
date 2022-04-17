@@ -57,7 +57,7 @@ const VacancyForm = () => {
         <Breadcrumb.Item href='/vacancies'>Job Positions</Breadcrumb.Item>
         <Breadcrumb.Item active>Add Job Position</Breadcrumb.Item>
       </Breadcrumb>
-      <h1 className='page-header'>Job Position Form</h1>
+      <h1 className='page-header' align='center'>Job Position Form</h1>
       <CForm
         className='row g-3 needs-validation'
         noValidate
