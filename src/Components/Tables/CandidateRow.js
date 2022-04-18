@@ -1,6 +1,5 @@
 import React, {useCallback, useState} from 'react';
 import {
-  CButton,
   CModal,
   CModalBody,
   CModalFooter,
@@ -22,6 +21,7 @@ const CandidateRow = ({candidate, candidates}) => {
   const deleteCandidate = useCallback(() => {
     getApiClient().deleteCandidate(candidate.id);
     setVisible(false);
+    window.location.reload(false);
   }, [candidate]);
 
   return (
@@ -56,8 +56,7 @@ const CandidateRow = ({candidate, candidates}) => {
         </CModalHeader>
         <CModalBody>Are you sure you want to delete this candidate?</CModalBody>
         <CModalFooter>
-          <CButton color='info'
-                   onClick={deleteCandidate}>Confirm</CButton>
+          <button className="confirm-button" onClick={deleteCandidate}>Confirm</button>
         </CModalFooter>
       </CModal>
     </CTableRow>
