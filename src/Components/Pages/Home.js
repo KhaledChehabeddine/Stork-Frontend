@@ -3,6 +3,7 @@ import NavBar from "../Utils/Navbar";
 import '../../Styles/Breadcrumbs.css';
 import './Home.css';
 import getApiClient from "../../api_client/getApiClient";
+import {formatDateTime} from "../Utils/utils";
 import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
 
 const Home = () => {
@@ -11,31 +12,9 @@ const Home = () => {
       <NavBar/>
       <div className="form-header" style={{ marginTop:"50px"}}></div>
 
-      <div> 
-        <div style={{display: "flex"}}>
-          <div style={{width: "50%"}}>
-            <UpcomingEvents/>
-          </div>
-          <div style={{width: "50%"}}>
-          <p>
-            My vacancies
-          </p>
-          </div>
-        </div>
-
-        <div>
-          <p>
-            Recent Candidates
-          </p>
-        </div>
-
-        <div>
-          <p>
-            Calendar
-          </p>
-        </div>
+      <div>
+        <UpcomingEvents/>
       </div>
-
     </div>
   );
 };
@@ -87,15 +66,15 @@ const UpcomingEvents = () => {
             </CTableRow>
           }
           {
-            (showingMore ? events : events.slice(0, 5)).map(element => (
+            (showingMore ? events : events.slice(0, 10)).map(element => (
               <CTableRow key={element.id}>
                 <CTableDataCell>{element.description}</CTableDataCell>
-                <CTableDataCell>{element.dateTime}</CTableDataCell>
+                <CTableDataCell>{formatDateTime(element.dateTime)}</CTableDataCell>
                 <CTableDataCell>{element.vacancyId}</CTableDataCell>
               </CTableRow>
             ))
           }
-          {!showingMore && events.length > 5 && // conditional rendering 
+          {!showingMore && events.length > 10 && // conditional rendering 
             <CTableRow>
               <CTableDataCell colSpan="3">
                 <div onClick={() => setShowingMore(true)} className="view-more-button">
