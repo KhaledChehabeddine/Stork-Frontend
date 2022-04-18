@@ -83,7 +83,8 @@ const UpcomingEvents = () => {
             (showingMore ? events : events.slice(0, 10)).map(element => (
               <CTableRow key={element.id}>
                 <CTableDataCell>{element.description}</CTableDataCell>
-                <CTableDataCell>{getCandidateName(element.candidateId)}</CTableDataCell>
+                <CTableDataCell>{'N/A'}</CTableDataCell>
+                {/*getCandidateName(element.candidateId)*/}
                 <CTableDataCell>{formatDateTime(element.dateTime)}</CTableDataCell>
               </CTableRow>
             ))
