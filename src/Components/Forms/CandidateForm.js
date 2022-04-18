@@ -99,8 +99,9 @@ const CandidateForm = () => {
     if (!state.resumeFile) return;
     getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone,
                                 state.gender, state.email, state.phone, state.jobPosition, 'Pending')
-      .then(response =>
-        getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error))
+      .then(response => {
+          getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
+        }
       ).catch(error => console.log(error));
     alert('Candidate has been successfully added!');
     navigate('/home');
@@ -122,7 +123,7 @@ const CandidateForm = () => {
         className='form row g-3 needs-validation'
         encType='multipart/form-data'
         noValidate
-        onSubmit={handleSubmit}
+        //onSubmit={handleSubmit}
         style={formStyle}
         validated={state.valid}>
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
@@ -202,9 +203,9 @@ const CandidateForm = () => {
             defaultValue={''}
             required
             onChange={(event) => dispatch(
-              {type: 'set-country-code', countryPhone: event.target.value}
+              {type: 'set-country-code', countryPhone: '+' + event.target.value}
             )}>
-            <option value='' disabled>+</option>
+            <option value='' disabled></option>
             {Object.values(countries).filter((phoneCode, index) => {
                 return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
               <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
@@ -249,9 +250,11 @@ const CandidateForm = () => {
             type='file'
             accept='.pdf'
             required
-            onChange={(event) => dispatch(
-              {type: 'set-resume-file', resumeFile: event.target.files[0]}
-            )}/>
+            onChange={(event) => {
+              dispatch(
+                {type: 'set-resume-file', resumeFile: event.target.files[0]}
+              )
+            }}/>
           <CFormFeedback tooltip invalid>Invalid resume</CFormFeedback>
         </CCol>
 
