@@ -3,13 +3,11 @@ import {Breadcrumb} from 'react-bootstrap';
 import {
   CButton,
   CCol,
-  CContainer,
   CForm,
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect, CRow,
-  CTooltip
+  CFormSelect,
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -18,8 +16,6 @@ import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
-import CIcon from '@coreui/icons-react';
-import {cilInfo} from '@coreui/icons'
 
 const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
 const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
@@ -43,7 +39,9 @@ const initialState = {
 const reducer = (state, action) => {
   switch(action.type) {
     case 'set-country':
-      return {...state, country: action.country, countryPhone: action.countryPhone};
+      return {...state, country: action.country};
+    case 'set-country-code':
+      return {...state, countryPhone: action.countryPhone}
     case 'set-email':
       return {...state, email: action.email};
     case 'set-first-name':
@@ -160,7 +158,7 @@ const CandidateForm = () => {
             defaultValue={''}
             required
             onChange={(event) => dispatch(
-              {type: 'set-country', country: event.target.value, countryPhone: countries[event.target.value]}
+              {type: 'set-country', country: event.target.value}
             )}>
             <option value='' disabled>Choose...</option>
             {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
@@ -204,11 +202,12 @@ const CandidateForm = () => {
             defaultValue={''}
             required
             onChange={(event) => dispatch(
-
+              {type: 'set-country-code', countryPhone: event.target.value}
             )}>
             <option value='' disabled>+</option>
-            {Object.keys(countries).map(country =>
-              <option key={countries[country]} value={countries[country]}>{'+' + countries[country]}</option>)}
+            {Object.values(countries).filter((phoneCode, index) => {
+                return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
+              <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
         </CCol>
