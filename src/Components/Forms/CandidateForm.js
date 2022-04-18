@@ -17,8 +17,8 @@ import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 
-const nameRegex = new RegExp('^[A-Za-z]{2,26}$');
-const emailRegex = new RegExp('^[^ ].+@[^ ].+$');
+const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
+const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const initialState = {
@@ -123,7 +123,7 @@ const CandidateForm = () => {
         className='form row g-3 needs-validation'
         encType='multipart/form-data'
         noValidate
-        //onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         style={formStyle}
         validated={state.valid}>
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
@@ -205,7 +205,7 @@ const CandidateForm = () => {
             onChange={(event) => dispatch(
               {type: 'set-country-code', countryPhone: '+' + event.target.value}
             )}>
-            <option value='' disabled></option>
+            <option value='' disabled>+</option>
             {Object.values(countries).filter((phoneCode, index) => {
                 return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
               <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
@@ -250,8 +250,7 @@ const CandidateForm = () => {
             type='file'
             accept='.pdf'
             required
-            onChange={(event) => {
-              dispatch(
+            onChange={(event) => {dispatch(
                 {type: 'set-resume-file', resumeFile: event.target.files[0]}
               )
             }}/>
