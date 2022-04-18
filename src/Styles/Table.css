@@ -12,16 +12,28 @@
     line-height: 350%;
 }
 
+.table-rows {
+    background-color: white;
+}
+
+
 .icon-cell {
     line-height: 350%;
     width: 5%;
 }
 
-.sort-button {
+.sort-button-top {
+    border: 0;
+    background-color: transparent;
+    padding-right: 10px;
+}
+
+.sort-button-bottom {
     border: 0;
     background-color: transparent;
     padding-left: 10px;
 }
+
 .sort-icon {
     pointer-events: none;
 }
@@ -39,7 +51,7 @@
 }
 
 .table-body {
-    font-family: 'Raleway', sans-serif!important;
+    font-family: 'Poppins', sans-serif!important;
     font-weight: normal;
 }
 

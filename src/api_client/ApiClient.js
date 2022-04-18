@@ -98,6 +98,12 @@ class ApiClient extends ApiClientBase {
     return this.Post('/vacancy/add', data);
   }
 
+  deleteVacancy(jobPositionId) {
+    const data = new FormData();
+    data.append('id', jobPositionId);
+    return this.Post('/vacancy/delete', data);
+  }
+
   getAllVacancies() {
     return this.Get('/vacancy/all');
   }

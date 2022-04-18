@@ -5,6 +5,7 @@
   "dependencies": {
     "@coreui/coreui": "^4.1.0",
     "@coreui/icons": "^2.1.0",
+    "@coreui/icons-pro": "^2.0.3",
     "@coreui/icons-react": "^2.0.1",
     "@coreui/react": "^4.1.2",
     "@emailjs/browser": "^3.6.2",

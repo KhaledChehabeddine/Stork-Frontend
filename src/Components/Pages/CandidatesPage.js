@@ -144,12 +144,6 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ?
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: "center"}}>
-          <div align="center" style={{display:"flex",  alignItems:"center"}}>
-            <CIcon className="search-icon" icon={cilSearch} />
-            <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
-              dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
-            } placeholder="Search Candidates"/>
-          </div>
           <CTable style={{width: "100%"}} id="candidatesTable" align="middle" className="mb-0" hover responsive>
             <CTableHead color="light">
               <CTableRow className="header-row">
@@ -158,101 +152,106 @@ const CandidateCardWrapper = () => {
                 </CTableHeaderCell>
                 <CTableHeaderCell className="header-cell">
                   <div style={{display:"flex",  alignItems:"center" }}>
-                    Candidates
                     <button onClick={event => {
                       dispatch({
                         type: 'sort-by-name',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-top">
                       <CIcon className="sort-icon" icon={cilArrowTop}/>
                     </button>
+                    Candidates
                     <button onClick={event => {
                       dispatch({
                         type: 'reverse-sort-by-name',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-bottom">
                       <CIcon className="sort-icon" icon={cilArrowBottom}/>
                     </button>
                   </div>
                 </CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">
                   <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                    Email
                     <button onClick={event => {
                       dispatch({
                         type: 'sort-by-email',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-top">
                       <CIcon className="sort-icon" icon={cilArrowTop}/>
                     </button>
+                    Email
                     <button onClick={event => {
                       dispatch({
                         type: 'reverse-sort-by-email',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-bottom">
                       <CIcon className="sort-icon" icon={cilArrowBottom}/>
                     </button>
                   </div>
                 </CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">
                   <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                    Phone Number
                     <button onClick={event => {
                       dispatch({
                         type: 'sort-by-phone',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-top">
                       <CIcon className="sort-icon" icon={cilArrowTop}/>
                     </button>
+                    Phone Number
                     <button onClick={event => {
                       dispatch({
                         type: 'reverse-sort-by-phone',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-bottom">
                       <CIcon className="sort-icon" icon={cilArrowBottom}/>
                     </button>
                   </div>
                 </CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">
                   <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                    Date Applied
                     <button onClick={event => {
                       dispatch({
                         type: 'sort-by-date',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-top">
                       <CIcon className="sort-icon" icon={cilArrowTop}/>
                     </button>
+                    Date Applied
                     <button onClick={event => {
                       dispatch({
                         type: 'reverse-sort-by-date',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-bottom">
                       <CIcon className="sort-icon" icon={cilArrowBottom}/>
                     </button>
                   </div>
                 </CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">
                   <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                    Status
                     <button onClick={event => {
                       dispatch({
                         type: 'sort-by-status',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-top">
                       <CIcon className="sort-icon" icon={cilArrowTop}/>
                     </button>
+                    Status
                     <button onClick={event => {
                       dispatch({
                         type: 'reverse-sort-by-status',
                         candidates: (filterCandidates(state.candidates, event.target))})
-                    }} className="sort-button">
+                    }} className="sort-button-bottom">
                       <CIcon className="sort-icon" icon={cilArrowBottom}/>
                     </button>
                   </div>
                 </CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">
-                  View
+                  <div align="center" style={{display:"flex",  alignItems:"center"}}>
+                    <CIcon className="search-icon" icon={cilSearch} />
+                    <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
+                      dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
+                    } placeholder="Search Candidates"/>
+                  </div>
                 </CTableHeaderCell>
               </CTableRow>
             </CTableHead>

@@ -1,6 +1,8 @@
 import React from 'react';
 import {CTableDataCell, CTableRow} from "@coreui/react";
 import '../../Styles/Table.css'
+import CIcon from "@coreui/icons-react";
+import {cilTrash} from "@coreui/icons";
 
 const VacancyRow = ({ vacancy, vacancies}) => {
   return (
@@ -12,6 +14,9 @@ const VacancyRow = ({ vacancy, vacancies}) => {
       <CTableDataCell>{vacancy.country}</CTableDataCell>
       <CTableDataCell>{vacancy.city}</CTableDataCell>
       <CTableDataCell>
+        <button className="view-button" style={{margin:0, width: "10%", height: "10%", marginRight: "20%", float: "right"}}>
+          <CIcon className="view-icon" icon={cilTrash}/>
+        </button>
       </CTableDataCell>
     </CTableRow>
   );

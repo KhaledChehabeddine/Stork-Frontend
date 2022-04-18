@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.profile-card {
+    position: relative;
+    margin-top: 5%;
+    margin-left: 10%;
+    width: 35%;
+    height: 70%;
+    border-radius: 62px;
+    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
+    box-shadow:  31px 31px 50px #868686,
+    -31px -31px 50px #ffffff;
+}
+
+.buttons-table {
+    position: relative;
+    margin-top: 5%;
+    margin-right: 10%;
+    margin-left: 10%;
+    width: 35%;
+    height: 70%;
+    border-radius: 62px;
+    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
+    box-shadow:  31px 31px 50px #868686,
+    -31px -31px 50px #ffffff;
+}
+
+.button-container {
+    padding-top: 5%;
+    align-items: center;
+    text-align: center;
+}
+
+.action-button {
+    font-family: 'Josefin Sans', sans-serif;
+    width: 60% !important;
+    line-height: 250%;
+    margin-bottom: 5%;
+    text-transform: uppercase;
+    color: black;
+    background-color: transparent;
+    border: 1px solid black!important;
+    border-radius: 50px;
+    box-sizing: border-box;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.profile-field {
+    padding-left: 10%;
+    display: flex;
+    padding-bottom: 2%;
+}
+
+.card-text {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 4px;
+    font-size: 115%;
+}
+
+.profile-icon-container {
+    padding-right: 5%;
+}
+
+.profile-name {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 150%;
+    text-transform: uppercase;
+    text-align: center;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.view-resume-container {
+    padding-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-resume {
+    font-family: 'Josefin Sans', sans-serif;
+    width: 35%;
+    line-height: 250%;
+    text-transform: uppercase;
+    color: black;
+    background-color: transparent;
+    border: 1px solid black!important;
+    border-radius: 50px;
+    box-sizing: border-box;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.actions-table {
+    margin-left: 10%;
+    width: 80%;
+    border-radius: 62px;
+    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
+    box-shadow:  31px 31px 50px #868686,
+    -31px -31px 50px #ffffff;
+}
+.actions-table-rows {
+    background-color: white !important;
+}
+.profile-wave-top {
+    border-top-left-radius: 62px;
+    border-top-right-radius: 62px;
+}
+
+.profile-wave-bottom {
+    transform: rotate(180deg) scaleX(-1);
+    border-top-left-radius: 62px;
+    border-top-right-radius: 62px;
+    position: absolute;
+    bottom: 0;
+}
+
+.wave {
+    width: 100%;
+    animation: wave 8s linear infinite;
+}
+
+.wave1 {
+    animation: wave1 10s linear infinite;
+}
+
+.wave2 {
+    animation: wave2 12s linear infinite;
+}
+
+@keyframes wave {
+    0 % {
+        transform: translateX(50%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes wave1 {
+    0 % {
+        transform: scaleY(2.8) translateX(0%);
+    }
+
+    100% {
+        transform: scaleY(1.0) translateX(100%);
+    }
+}
+
+@keyframes wave2 {
+    0 % {
+        transform: scaleY(2.5) translateX(0%);
+    }
+
+    100% {
+        transform: scaleY(1.4) translateX(100%);
+    }
+}

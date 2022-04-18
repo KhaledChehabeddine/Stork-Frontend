@@ -12,7 +12,7 @@ import NavigateToAfter from "./Components/Pages/NavigateToAfter";
 import VacancyForm from './Components/Forms/VacancyForm';
 import VacanciesPage from "./Components/Pages/VacanciesPage";
 import CandidatesPage from "./Components/Pages/CandidatesPage";
-import ProfileCard from './Components/Cards/ProfileCard';
+import ProfilePage from './Components/Cards/ProfilePage';
 import {getHashCode} from "./Components/Utils/utils";
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
               exact
               key={candidate.id}
               path={`/candidate/${getHashCode(candidate.id)}`}
-              element={<ProfileCard candidate={candidate} />}
+              element={<ProfilePage candidate={candidate} />}
               />)}
           </>
           :
