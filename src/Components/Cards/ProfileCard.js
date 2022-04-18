@@ -21,10 +21,6 @@ const ProfileCard = ({ candidate }) => {
           <h3>{candidate.sex}</h3>
         </div>
       </div>
-      <button onClick={() => {getApiClient()
-        .sendEmail('asz07@mail.aub.edu', 'Test', 'Email service working successfully')}}>
-        Test
-      </button>
       <ActionTable candidate={candidate} />
     </>
   );

@@ -27,10 +27,6 @@ const formatDate = (date) => {
   return date.substring(0, 16).split('T')[0];
 };
 
-const formatDateTime = (date) => {
-  return date.substring(0, 16).split('T').join(' at ');
-};
-
 const countries = {
   'Afghanistan': '93',
   'Aland Islands': '358',

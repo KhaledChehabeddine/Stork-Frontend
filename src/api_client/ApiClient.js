@@ -102,9 +102,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/vacancy/all');
   }
 
-  addAction(title) {
+  addAction(title, candidateId) {
     const data = {};
     data.title = title;
+    data.candidateId = candidateId;
     data.date = getCurrentDate();
     return this.Post('/action/add', data);
   }
@@ -144,13 +145,23 @@ class ApiClient extends ApiClientBase {
   }
 
   sendEmail(to, subject, body) {
-    const emailjs = require('emailjs');
+    const emailjs = require('@emailjs/browser');
+
+    emailjs.init(this.publicKey);
+
     const templateParams = {
       subject: subject,
       toEmail: to,
       body: body,
       fromName: window.localStorage.getItem('name')
     }
+
+    emailjs.send(this.serviceId, this.templateId, templateParams)
+      .then(response => {
+        console.log("Success!", response.status, response.text);
+      }, error => {
+        console.log(error);
+      });
   }
 }
 

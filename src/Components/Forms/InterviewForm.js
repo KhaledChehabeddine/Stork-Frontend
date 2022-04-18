@@ -80,8 +80,10 @@ const InterviewForm = () => {
     getApiClient().addInterview(state.candidateId, state.vacancy, state.date_time, state.description)
       .then(response => {
         alert('Your interview has been successfully scheduled!');
-        const index = getApiClient().getNumInterviewsPerCandidate(state.candidateId);
-        getApiClient().updateStatus(candidate, `Interview #${index+1} scheduled`)
+        getApiClient().addAction("First Interview Scheduled", state.candidateId)
+          .then(response => console.log(response))
+          .catch(error => console.log(error));
+        getApiClient().updateStatus(candidate, `First Interview Scheduled`)
           .then(response => {
             alert('Candidate status has been successfully updated to "' + response.data.status + '"');
             window.location.reload();
