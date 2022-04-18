@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
-import {Breadcrumb} from 'react-bootstrap';
 import {
   CButton,
   CCol,
@@ -7,7 +6,7 @@ import {
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect,
+  CFormSelect
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -111,12 +110,6 @@ const CandidateForm = () => {
   return (
     <div>
       <NavBar/>
-      <Breadcrumb className='form-breadcrumb' style={{marginTop:'50px'}}>
-        <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
-        <Breadcrumb.Item href='/candidate/all'>Candidates</Breadcrumb.Item>
-        <Breadcrumb.Item active>Add Candidate</Breadcrumb.Item>
-      </Breadcrumb>
-
       <h1 className='page-header' align='center'>Candidate Form</h1>
 
       <CForm
@@ -203,14 +196,14 @@ const CandidateForm = () => {
             defaultValue={''}
             required
             onChange={(event) => dispatch(
-              {type: 'set-country-code', countryPhone: '+' + event.target.value}
+              {type: 'set-country-code', countryPhone: event.target.value}
             )}>
             <option value='' disabled>+</option>
             {Object.values(countries).filter((phoneCode, index) => {
                 return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
               <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
           </CFormSelect>
-          <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
+          <CFormFeedback tooltip invalid>Invalid prefix</CFormFeedback>
         </CCol>
 
         <CCol style={{marginBottom: '1rem'}} md={4} className='position-relative'>
