@@ -5,7 +5,7 @@ import NavBar from "../Utils/Navbar";
 import VacancyRow from "../Tables/VacancyRow";
 import Spinner from "../Utils/Spinner";
 import CIcon from "@coreui/icons-react";
-import {cilBriefcase, cilSearch, cilSwapVertical} from "@coreui/icons";
+import {cilArrowBottom, cilArrowTop, cilBriefcase, cilSearch} from "@coreui/icons";
 import Input from "../Utils/Input";
 
 const filterPositions = (vacancies, input) => {
@@ -33,6 +33,18 @@ const sortByCity = vacancies => vacancies.sort((a, b) => {
   return a.city.localeCompare(b.city);
 })
 
+const rSortByTitle = vacancies => vacancies.sort((a, b) => {
+  return b.jobTitle.localeCompare(a.jobTitle);
+})
+
+const rSortByCountry = vacancies => vacancies.sort((a, b) => {
+  return b.country.localeCompare(a.country);
+})
+
+const rSortByCity = vacancies => vacancies.sort((a, b) => {
+  return b.city.localeCompare(a.city);
+})
+
 const reducer = (state, action) => {
   switch(action.type) {
     case 'vacancies-loaded':
@@ -45,6 +57,12 @@ const reducer = (state, action) => {
       return { ...state, filteredPositions: sortByCountry(state.vacancies) };
     case 'sort-by-city':
       return { ...state, filteredPositions: sortByCity(state.vacancies) };
+    case 'reverse-sort-by-title':
+      return { ...state, filteredPositions: rSortByTitle(state.vacancies) };
+    case 'reverse-sort-by-country':
+      return { ...state, filteredPositions: rSortByCountry(state.vacancies) };
+    case 'reverse-sort-by-city':
+      return { ...state, filteredPositions: rSortByCity(state.vacancies) };
     default:
       return { ...state }
   }
@@ -76,25 +94,34 @@ const VacanciesPage = (props) => {
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
                     <div style={{display:"flex",  alignItems:"center"}}>
+                      <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
+                        <CIcon className="sort-icon" icon={cilArrowTop}/>
+                      </button>
                       Job Title
-                      <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
-                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      <button onClick={event => dispatch({type: 'reverse-sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
+                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
                       </button>
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
                     <div style={{display:"flex",  alignItems:"center"}}>
+                      <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
+                        <CIcon className="sort-icon" icon={cilArrowTop}/>
+                      </button>
                       Country
-                      <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
-                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      <button onClick={event => dispatch({type: 'reverse-sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
+                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
                       </button>
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
                     <div style={{display:"flex",  alignItems:"center"}}>
+                      <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
+                        <CIcon className="sort-icon" icon={cilArrowTop}/>
+                      </button>
                       City
-                      <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button">
-                        <CIcon className="sort-icon" icon={cilSwapVertical}/>
+                      <button onClick={event => dispatch({type: 'reverse-sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
+                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
                       </button>
                     </div>
                   </CTableHeaderCell>
