@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
+
+.profile-card {
+    position: relative;
+    margin-top: 5%;
+    margin-left: 10%;
+    width:30%;
+    height: 70%;
+    border-radius: 62px;
+    background: linear-gradient(225deg, #e6e6e6, #ffffff);
+    box-shadow:  -21px 21px 74px #d4d4d4,
+    21px -21px 74px #ffffff;
+}
+
+.profile-field {
+    display: flex;
+    align-content: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.card-text {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 150%;
+    text-transform: uppercase;
+    text-align: center;
+    padding-top: 5%;
+}
+
+.profile-wave-top {
+    border-top-left-radius: 62px;
+    border-top-right-radius: 62px;
+}
+
+.profile-wave-bottom {
+    transform: rotate(180deg) scaleX(-1);
+    border-top-left-radius: 62px;
+    border-top-right-radius: 62px;
+    position: absolute;
+    bottom: 0;
+}
+
+.wave {
+    width: 100%;
+    animation: wave 8s linear infinite;
+}
+
+.wave1 {
+    animation: wave1 10s linear infinite;
+}
+
+.wave2 {
+    animation: wave2 12s linear infinite;
+}
+
+@keyframes wave {
+    0 % {
+        transform: translateX(50%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes wave1 {
+    0 % {
+        transform: scaleY(2.8) translateX(0%);
+    }
+
+    100% {
+        transform: scaleY(1.0) translateX(100%);
+    }
+}
+
+@keyframes wave2 {
+    0 % {
+        transform: scaleY(2.5) translateX(0%);
+    }
+
+    100% {
+        transform: scaleY(1.4) translateX(100%);
+    }
+}
