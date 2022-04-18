@@ -4,7 +4,7 @@ import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import {cilPeople, cilSearch, cilArrowBottom, cilArrowTop, cilSwapVertical} from "@coreui/icons";
+import {cilPeople, cilSearch, cilArrowBottom, cilArrowTop} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
 
