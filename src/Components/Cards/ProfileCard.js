@@ -3,6 +3,7 @@ import '../../Styles/ProfileCard.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
 import {formatDate} from "../Utils/utils";
+import getApiClient from "../../api_client/getApiClient";
 
 const ProfileCard = ({ candidate }) => {
   return (
@@ -20,6 +21,10 @@ const ProfileCard = ({ candidate }) => {
           <h3>{candidate.sex}</h3>
         </div>
       </div>
+      <button onClick={() => {getApiClient()
+        .sendEmail('asz07@mail.aub.edu', 'Test', 'Email service working successfully')}}>
+        Test
+      </button>
       <ActionTable candidate={candidate} />
     </>
   );

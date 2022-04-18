@@ -14,8 +14,8 @@ const LoginForm = () => {
   const authLogin = useCallback(() => {
     const response = getApiClient().authenticateUser(username, password);
     //  .then(response => {
-        window.localStorage.setItem('username', response.data.username);
-        window.localStorage.setItem('password', response.data.password);
+        window.localStorage.setItem('name', response.data.username);
+        window.localStorage.setItem('email', response.data.email);
         navigate('/home');
         window.location.reload();
     //  }).catch(error => console.log(error));

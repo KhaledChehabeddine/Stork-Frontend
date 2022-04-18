@@ -20,7 +20,8 @@ const CandidateRow = ({ candidate, candidates}) => {
       <CTableDataCell className="text-center">{formatDate(candidate.date)}</CTableDataCell>
       <CTableDataCell className="text-center">{candidate.status}</CTableDataCell>
       <CTableDataCell className="text-center">
-        <button className="view-button" style={{margin:0, padding: "10px"}} onClick={() => navigate(`/candidate/${getHashCode(candidate.id)}`)}>
+        <button className="view-button" style={{margin:0, padding: "10px"}}
+                onClick={() => navigate(`/candidate/${getHashCode(candidate.id)}`)}>
           <CIcon className="view-icon" icon={cilArrowCircleRight}/>
         </button>
       </CTableDataCell>

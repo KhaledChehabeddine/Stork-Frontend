@@ -12,7 +12,7 @@ const filterPositions = (vacancies, input) => {
   let filter, value, i, title, filteredPositions = [];
   filter = input.value.toUpperCase();
   for (i = 0; i < vacancies.length; i++) {
-    title = vacancies[i].jobTitle;
+    title = vacancies[i].jobTitle + ' ' + vacancies[i].country + ' ' + vacancies[i].city;
     value = title || title.innerText;
     if (value.toUpperCase().indexOf(filter) > -1) {
       filteredPositions.push(vacancies[i]);

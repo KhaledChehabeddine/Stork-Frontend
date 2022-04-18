@@ -1,6 +1,7 @@
 import ApiClientBase from "./ApiClientBase";
 import {getCurrentDate} from "../Components/Utils/utils";
 
+
 class ApiClient extends ApiClientBase {
   /* Post method example
   PostExample(endpoint, arg1, arg2) {
@@ -20,7 +21,7 @@ class ApiClient extends ApiClientBase {
   authenticateUser(username, password) {
     return {
       data : {
-        username: 'Ahmad Zaaroura',
+        name: 'Ahmad Zaaroura',
         email: 'asz07@mail.aub.edu',
         id: 41
       }
@@ -140,6 +141,16 @@ class ApiClient extends ApiClientBase {
       .then(response => {return response.data.length})
       .catch(error => console.log(error));
     return 0;
+  }
+
+  sendEmail(to, subject, body) {
+    const emailjs = require('emailjs');
+    const templateParams = {
+      subject: subject,
+      toEmail: to,
+      body: body,
+      fromName: window.localStorage.getItem('name')
+    }
   }
 }
 
