@@ -27,6 +27,10 @@ const formatDate = (date) => {
   return date.substring(0, 16).split('T')[0];
 };
 
+const formatDateTime = (date) => {
+  return date.substring(0, 16).split('T').join('   at ');
+};
+
 const countries = {
   'Afghanistan': '93',
   'Aland Islands': '358',
@@ -285,9 +289,5 @@ const countries = {
 const genders = [
   'Male', 'Female'
 ]
-
-const formatDateTime = (date) => {
-  return date.substring(0, 16).split('T').join('   at ');
-};
 
 export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime};

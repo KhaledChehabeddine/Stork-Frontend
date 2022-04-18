@@ -3,7 +3,6 @@ import '../../Styles/ProfileCard.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
 import {formatDate} from "../Utils/utils";
-import getApiClient from "../../api_client/getApiClient";
 
 const ProfileCard = ({ candidate }) => {
   return (

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import NavBar from "../Utils/Navbar";
 import '../../Styles/Breadcrumbs.css';
-import './Home.css';
+import '../../Styles/Home.css';
 import getApiClient from "../../api_client/getApiClient";
 import {formatDateTime} from "../Utils/utils";
 import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
@@ -41,8 +41,20 @@ const UpcomingEvents = () => {
         setErrorMessage(error.message);
       });
   }, []);
-  
 
+  const [name, setName] = useState('');
+
+  const getCandidateName = useCallback((candidateId) => {
+    getApiClient().getCandidate(candidateId)
+      .then(response => {
+        if (response.status === 200)
+          setName(response.data.firstName + " " + response.data.lastName);
+      }).catch(error => {
+        console.log(error);
+        setName('');
+    });
+    return name;
+  }, []);
 
   return (
     <div className='upcoming-events-container'>
@@ -52,7 +64,9 @@ const UpcomingEvents = () => {
       <CTable striped hover bordered>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope="col" colspan="3">Starting Today</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Title</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Candidate</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Date</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -69,12 +83,12 @@ const UpcomingEvents = () => {
             (showingMore ? events : events.slice(0, 10)).map(element => (
               <CTableRow key={element.id}>
                 <CTableDataCell>{element.description}</CTableDataCell>
+                <CTableDataCell>{getCandidateName(element.candidateId)}</CTableDataCell>
                 <CTableDataCell>{formatDateTime(element.dateTime)}</CTableDataCell>
-                <CTableDataCell>{element.vacancyId}</CTableDataCell>
               </CTableRow>
             ))
           }
-          {!showingMore && events.length > 10 && // conditional rendering 
+          {!showingMore && events.length > 10 && // conditional rendering
             <CTableRow>
               <CTableDataCell colSpan="3">
                 <div onClick={() => setShowingMore(true)} className="view-more-button">
