@@ -286,4 +286,8 @@ const genders = [
   'Male', 'Female'
 ]
 
-export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders};
+const formatDateTime = (date) => {
+  return date.substring(0, 16).split('T').join('   at ');
+};
+
+export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime};
