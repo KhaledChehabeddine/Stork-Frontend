@@ -3,7 +3,7 @@ import {CTableDataCell, CTableRow} from "@coreui/react";
 import {formatDate, getHashCode} from "../Utils/utils";
 import {useNavigate} from "react-router-dom";
 import CIcon from "@coreui/icons-react";
-import {cilArrowCircleRight} from "@coreui/icons";
+import {cilArrowCircleRight, cilTrash} from "@coreui/icons";
 
 const CandidateRow = ({ candidate, candidates}) => {
   const navigate = useNavigate();
@@ -23,6 +23,9 @@ const CandidateRow = ({ candidate, candidates}) => {
         <button className="view-button" style={{margin:0, padding: "10px"}}
                 onClick={() => navigate(`/candidate/${getHashCode(candidate.id)}`)}>
           <CIcon className="view-icon" icon={cilArrowCircleRight}/>
+        </button>
+        <button className="view-button" style={{margin:0, padding: "10px"}}>
+          <CIcon className="view-icon" icon={cilTrash}/>
         </button>
       </CTableDataCell>
     </CTableRow>

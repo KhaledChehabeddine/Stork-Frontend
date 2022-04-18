@@ -12,6 +12,11 @@
     line-height: 350%;
 }
 
+.table-rows {
+    background-color: white;
+}
+
+
 .icon-cell {
     line-height: 350%;
     width: 5%;
@@ -32,6 +37,7 @@
     border: 0;
     background-color: transparent;
 }
+
 
 .view-icon {
     width: 100%!important;

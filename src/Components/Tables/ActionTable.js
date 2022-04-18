@@ -19,6 +19,11 @@ const ActionTable = ({ candidate }) => {
     actionsLoaded: false
   });
 
+  const getActionRows = (actions) => {
+    if (actions.length === 0) return <CTableBody className="table-body"><h1 className="profile-name">You have not made any actions yet.</h1></CTableBody>
+    else return <CTableBody className="table-body">{actions.map(action => <ActionRow key={action.id} action={action} /> )}</CTableBody>
+  }
+
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id)
       .then(response => {
@@ -33,19 +38,15 @@ const ActionTable = ({ candidate }) => {
           display: 'flex',
           flexDirection: 'column',
         }}>
-          <h1 align="center">Action History</h1>
+          <h1 className="profile-name" align="center">Action History</h1>
           <CTable id="candidatesTable" align="middle" className="mb-0 candidatesTable" hover responsive>
             <CTableHead color="light">
               <CTableRow className="header-row">
-                <CTableHeaderCell style={{width: "2%"}}></CTableHeaderCell>
-                <CTableHeaderCell className="header-cell">#</CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">Action</CTableHeaderCell>
                 <CTableHeaderCell className="text-center header-cell">Date</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
-            <CTableBody className="table-body">
-              {state.actions.map(action => <ActionRow key={action.id} action={action} /> )}
-            </CTableBody>
+            {getActionRows(state.actions)}
           </CTable>
         </div>
         : <Spinner />}
