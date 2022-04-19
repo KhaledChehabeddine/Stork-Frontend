@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useCallback, useEffect, useReducer} from 'react';
 import '../../Styles/ProfilePage.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
@@ -8,12 +8,19 @@ import {cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/ic
 import {cilMail} from "@coreui/icons-pro";
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
-import {useNavigate} from "react-router";
+import {CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle} from "@coreui/react";
+import {useNavigate} from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'set-actions':
       return { ...state, actions: action.actions, actionsLoaded: true };
+    case 'set-confirm-rejection':
+      return { ...state, confirmRejection: action.value };
+    case 'set-text-box-visible':
+      return { ...state, textBoxVisible: action.value };
+    case 'set-email-text':
+      return { ...state, emailText: action.value };
     default:
       return { ...state }
   }
@@ -28,8 +35,42 @@ const ProfilePage = ({ candidate }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, {
     actions: [],
-    actionsLoaded: false
+    actionsLoaded: false,
+    textBoxVisible: false,
+    confirmSendOffer: false,
+    confirmRejection: false,
+    emailText: ''
   });
+
+  const scheduleInterview = useCallback(() => {
+    navigate('/interview/add', {
+      state: {
+        candidate: candidate
+      }
+    });
+  }, []);
+
+  const sendOffer = useCallback(() => {
+    console.log(state.emailText);
+    getApiClient().sendEmail(candidate.email, 'Application', state.emailText);
+    getApiClient().updateStatus(candidate, 'Offer Sent').catch(error => console.log(error));
+    getApiClient().addAction('Offer Recieved', candidate.id).catch(error => console.log(error));
+    alert('Email sent successfully!');
+    dispatch({ type: 'set-text-box-visible', value: false });
+    dispatch({ type: 'set-email-text', value: '' });
+  }, []);
+
+  const sendRejection = useCallback(() => {
+    let rejectionText = 'Dear ' + candidate.firstName + ' ' + candidate.lastName + '\n'
+                      + 'Hope this email finds you well.\n'
+                      + 'We are very sad to inform you that your application has not been considered successful.\n\n'
+                      + 'Regards,\n'
+                      + window.localStorage.getItem('name');
+    if (getApiClient().sendEmail(candidate.email, 'Application', rejectionText)) {
+      getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
+      getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
+    }
+  }, []);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id)
@@ -113,12 +154,47 @@ const ProfilePage = ({ candidate }) => {
             <div className="buttons-table" style={{float: "right", marginBottom:"5%"}}>
               <div className="button-container" style={{paddingTop: "20%", marginBottom:"33%"}}>
                 <h1 className="profile-name">Actions</h1>
-                <button className="action-button">Send Acceptance Letter</button>
-                <button className="action-button">Send Rejection Letter</button>
-                <button className="action-button">Schedule Interview</button>
+                <button className="action-button" onClick={() => {
+                  dispatch({ type: 'set-text-box-visible', value: true });
+                }}>Send Offer</button>
+                <button className="action-button" onClick={() => {
+                  dispatch({ type: 'set-confirm-rejection', value: true });
+                }}>Reject</button>
+                <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
                 <button className="action-button">Contact</button>
               </div>
             </div>
+          </div>
+          <div>
+            <CModal alignment="center"
+                    backdrop={"static"}
+                    visible={state.confirmRejection}
+                    onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
+              <CModalHeader>
+                <CModalTitle>Reject</CModalTitle>
+              </CModalHeader>
+              <CModalBody>Are you sure you want reject this candidate?</CModalBody>
+              <CModalFooter>
+                <button className="confirm-button" onClick={sendRejection}>Confirm</button>
+              </CModalFooter>
+            </CModal>
+            <CModal alignment="center"
+                    backdrop={"static"}
+                    visible={state.textBoxVisible}
+                    onClose={() => dispatch({type: 'set-text-box-visible', value: false})}>
+              <CModalHeader>
+                <CModalTitle>Write a letter</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <CFormTextarea onChange={(event) => {
+                  console.log(state.emailText);
+                  dispatch({ type: 'set-email-text', value: event.target.value });
+                }}></CFormTextarea>
+              </CModalBody>
+              <CModalFooter>
+                <button className="confirm-button" onClick={sendOffer}>Confirm</button>
+              </CModalFooter>
+            </CModal>
           </div>
           <div className="actions-table" style={{paddingBottom:"5%"}}>
             {getActionTable(candidate)}

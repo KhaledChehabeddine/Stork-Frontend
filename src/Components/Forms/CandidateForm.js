@@ -100,10 +100,11 @@ const CandidateForm = () => {
                                 state.gender, state.email, state.phone, state.jobPosition, 'Pending')
       .then(response => {
           getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
+          getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
         }
       ).catch(error => console.log(error));
     alert('Candidate has been successfully added!');
-    navigate('/home');
+    navigate('/candidate/all');
   }, [state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
             state.email, state.phone, state.jobPosition, state.resumeFile, navigate]);
 
