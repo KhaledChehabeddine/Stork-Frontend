@@ -44,7 +44,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -52,7 +52,7 @@ class ApiClient extends ApiClientBase {
     data.sex = gender;
     data.email = email;
     data.phone = '+' + countryPhone + phone;
-    // data.jobPosition = jobPosition;
+    data.jobPositionId = jobPositionId;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
@@ -96,6 +96,12 @@ class ApiClient extends ApiClientBase {
     data.jobDescription = notes;
     data.datePosted = getCurrentDate();
     return this.Post('/vacancy/add', data);
+  }
+
+  findVacancy(id) {
+    const data = {};
+    data.id = id;
+    return this.Get('/vacancy/find', data);
   }
 
   deleteVacancy(jobPositionId) {
@@ -144,13 +150,13 @@ class ApiClient extends ApiClientBase {
   }
 
   getNumInterviewsPerCandidate(candidateId) {
-    this.getInterviewsByCandidateId(candidateId)
-      .then(response => {return response.data.length})
-      .catch(error => console.log(error));
-    return 0;
+    const params = {};
+    params.candidateId = candidateId;
+    return this.Get('/interview/candidate/num', params);
   }
 
   sendEmail(to, subject, body) {
+    console.log('Body\n' + body);
     const emailjs = require('@emailjs/browser');
 
     emailjs.init(this.publicKey);

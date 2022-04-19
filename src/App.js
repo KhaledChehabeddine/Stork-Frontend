@@ -26,7 +26,7 @@ function App() {
       .then(response => {
         setCandidates(response.data);
       }).catch(error => {console.log(error)});
-  }, []);
+  }, [candidates, setCandidates]);
 
   return (
     <Router>

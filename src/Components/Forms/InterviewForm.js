@@ -2,10 +2,10 @@ import '../../Styles/FormStyle.css';
 import {Breadcrumb} from "react-bootstrap"
 import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect, CFormTextarea} from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
-import React, {useReducer, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback, useState} from 'react';
 import Spinner from '../Utils/Spinner';
 
 const reducer = (state, action) => {
@@ -22,6 +22,10 @@ const reducer = (state, action) => {
       return {...state, date_time: action.date_time};
     case 'set-description':
       return {...state, description: action.description};
+    case 'set-num-interviews':
+      return { ...state, numInterviews: action.numInterviews };
+    case 'set-redirected':
+      return { ...state, redirected: action.redirected };
     default:
       return {...state};
   }
@@ -29,6 +33,8 @@ const reducer = (state, action) => {
 
 const InterviewForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [jobTitle, setJobTitle] = useState('');
   const [state, dispatch] = useReducer(reducer, {
     candidateId: null,
     candidates: [],
@@ -37,7 +43,9 @@ const InterviewForm = () => {
     pageLoaded: false,
     vacancy: null,
     vacancies: [],
-    valid: false
+    valid: false,
+    numInterviews: 0,
+    redirected: false
   });
 
   useEffect(() => {
@@ -55,6 +63,21 @@ const InterviewForm = () => {
       }
     ).catch(error => console.log(error))
   }, []);
+
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.candidate) {
+        dispatch({ type: 'set-candidate-id', candidateId: location.state.candidate.id });
+        dispatch({ type: 'set-vacancy', vacancy: location.state.candidate.jobPositionId })
+        dispatch({ type: 'set-redirected', redirected: true });
+        getApiClient().findVacancy(location.state.candidate.jobPositionId)
+          .then(response => {
+            setJobTitle(response.data.jobTitle + ' (' + response.data.country + ')');
+          }).catch(error => console.log(error));
+      }
+    }
+  }, [location]);
+
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -80,13 +103,20 @@ const InterviewForm = () => {
     getApiClient().addInterview(state.candidateId, state.vacancy, state.date_time, state.description)
       .then(response => {
         alert('Your interview has been successfully scheduled!');
-        getApiClient().addAction("First Interview Scheduled", state.candidateId)
+        getApiClient().getNumInterviewsPerCandidate(response.data.id)
+          .then(response => {
+            console.log(response);
+            if (response.status === 200) {
+              dispatch({ type: 'set-num-interviews', numInterviews: response.data[0]});
+            }
+          }).catch(error => console.log(error));
+        getApiClient().addAction(`Interview #${state.numInterviews+1} scheduled`, state.candidateId)
           .then(response => console.log(response))
           .catch(error => console.log(error));
-        getApiClient().updateStatus(candidate, `First Interview Scheduled`)
+        getApiClient().updateStatus(candidate, `Interview #${state.numInterviews+1} scheduled`)
           .then(response => {
             alert('Candidate status has been successfully updated to "' + response.data.status + '"');
-            window.location.reload();
+            navigate('/candidate/all');
           }).catch(error => console.log(error));
       }).catch(error => console.log(error));
   }, [state.candidateId, state.vacancy, state.date_time, state.description, navigate]);
@@ -106,43 +136,50 @@ const InterviewForm = () => {
             className='row g-3 needs-validation'
             noValidate
             validated={state.valid}
-            //onSubmit={handleSubmit}
-            onSubmit={event => event.preventDefault()}
+            onSubmit={e => e.preventDefault()}
             style={formStyle}
             encType="multipart/form-data"
           >
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
               <CFormLabel htmlFor='validationServer01'>Candidate</CFormLabel>
-              <CFormSelect
-                id='validationServer01'
-                defaultValue='Choose...'
-                required
-                onChange={(event) => dispatch(
-                  {type: 'set-candidate-id', candidateId: event.target.value}
-                )}
-              >
-                <option disabled value='Choose...'>Choose...</option>
-                {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
-                  {candidate.firstName + ' ' + candidate.lastName}
-                </option>)}
-              </CFormSelect>
+              {state.redirected
+              ?
+                <h5>{location.state.candidate.firstName + ' ' + location.state.candidate.lastName}</h5>
+              :
+                <CFormSelect
+                  id='validationServer01'
+                  defaultValue='Choose...'
+                  required
+                  onChange={(event) => dispatch(
+                    {type: 'set-candidate-id', candidateId: event.target.value}
+                  )}
+                >
+                  <option disabled value='Choose...'>Choose...</option>
+                  {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
+                    {candidate.firstName + ' ' + candidate.lastName}
+                  </option>)}
+                </CFormSelect>}
               <CFormFeedback tooltip invalid>Invalid candidate</CFormFeedback>
             </CCol>
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
               <CFormLabel htmlFor='validationServer02'>Vacancy</CFormLabel>
-              <CFormSelect
-                id='validationServer02'
-                defaultValue='Choose...'
-                required
-                onChange={(event) => dispatch(
-                  {type: 'set-vacancy', vacancy: event.target.value}
-                )}
-              >
-                <option disabled value='Choose...'>Choose...</option>
-                {state.vacancies.map(vacancy => <option key={vacancy.id} value={vacancy.id}>
-                  {vacancy.jobTitle + ' (' + vacancy.country + ')'}
-                </option>)}
-              </CFormSelect>
+              {state.redirected
+                ?
+                <h5>{jobTitle}</h5>
+                :
+                <CFormSelect
+                  id='validationServer02'
+                  defaultValue='Choose...'
+                  required
+                  onChange={(event) => dispatch(
+                    {type: 'set-vacancy', vacancy: event.target.value}
+                  )}
+                >
+                  <option disabled value='Choose...'>Choose...</option>
+                  {state.vacancies.map(vacancy => <option key={vacancy.id} value={vacancy.id}>
+                    {vacancy.jobTitle + ' (' + vacancy.country + ')'}
+                  </option>)}
+                </CFormSelect>}
               <CFormFeedback tooltip invalid>Invalid vacancy</CFormFeedback>
             </CCol>
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
@@ -150,8 +187,7 @@ const InterviewForm = () => {
               <CFormInput type='datetime-local' id='validationServer03' required
                           onChange={(event) => dispatch(
                             {type: 'set-date-time', date_time: event.target.value}
-                          )}
-              />
+                          )}/>
               <CFormFeedback tooltip invalid>Invalid time</CFormFeedback>
             </CCol>
             <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
