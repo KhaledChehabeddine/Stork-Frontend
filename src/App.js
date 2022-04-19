@@ -19,7 +19,7 @@ import ResumePage from "./Components/Pages/ResumePage";
 function App() {
   const [candidates, setCandidates] = useState([]);
   const isLoggedIn = useCallback(() => {
-    return window.localStorage.getItem('username');
+    return window.localStorage.getItem('email');
   }, []);
 
   useEffect(() => {
@@ -40,8 +40,8 @@ function App() {
             <Route exact path='/home' element={<Home/>}/>
             <Route exact path='/candidate/add' element={<CandidateForm />} />
             <Route exact path='/candidate/all' element={<CandidatesPage />} />
-            <Route exact path='/vacancy/post' element={<VacancyForm />} />
-            <Route exact path='/vacancy/all' element={<VacanciesPage />} />
+            <Route exact path='/job/add' element={<VacancyForm />} />
+            <Route exact path='/job/all' element={<VacanciesPage />} />
             <Route exact path='/interview/add' element={<InterviewForm />} />
             {candidates.map(candidate =>
               <Route exact key={candidate.id} path={`/candidate/${getHashCode(candidate.id)}`} element={<ProfilePage candidate={candidate}/>}/>)}
