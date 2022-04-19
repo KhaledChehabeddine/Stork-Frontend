@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useReducer} from 'react';
 import '../../Styles/ProfilePage.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
-import {formatDate} from "../Utils/utils";
+import {formatDate, getHashCode} from "../Utils/utils";
 import CIcon from "@coreui/icons-react";
 import {cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/icons";
 import {cilMail} from "@coreui/icons-pro";
@@ -136,7 +136,7 @@ const ProfilePage = ({ candidate }) => {
                   <h3 className="card-text" style={{float: "right"}}>{formatDate(candidate.date)}</h3>
                 </div>
                 <div className="view-resume-container">
-                  <button className="view-resume">View Resumé</button>
+                  <button className="view-resume" onClick={() => navigate(`/resume/${getHashCode(candidate.id)}`)}>View Resumé</button>
                 </div>
               </div>
               <svg className="profile-wave-bottom" viewBox="0 0 1440 420" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +161,7 @@ const ProfilePage = ({ candidate }) => {
                   dispatch({ type: 'set-confirm-rejection', value: true });
                 }}>Reject</button>
                 <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
-                {/*<button className="action-button">Contact</button>*/}
+                <button className="action-button">Contact</button>
               </div>
             </div>
           </div>

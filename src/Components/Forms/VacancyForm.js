@@ -1,5 +1,4 @@
 import React, {useCallback, useState} from 'react';
-import {Breadcrumb} from 'react-bootstrap';
 import {
   CForm,
   CCol,
@@ -52,7 +51,7 @@ const VacancyForm = () => {
   return (
     <div>
       <NavBar />
-      <h1 className='page-header' align='center'>Job Position Form</h1>
+      <h1 className='profile-name' align='center'>Job Position Form</h1>
       <CForm
         className='row g-3 needs-validation'
         noValidate
