@@ -18,7 +18,7 @@ import {getHashCode} from "./Components/Utils/utils";
 function App() {
   const [candidates, setCandidates] = useState([]);
   const isLoggedIn = useCallback(() => {
-    return window.localStorage.getItem('username');
+    return window.localStorage.getItem('email');
   }, []);
 
   useEffect(() => {
