@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import NavBar from "../Utils/Navbar";
+import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
-import getApiClient from "../../api_client/getApiClient";
-import {formatDateTime} from "../Utils/utils";
-import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react";
+import getApiClient from '../../api_client/getApiClient';
+import {formatDateTime} from '../Utils/utils';
+import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from '@coreui/react';
 
 const Home = () => {
   return (
     <div align='center' id='home'>
       <NavBar/>
-      <div className="form-header" style={{ marginTop:"50px"}}></div>
+      <div className='form-header' style={{ marginTop:'50px'}}></div>
 
       <div>
         <UpcomingEvents/>
@@ -23,7 +23,8 @@ const UpcomingEvents = () => {
   const [loaded, setLoaded] = useState(false);
   const [showingMore, setShowingMore] = useState(false);
   const [events, setEvents] = useState([]); 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [candidates, setCandidates] = useState({});
 
   useEffect(()=> {
     getApiClient().getAllInterviews()
@@ -39,22 +40,20 @@ const UpcomingEvents = () => {
       })
       .catch(error => {
         setErrorMessage(error.message);
-      });
-  }, []);
-
-  const [name, setName] = useState('');
-
-  const getCandidateName = useCallback((candidateId) => {
-    getApiClient().getCandidate(candidateId)
-      .then(response => {
-        if (response.status === 200)
-          setName(response.data.firstName + " " + response.data.lastName);
-      }).catch(error => {
         console.log(error);
-        setName('');
-    });
-    return name;
-  }, []);
+      });
+  }, [events]);
+
+  useEffect(() => {
+    getApiClient().getAllCandidates()
+      .then(response => {
+        let curr = {};
+        for (let i = 0; i < response.data.length; ++i) {
+          curr[response.data[i].id] = response.data[i];
+        }
+        setCandidates(curr);
+      }).catch(error => console.log(error));
+  }, [candidates]);
 
   return (
     <div className='upcoming-events-container'>
@@ -72,7 +71,7 @@ const UpcomingEvents = () => {
         <CTableBody>
           {!loaded && 
             <CTableRow>
-              <CTableDataCell colSpan="3">
+              <CTableDataCell colSpan='3'>
                 <div className='loading-text'>
                   Loading...
                 </div>
@@ -83,16 +82,22 @@ const UpcomingEvents = () => {
             (showingMore ? events : events.slice(0, 10)).map(element => (
               <CTableRow key={element.id}>
                 <CTableDataCell>{element.description}</CTableDataCell>
-                <CTableDataCell>{'N/A'}</CTableDataCell>
-                {/*getCandidateName(element.candidateId)*/}
+                <CTableDataCell>
+                  {candidates[element.candidateId]
+                    ?
+                    candidates[element.candidateId].firstName + ' ' + candidates[element.candidateId].lastName
+                    :
+                    ''
+                  }
+                </CTableDataCell>
                 <CTableDataCell>{formatDateTime(element.dateTime)}</CTableDataCell>
               </CTableRow>
             ))
           }
           {!showingMore && events.length > 10 && // conditional rendering
             <CTableRow>
-              <CTableDataCell colSpan="3">
-                <div onClick={() => setShowingMore(true)} className="view-more-button">
+              <CTableDataCell colSpan='3'>
+                <div onClick={() => setShowingMore(true)} className='view-more-button'>
                   View more
                 </div>
               </CTableDataCell>

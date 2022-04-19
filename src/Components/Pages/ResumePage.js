@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import NavBar from "../Utils/Navbar";
 import getApiClient from "../../api_client/getApiClient";
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Link } from "react-router-dom";
+
 
 const ResumePage = ({candidate}) => {
   const [resume, setResume] = useState(null);
@@ -11,11 +14,14 @@ const ResumePage = ({candidate}) => {
           setResume(response.data);
         }
       }).catch(error => console.log(error));
-  }, [candidate]);
+  }, []);
 
   return (
     <>
       <NavBar/>
+      {/*<Document type='application/pdf' file={resume} onLoadSuccess={() => console.log('success!')}>*/}
+      {/*  <Page pageNumber={1} />*/}
+      {/*</Document>*/}
     </>
   );
 };
