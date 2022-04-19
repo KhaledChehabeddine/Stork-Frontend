@@ -110,7 +110,7 @@ const CandidateForm = () => {
   return (
     <div>
       <NavBar/>
-      <h1 className='page-header' align='center'>Candidate Form</h1>
+      <h1 className='profile-name' align='center'>Candidate Form</h1>
 
       <CForm
         className='form row g-3 needs-validation'

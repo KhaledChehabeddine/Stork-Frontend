@@ -1,5 +1,4 @@
 import '../../Styles/FormStyle.css';
-import {Breadcrumb} from "react-bootstrap"
 import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect, CFormTextarea} from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
 import {useNavigate} from "react-router-dom";
@@ -96,12 +95,7 @@ const InterviewForm = () => {
       <NavBar/>
       {state.pageLoaded ?
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <Breadcrumb className='form-breadcrumb' style={{marginTop:"50px"}}>
-            <Breadcrumb.Item href='/home'>Home</Breadcrumb.Item>
-            <Breadcrumb.Item href='/interview/all'>Interviews</Breadcrumb.Item>
-            <Breadcrumb.Item active>Add Interview</Breadcrumb.Item>
-          </Breadcrumb>
-          <h1 className='form-header'>Interview Form</h1>
+          <h1 className='profile-name'>Interview Form</h1>
           <CForm
             className='row g-3 needs-validation'
             noValidate
