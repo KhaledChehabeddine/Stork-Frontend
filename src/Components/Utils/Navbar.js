@@ -35,9 +35,9 @@ const NavBar = () => {
           <Nav className="navbar-link link4">
             <Nav.Link as={Link} to="/candidate/all">View Candidates</Nav.Link>
           </Nav>
-          <Nav style={{marginLeft:"auto"}} className="navbar-profile">
-            <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>
-          </Nav>
+          {/*<Nav style={{marginLeft:"auto"}} className="navbar-profile">*/}
+          {/*  <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>*/}
+          {/*</Nav>*/}
           <Nav className="nav-hamburger">
             <Dropdown align="end" id="dropdown-menu-align-end">
               <Dropdown.Toggle className="hamburger-dropdown">

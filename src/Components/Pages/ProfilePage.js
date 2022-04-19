@@ -8,7 +8,7 @@ import {cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/ic
 import {cilMail} from "@coreui/icons-pro";
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
-import {CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle} from "@coreui/react";
+import {CFormInput, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle} from "@coreui/react";
 import {useNavigate} from "react-router-dom";
 
 const reducer = (state, action) => {
@@ -21,6 +21,10 @@ const reducer = (state, action) => {
       return { ...state, textBoxVisible: action.value };
     case 'set-email-text':
       return { ...state, emailText: action.value };
+    case 'set-contact-visible':
+      return { ...state, contactVisible: action.value };
+    case 'set-contact-text':
+      return { ...state, contactText: action.value };
     default:
       return { ...state }
   }
@@ -39,7 +43,9 @@ const ProfilePage = ({ candidate }) => {
     textBoxVisible: false,
     confirmSendOffer: false,
     confirmRejection: false,
-    emailText: ''
+    contactVisible: false,
+    emailText: '',
+    contactText: ''
   });
 
   const scheduleInterview = useCallback(() => {
@@ -50,9 +56,8 @@ const ProfilePage = ({ candidate }) => {
     });
   }, []);
 
-  const sendOffer = useCallback(() => {
-    console.log(state.emailText);
-    getApiClient().sendEmail(candidate.email, 'Application', state.emailText);
+  const sendOffer = useCallback((text) => {
+    getApiClient().sendEmail(candidate.email, 'Job Offer', text);
     getApiClient().updateStatus(candidate, 'Offer Sent').catch(error => console.log(error));
     getApiClient().addAction('Offer Recieved', candidate.id).catch(error => console.log(error));
     alert('Email sent successfully!');
@@ -66,10 +71,17 @@ const ProfilePage = ({ candidate }) => {
                       + 'We are very sad to inform you that your application has not been considered successful.\n\n'
                       + 'Regards,\n'
                       + window.localStorage.getItem('name');
-    if (getApiClient().sendEmail(candidate.email, 'Application', rejectionText)) {
-      getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
-      getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-    }
+    getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
+    getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
+    getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
+    alert('Candidate Rejected');
+  }, []);
+
+  const contact = useCallback((text) => {
+    getApiClient().sendEmail(candidate.email, 'Application', text);
+    alert('Message Sent');
+    dispatch({ type: 'set-contact-visible', value: false });
+    dispatch({ type: 'set-contact-text', value: '' });
   }, []);
 
   useEffect(() => {
@@ -136,7 +148,13 @@ const ProfilePage = ({ candidate }) => {
                   <h3 className="card-text" style={{float: "right"}}>{formatDate(candidate.date)}</h3>
                 </div>
                 <div className="view-resume-container">
-                  <button className="view-resume" onClick={() => navigate(`/resume/${getHashCode(candidate.id)}`)}>View Resumé</button>
+                  <button className="view-resume" onClick={() => {
+                    navigate(`/resume/${getHashCode(candidate.id)}`, {
+                      state: {
+                        candidate: candidate
+                      }
+                    })
+                  }}>View Resumé</button>
                 </div>
               </div>
               <svg className="profile-wave-bottom" viewBox="0 0 1440 420" xmlns="http://www.w3.org/2000/svg">
@@ -154,14 +172,16 @@ const ProfilePage = ({ candidate }) => {
             <div className="buttons-table" style={{float: "right", marginBottom:"5%"}}>
               <div className="button-container" style={{paddingTop: "20%", marginBottom:"33%"}}>
                 <h1 className="profile-name">Actions</h1>
+                <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
+                <button className="action-button" onClick={() => {
+                  dispatch({ type: 'set-contact-visible', value: true });
+                }}>Contact</button>
                 <button className="action-button" onClick={() => {
                   dispatch({ type: 'set-text-box-visible', value: true });
                 }}>Send Offer</button>
                 <button className="action-button" onClick={() => {
                   dispatch({ type: 'set-confirm-rejection', value: true });
                 }}>Reject</button>
-                <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
-                <button className="action-button">Contact</button>
               </div>
             </div>
           </div>
@@ -186,13 +206,34 @@ const ProfilePage = ({ candidate }) => {
                 <CModalTitle>Write a letter</CModalTitle>
               </CModalHeader>
               <CModalBody>
-                <CFormTextarea onChange={(event) => {
-                  console.log(state.emailText);
+                <textarea
+                  placeholder='Type an offer...'
+                  style={{width: '100%', height: '250px'}}
+                  onChange={(event) => {
                   dispatch({ type: 'set-email-text', value: event.target.value });
-                }}></CFormTextarea>
+                }}/>
               </CModalBody>
               <CModalFooter>
-                <button className="confirm-button" onClick={sendOffer}>Confirm</button>
+                <button className="confirm-button" onClick={() => sendOffer(state.emailText)}>Confirm</button>
+              </CModalFooter>
+            </CModal>
+            <CModal alignment="center"
+                    backdrop={"static"}
+                    visible={state.contactVisible}
+                    onClose={() => dispatch({type: 'set-contact-visible', value: false})}>
+              <CModalHeader>
+                <CModalTitle>Write a letter</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <textarea
+                  placeholder='Type a message...'
+                  style={{width: '100%', height: '250px'}}
+                  onChange={(event) => {
+                    dispatch({ type: 'set-contact-text', value: event.target.value });
+                }}/>
+              </CModalBody>
+              <CModalFooter>
+                <button className="confirm-button" onClick={() => contact(state.contactText)}>Confirm</button>
               </CModalFooter>
             </CModal>
           </div>
