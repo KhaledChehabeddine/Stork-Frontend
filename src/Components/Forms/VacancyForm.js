@@ -26,6 +26,7 @@ const VacancyForm = () => {
   const [workType, setWorkType] = useState(null);
   const [employmentType, setEmploymentType] = useState(null);
   const [notes, setNotes] = useState('');
+  const [startDate, setStartDate] = useState('');
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -51,33 +52,44 @@ const VacancyForm = () => {
   return (
     <div>
       <NavBar />
+
       <h1 className='profile-name' align='center'>Job Position Form</h1>
-      <CForm
-        className='row g-3 needs-validation'
-        noValidate
-        onSubmit={handleSubmit}
-        style={formStyle}
-        validated={valid}>
-        <CCol style={{marginBottom: '1rem'}} md={12} className='position-relative'>
+
+      <CForm className='row g-3 needs-validation'
+             noValidate
+             onSubmit={handleSubmit}
+             style={formStyle}
+             validated={valid}>
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer01'>Job Title</CFormLabel>
-          <CFormInput
-            id='validationServer01'
-            type='text'
-            placeholder='ex: Software Engineer'
-            required
-            onChange={(event) => setJobTitle(event.target.value)}/>
+          <CFormInput id='validationServer01'
+                      type='text'
+                      placeholder='ex: Software Engineer'
+                      required
+                      onChange={(event) => setJobTitle(event.target.value)}/>
           <CFormFeedback invalid tooltip>Invalid job title.</CFormFeedback>
         </CCol>
 
         <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+          <CFormLabel htmlFor='validationServer02'>Start Date</CFormLabel>
+          <CFormInput id='validationServer02'
+                      type='date'
+                      required
+                      onChange={(event) => setStartDate(event.target.value)}/>
+          <CFormFeedback invalid tooltip>Invalid start date.</CFormFeedback>
+        </CCol>
+
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer03'>Country</CFormLabel>
-          <CFormSelect
-            id='validationServer03'
-            defaultValue={''}
-            required
-            onChange={(event) => {setCountry(event.target.value)}}>
+          <CFormSelect id='validationServer03'
+                       defaultValue={''}
+                       required
+                       onChange={(event) => {setCountry(event.target.value)}}>
             <option value='' disabled>Choose...</option>
-            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
+            <option key='Iraq' value='Iraq'>Iraq</option>
+            <option key='Jordan' value='Jordan'>Jordan</option>
+            <option key='Lebanon' value='Lebanon'>Lebanon</option>
+            <option key='United Arab Emirates' value='United Arab Emirates'>United Arab Emirates</option>
           </CFormSelect>
           <CFormFeedback invalid tooltip>Invalid country</CFormFeedback>
         </CCol>
