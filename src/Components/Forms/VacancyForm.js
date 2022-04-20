@@ -86,10 +86,7 @@ const VacancyForm = () => {
                        required
                        onChange={(event) => {setCountry(event.target.value)}}>
             <option value='' disabled>Choose...</option>
-            <option key='Iraq' value='Iraq'>Iraq</option>
-            <option key='Jordan' value='Jordan'>Jordan</option>
-            <option key='Lebanon' value='Lebanon'>Lebanon</option>
-            <option key='United Arab Emirates' value='United Arab Emirates'>United Arab Emirates</option>
+            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
           </CFormSelect>
           <CFormFeedback invalid tooltip>Invalid country</CFormFeedback>
         </CCol>

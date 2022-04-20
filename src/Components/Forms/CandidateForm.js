@@ -6,7 +6,7 @@ import {
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect, CModal, CModalBody, CModalFooter
+  CFormSelect, CInputGroup, CModal, CModalBody, CModalFooter
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -165,10 +165,7 @@ const CandidateForm = () => {
               {type: 'set-country', country: event.target.value}
             )}>
             <option key='' value='' disabled>Choose...</option>
-            <option key='Iraq' value='Iraq'>Iraq</option>
-            <option key='Jordan' value='Jordan'>Jordan</option>
-            <option key='Lebanon' value='Lebanon'>Lebanon</option>
-            <option key='United Arab Emirates' value='United Arab Emirates'>United Arab Emirates</option>
+            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
         </CCol>
@@ -201,21 +198,33 @@ const CandidateForm = () => {
           <CFormFeedback tooltip invalid>Invalid email address</CFormFeedback>
         </CCol>
 
-        <CCol style={{marginBottom: '1rem'}} md={2} className='position-relative'>
+        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer03'>Prefix</CFormLabel>
-          <CFormSelect
-            id='validationServer03'
-            type='tel'
-            defaultValue={''}
-            required
-            onChange={(event) => dispatch(
-              {type: 'set-country-code', countryPhone: event.target.value}
-            )}>
-            <option value='' disabled>+</option>
-            {Object.values(countries).filter((phoneCode, index) => {
-                return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
-              <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
-          </CFormSelect>
+          <CInputGroup>
+            <CFormSelect
+              xs={4}
+              id='validationServer03'
+              type='tel'
+              defaultValue={''}
+              required
+              onChange={(event) => dispatch(
+                {type: 'set-country-code', countryPhone: event.target.value}
+              )}>
+              <option value='' disabled>+</option>
+              {Object.values(countries).filter((phoneCode, index) => {
+                  return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
+                <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
+            </CFormSelect>
+            <CFormInput
+              xs={8}
+              id='validationServer04'
+              type='tel'
+              placeholder='ex: 44521276'
+              required
+              onChange={(event) => dispatch(
+                {type: 'set-phone', phone: event.target.value}
+              )}/>
+            </CInputGroup>
           <CFormFeedback tooltip invalid>Invalid prefix</CFormFeedback>
         </CCol>
 
