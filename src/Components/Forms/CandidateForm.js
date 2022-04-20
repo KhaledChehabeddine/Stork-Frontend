@@ -6,7 +6,7 @@ import {
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect
+  CFormSelect, CModal, CModalBody, CModalFooter
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -16,8 +16,8 @@ import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 
-const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
+const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const initialState = {
@@ -32,7 +32,8 @@ const initialState = {
   pageLoaded: false,
   phone: '',
   resumeFile: null,
-  valid: false
+  valid: false,
+  visible: false
 };
 
 const reducer = (state, action) => {
@@ -59,6 +60,8 @@ const reducer = (state, action) => {
       return {...state, resumeFile: action.resumeFile};
     case 'set-valid':
       return {...state, valid: true};
+    case 'set-visible':
+      return {...state, visible: action.visible};
     default:
       return {...state};
   }
@@ -86,7 +89,13 @@ const CandidateForm = () => {
     dispatch({type: 'set-valid'});
   }
 
-  const onSubmit = useCallback( () => {
+  const onClose = useCallback(() => {
+    dispatch({type: 'set-visible', visible: false})
+    navigate('/interview/add');
+  }, [navigate]);
+
+  const onSubmit = useCallback( (event) => {
+    event.preventDefault();
     if (!nameRegex.test(state.firstName)) return;
     if (!nameRegex.test(state.lastName)) return;
     if (!state.country) return;
@@ -103,14 +112,14 @@ const CandidateForm = () => {
           getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
         }
       ).catch(error => console.log(error));
-    alert('Candidate has been successfully added!');
-    navigate('/candidate/all');
+    dispatch({type: 'set-visible', visible: true});
   }, [state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
-            state.email, state.phone, state.jobPosition, state.resumeFile, navigate]);
+            state.email, state.phone, state.jobPosition, state.resumeFile]);
 
   return (
     <div>
       <NavBar/>
+
       <h1 className='profile-name' align='center'>Candidate Form</h1>
 
       <CForm
@@ -155,8 +164,11 @@ const CandidateForm = () => {
             onChange={(event) => dispatch(
               {type: 'set-country', country: event.target.value}
             )}>
-            <option value='' disabled>Choose...</option>
-            {Object.keys(countries).map(country => <option key={country} value={country}>{country}</option>)}
+            <option key='' value='' disabled>Choose...</option>
+            <option key='Iraq' value='Iraq'>Iraq</option>
+            <option key='Jordan' value='Jordan'>Jordan</option>
+            <option key='Lebanon' value='Lebanon'>Lebanon</option>
+            <option key='United Arab Emirates' value='United Arab Emirates'>United Arab Emirates</option>
           </CFormSelect>
           <CFormFeedback tooltip invalid>Invalid country</CFormFeedback>
         </CCol>
@@ -260,6 +272,18 @@ const CandidateForm = () => {
           </center>
         </CCol>
       </CForm>
+
+      <CModal alignment='center'
+              visible={state.visible}
+              onClose={onClose}>
+        <CModalBody>
+          {state.firstName + ' ' + state.lastName + ' has been successfully added.'}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color='info'
+                   onClick={onClose}>Close</CButton>
+        </CModalFooter>
+      </CModal>
     </div>
   );
 };
