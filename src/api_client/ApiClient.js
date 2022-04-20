@@ -28,12 +28,6 @@ class ApiClient extends ApiClientBase {
     }
   }
 
-  deleteEmployee(id) {
-    const data = new FormData();
-    data.append('id', id);
-    return this.Post('/employee/delete', data);
-  }
-
   getAllCandidates() {
     return this.Get('/candidate/all');
   }
@@ -56,6 +50,27 @@ class ApiClient extends ApiClientBase {
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
+  }
+
+  getAllManagers() {
+    return this.Get('/manager/all');
+  }
+
+  addManager(firstName, lastName, gender, countryPhone, phone, email) {
+    const data = {};
+    data.firstName = firstName;
+    data.lastName = lastName;
+    data.gender = gender;
+    data.countryPhone = countryPhone
+    data.phone = phone;
+    data.email = email;
+    return this.Post('/manager/delete', data);
+  }
+
+  deleteManager(id) {
+    const data = new FormData();
+    data.append('id', id);
+    return this.Post('/manager/delete', data);
   }
 
   addResume(id, resume) {

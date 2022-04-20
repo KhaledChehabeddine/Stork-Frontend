@@ -15,6 +15,7 @@ import CandidatesPage from "./Components/Pages/CandidatesPage";
 import ProfilePage from './Components/Pages/ProfilePage';
 import {getHashCode} from "./Components/Utils/utils";
 import ResumePage from "./Components/Pages/ResumePage";
+import HiringManagerForm from "./Components/Forms/HiringManagerForm";
 
 function App() {
   const [candidates, setCandidates] = useState([]);
@@ -39,11 +40,12 @@ function App() {
         {isLoggedIn() ?
           <>
             <Route exact path='/home' element={<Home/>}/>
-            <Route exact path='/candidate/add' element={<CandidateForm />} />
-            <Route exact path='/candidate/all' element={<CandidatesPage />} />
-            <Route exact path='/job/add' element={<VacancyForm />} />
-            <Route exact path='/job/all' element={<VacanciesPage />} />
-            <Route exact path='/interview/add' element={<InterviewForm />} />
+            <Route exact path='/candidate/add' element={<CandidateForm/>}/>
+            <Route exact path='/candidate/all' element={<CandidatesPage/>}/>
+            <Route exact path='/interview/add' element={<InterviewForm/>}/>
+            <Route exact path='/job/add' element={<VacancyForm/>}/>
+            <Route exact path='/job/all' element={<VacanciesPage/>}/>
+            <Route exact path='/manager/add' element={<HiringManagerForm/>}/>
             {candidates.map(candidate =>
               <Route exact key={candidate.id} path={`/candidate/${getHashCode(candidate.id)}`} element={<ProfilePage candidate={candidate}/>}/>)}
             {candidates.map(candidate =>
