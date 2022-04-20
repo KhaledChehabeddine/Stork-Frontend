@@ -32,7 +32,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path='*' element={<NavigateToAfter time={4} path={'/404'} />} />
+        <Route exact path='*' element={<NavigateToAfter time={2} path={'/login'} />} />
         <Route exact path='/' element={<LandingPage/>}/>
         <Route exact path='/404' element={<PageNotAvailable />} />
         <Route exact path='/login' element={<LoginForm/>} />
