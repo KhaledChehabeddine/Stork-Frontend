@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Button from '../Utils/Button';
 import Form from '../Utils/Form';
 import Input from '../Utils/Input';
@@ -10,6 +10,12 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (window.localStorage.getItem('email')) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const authLogin = useCallback(() => {
     const response = getApiClient().authenticateUser(username, password);

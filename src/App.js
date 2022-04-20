@@ -35,6 +35,7 @@ function App() {
         <Route exact path='*' element={<NavigateToAfter time={4} path={'/404'} />} />
         <Route exact path='/' element={<LandingPage/>}/>
         <Route exact path='/404' element={<PageNotAvailable />} />
+        <Route exact path='/login' element={<LoginForm/>} />
         {isLoggedIn() ?
           <>
             <Route exact path='/home' element={<Home/>}/>
@@ -50,7 +51,7 @@ function App() {
           </>
           :
           <>
-            <Route exact path='/login' element={<LoginForm/>}/>
+
           </>
         }
       </Routes>
