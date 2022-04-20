@@ -38,8 +38,8 @@ const NavBar = () => {
           {/*<Nav style={{marginLeft:"auto"}} className="navbar-profile">*/}
           {/*  <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>*/}
           {/*</Nav>*/}
-          <Nav className="nav-hamburger">
-            <Dropdown align="end" id="dropdown-menu-align-end">
+          <Nav style={{marginLeft:"auto", float: "left"}} className="nav-hamburger">
+            <Dropdown  align="end" id="dropdown-menu-align-end">
               <Dropdown.Toggle className="hamburger-dropdown">
                 <CIcon className="hamburger-icon" icon={cilHamburgerMenu}/>
               </Dropdown.Toggle>
