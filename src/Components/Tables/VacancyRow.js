@@ -4,6 +4,7 @@ import '../../Styles/Table.css'
 import CIcon from "@coreui/icons-react";
 import {cilTrash} from "@coreui/icons";
 import getApiClient from "../../api_client/getApiClient";
+import {formatDate} from "../Utils/utils";
 
 const VacancyRow = ({ vacancy, vacancies}) => {
   const [visible, setVisible] = useState(false);
@@ -20,8 +21,9 @@ const VacancyRow = ({ vacancy, vacancies}) => {
         {vacancies.indexOf(vacancy)+1}
       </CTableDataCell>
       <CTableDataCell>{vacancy.jobTitle}</CTableDataCell>
-      <CTableDataCell>{vacancy.country}</CTableDataCell>
-      <CTableDataCell>{vacancy.city}</CTableDataCell>
+      <CTableDataCell className="text-center">{vacancy.country}</CTableDataCell>
+      <CTableDataCell className="text-center">{vacancy.city}</CTableDataCell>
+      <CTableDataCell className="text-center">{formatDate(vacancy.datePosted)}</CTableDataCell>
       <CTableDataCell>
         <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, width: "10%", height: "10%", marginRight: "20%", float: "right"}}>
           <CIcon className="view-icon" icon={cilTrash}/>
