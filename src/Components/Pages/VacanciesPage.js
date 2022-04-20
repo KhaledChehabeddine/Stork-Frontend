@@ -33,6 +33,10 @@ const sortByCity = vacancies => vacancies.sort((a, b) => {
   return a.city.localeCompare(b.city);
 })
 
+const sortByDate = vacancies => vacancies.sort((a, b) => {
+  return a.id - b.id;
+})
+
 const rSortByTitle = vacancies => vacancies.sort((a, b) => {
   return b.jobTitle.localeCompare(a.jobTitle);
 })
@@ -43,6 +47,10 @@ const rSortByCountry = vacancies => vacancies.sort((a, b) => {
 
 const rSortByCity = vacancies => vacancies.sort((a, b) => {
   return b.city.localeCompare(a.city);
+})
+
+const rSortByDate = vacancies => vacancies.sort((a, b) => {
+  return b.id - a.id;
 })
 
 const reducer = (state, action) => {
@@ -57,18 +65,22 @@ const reducer = (state, action) => {
       return { ...state, filteredPositions: sortByCountry(state.vacancies) };
     case 'sort-by-city':
       return { ...state, filteredPositions: sortByCity(state.vacancies) };
+    case 'sort-by-date':
+      return { ...state, filteredPositions: sortByDate(state.vacancies) };
     case 'reverse-sort-by-title':
       return { ...state, filteredPositions: rSortByTitle(state.vacancies) };
     case 'reverse-sort-by-country':
       return { ...state, filteredPositions: rSortByCountry(state.vacancies) };
     case 'reverse-sort-by-city':
       return { ...state, filteredPositions: rSortByCity(state.vacancies) };
+    case 'reverse-sort-by-date':
+      return { ...state, filteredPositions: rSortByDate(state.vacancies) };
     default:
       return { ...state }
   }
 }
 
-const VacanciesPage = (props) => {
+const VacanciesPage = () => {
   const [state, dispatch] = useReducer(reducer, {
     vacanciesLoaded: false,
     vacancies: [],
@@ -103,8 +115,8 @@ const VacanciesPage = (props) => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -114,13 +126,24 @@ const VacanciesPage = (props) => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
                       City
                       <button onClick={event => dispatch({type: 'reverse-sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
+                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
+                      </button>
+                    </div>
+                  </CTableHeaderCell>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                      <button onClick={event => dispatch({type: 'sort-by-date', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
+                        <CIcon className="sort-icon" icon={cilArrowTop}/>
+                      </button>
+                      Date Posted
+                      <button onClick={event => dispatch({type: 'reverse-sort-by-date', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
                         <CIcon className="sort-icon" icon={cilArrowBottom}/>
                       </button>
                     </div>
