@@ -9,7 +9,6 @@ import {
   CFormSelect,
   CButton
 } from '@coreui/react';
-import {countries} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
 import {useNavigate} from 'react-router-dom'
 import getApiClient from '../../api_client/getApiClient';
@@ -53,9 +52,9 @@ const VacancyForm = () => {
     <div>
       <NavBar />
 
-      <h1 className='profile-name' align='center'>Job Position Form</h1>
+      <h1 className='form-title' align='center'>Job Position Form</h1>
 
-      <CForm className='row g-3 needs-validation'
+      <CForm className='form row g-3 needs-validation'
              noValidate
              onSubmit={handleSubmit}
              style={formStyle}

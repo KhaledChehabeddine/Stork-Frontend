@@ -100,9 +100,12 @@
     box-shadow:  31px 31px 50px #868686,
     -31px -31px 50px #ffffff;
 }
-.actions-table-rows {
-    background-color: white !important;
+
+.feedback-notes {
+    margin: auto;
+    width: 90%;
 }
+
 .profile-wave-top {
     border-top-left-radius: 62px;
     border-top-right-radius: 62px;
