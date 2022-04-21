@@ -125,9 +125,9 @@ const InterviewForm = () => {
       <NavBar/>
       {state.pageLoaded ?
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <h1 className='profile-name'>Interview Form</h1>
+          <h1 className='form-title'>Interview Form</h1>
           <CForm
-            className='row g-3 needs-validation'
+            className='form row g-3 needs-validation'
             noValidate
             validated={state.valid}
             onSubmit={e => e.preventDefault()}

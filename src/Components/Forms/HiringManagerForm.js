@@ -56,7 +56,7 @@ const HiringManagerForm = () => {
     <div>
       <NavBar/>
 
-      <h1 className='profile-name' align='center'>Hiring Manager Form</h1>
+      <h1 className='form-title' align='center'>Hiring Manager Form</h1>
 
       <CForm className='form row g-3 needs-validation'
              noValidate

@@ -120,7 +120,7 @@ const CandidateForm = () => {
     <div>
       <NavBar/>
 
-      <h1 className='profile-name' align='center'>Candidate Form</h1>
+      <h1 className='form-title' align='center'>Candidate Form</h1>
 
       <CForm
         className='form row g-3 needs-validation'
@@ -142,7 +142,7 @@ const CandidateForm = () => {
           <CFormFeedback tooltip invalid>Invalid first name</CFormFeedback>
         </CCol>
 
-        <CCol style={{marginBottom: '1rem'}} md={6} className='position-relative'>
+        <CCol style={{marginBottom: '1rem', backgroundColor:"transparent"}} md={6} className='position-relative'>
           <CFormLabel htmlFor='validationServer02'>Last Name</CFormLabel>
           <CFormInput
             id='validationServer02'
