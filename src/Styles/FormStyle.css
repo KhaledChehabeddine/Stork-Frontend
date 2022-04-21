@@ -1,12 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
+.form-title {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 150%;
+    text-transform: uppercase;
+    text-align: center;
+    padding-top: 5%;
+}
+
 .form {
     font-family: 'Raleway', sans-serif;
     font-weight: bolder;
+    border-radius: 62px!important;
+    background: white;
 }
 
 .form-button {
     border: 1px solid black !important;
-
     font-weight: lighter!important;
 }

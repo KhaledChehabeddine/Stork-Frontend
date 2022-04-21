@@ -8,7 +8,13 @@ import {cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/ic
 import {cilMail} from "@coreui/icons-pro";
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
-import {CFormInput, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle} from "@coreui/react";
+import {
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle
+} from "@coreui/react";
 import {useNavigate} from "react-router-dom";
 
 const reducer = (state, action) => {
@@ -237,8 +243,16 @@ const ProfilePage = ({ candidate }) => {
               </CModalFooter>
             </CModal>
           </div>
-          <div className="actions-table" style={{paddingBottom:"5%"}}>
+          <div className="actions-table" style={{paddingBottom:"5%", marginBottom: "5%"}}>
             {getActionTable(candidate)}
+          </div>
+          <div className="actions-table" style={{paddingBottom:"5%"}}>
+            <h1 className="profile-name" align="center">Feedback Notes</h1>
+{/*            <div className="feedback-notes">
+              <CInputGroup>
+                <CFormTextarea aria-label="With textarea">test</CFormTextarea>
+              </CInputGroup>
+            </div>*/}
           </div>
         </div>
         : <Spinner/>
