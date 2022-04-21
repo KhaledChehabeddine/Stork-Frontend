@@ -1,30 +1,68 @@
-import '../../Styles/FormStyle.css';
-import {CButton, CCol, CForm, CFormFeedback, CFormInput, CFormLabel, CFormSelect, CFormTextarea} from "@coreui/react";
+import React, {useReducer, useEffect, useCallback} from 'react';
+import {
+  CButton,
+  CCol,
+  CForm,
+  CFormFeedback,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CFormTextarea, CModal,
+  CModalBody, CModalFooter
+} from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
+import {getHashCode} from "../Utils/utils";
 import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
-import React, {useReducer, useEffect, useCallback, useState} from 'react';
 import Spinner from '../Utils/Spinner';
+import '../../Styles/FormStyle.css';
+
+const initialState = {
+  candidate: {firstName: '', lastName: ''},
+  candidateId: null,
+  candidates: [],
+  date_time: null,
+  description: "",
+  jobPositionId: null,
+  jobPositions: [],
+  jobTitle: '',
+  managerId: null,
+  managers: [],
+  numInterviews: 0,
+  pageLoaded: false,
+  redirected: false,
+  valid: false,
+  visible: false
+}
 
 const reducer = (state, action) => {
   switch(action.type) {
-    case 'page-loaded':
-      return {...state, candidates: action.candidates, pageLoaded: true, vacancies: action.vacancies};
-    case 'set-valid':
-      return {...state, valid: true};
+    case 'load-page':
+      return {...state, candidates: action.candidates, jobPositions: action.jobPositions,
+              managers: action.managers, pageLoaded: true};
+    case 'set-candidate':
+      return {...state, candidate: action.candidate};
     case 'set-candidate-id':
       return {...state, candidateId: action.candidateId};
-    case 'set-vacancy':
-      return {...state, vacancy: action.vacancy};
     case 'set-date-time':
       return {...state, date_time: action.date_time};
     case 'set-description':
       return {...state, description: action.description};
+    case 'set-job-position-id':
+      return {...state, jobPositionId: action.jobPositionId};
+    case 'set-job-title':
+      return {...state, jobTitle: action.jobTitle};
+    case 'set-manager-id':
+      return {...state, managerId: action.managerId};
     case 'set-num-interviews':
-      return { ...state, numInterviews: action.numInterviews };
+      return {...state, numInterviews: action.numInterviews};
     case 'set-redirected':
-      return { ...state, redirected: action.redirected };
+      return {...state, redirected: true};
+    case 'set-valid':
+      return {...state, valid: true};
+    case 'set-visible':
+      return {...state, visible: action.visible};
     default:
       return {...state};
   }
@@ -33,50 +71,34 @@ const reducer = (state, action) => {
 const InterviewForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [jobTitle, setJobTitle] = useState('');
-  const [state, dispatch] = useReducer(reducer, {
-    candidateId: null,
-    candidates: [],
-    date_time: null,
-    description: "",
-    pageLoaded: false,
-    vacancy: null,
-    vacancies: [],
-    valid: false,
-    numInterviews: 0,
-    redirected: false
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getApiClient().getAllCandidates()
-      .then(response1 => {
-        getApiClient().getAllVacancies()
-          .then(response2 => {
-            dispatch({
-              type: 'page-loaded',
-              candidates: response1.data,
-              vacancies: response2.data
-            })
-          }
-        ).catch(error => console.log(error))
-      }
-    ).catch(error => console.log(error))
-  }, []);
-
-  useEffect(() => {
-    if (location.state) {
-      if (location.state.candidate) {
-        dispatch({ type: 'set-candidate-id', candidateId: location.state.candidate.id });
-        dispatch({ type: 'set-vacancy', vacancy: location.state.candidate.jobPositionId })
-        dispatch({ type: 'set-redirected', redirected: true });
-        getApiClient().findVacancy(location.state.candidate.jobPositionId)
-          .then(response => {
-            setJobTitle(response.data.jobTitle + ' (' + response.data.country + ')');
-          }).catch(error => console.log(error));
-      }
+    getApiClient().getAllCandidates().then(candidates => {
+      getApiClient().getAllVacancies().then(job_positions => {
+        getApiClient().getAllManagers().then(managers => {
+          dispatch({
+            type: 'load-page',
+            candidates: candidates.data,
+            jobPositions: job_positions.data,
+            managers: managers.data
+          });
+        }).catch(error => console.log(error))
+      }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
+    if (location.state.candidate) {
+      dispatch({type: 'set-candidate', candidate: location.state.candidate});
+      dispatch({type: 'set-candidate-id', candidateId: location.state.candidate.id});
+      dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPositionId});
+      dispatch({type: 'set-redirected'});
+      getApiClient().findVacancy(location.state.candidate.jobPositionId).then(job_position =>
+        dispatch({
+          type: 'set-job-title',
+          jobTitle: job_position.data.jobTitle + ' (' + job_position.data.country + ')'
+        })
+      ).catch(error => console.log(error));
     }
   }, [location]);
-
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -87,118 +109,149 @@ const InterviewForm = () => {
     dispatch({type: 'set-valid'});
   };
 
-  const onSubmit = useCallback(() => {
+  const handleClick = useCallback((event) => {
+    event.preventDefault();
     if (!state.candidateId) return;
-    let candidate = null;
-    for (let c in state.candidates) {
-      if (state.candidates[c].id === parseInt(state.candidateId)) {
-        candidate = state.candidates[c];
-        break;
-      }
-    }
-    if (!candidate) return;
-    if (!state.vacancy) return;
     if (!state.date_time) return;
-    getApiClient().addInterview(state.candidateId, state.vacancy, state.date_time, state.description)
-      .then(response => {
-        alert('Your interview has been successfully scheduled!');
-        getApiClient().getNumInterviewsPerCandidate(response.data.id)
-          .then(response => {
-            console.log(response);
-            if (response.status === 200) {
-              dispatch({ type: 'set-num-interviews', numInterviews: response.data[0]});
-            }
-          }).catch(error => console.log(error));
-        getApiClient().addAction(`Interview #${state.numInterviews+1} scheduled`, state.candidateId)
-          .then(response => console.log(response))
-          .catch(error => console.log(error));
-        getApiClient().updateStatus(candidate, `Interview #${state.numInterviews+1} scheduled`)
-          .then(response => {
-            alert('Candidate status has been successfully updated to "' + response.data.status + '"');
-            navigate('/candidate/all');
-          }).catch(error => console.log(error));
-      }).catch(error => console.log(error));
-  }, [state.candidateId, state.vacancy, state.date_time, state.description, navigate]);
+    if (!state.jobPositionId) return;
+    if (!state.managerId) return;
+    getApiClient().getCandidate(state.candidateId).then(response =>
+      dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
+    getApiClient().addInterview(state.candidateId, state.date_time, state.description,
+                                state.jobPositionId, state.managerId).then(response => {
+      getApiClient().getNumInterviewsPerCandidate(response.data.id).then(response =>
+        dispatch({
+          type: 'set-num-interviews',
+          numInterviews: response.data[0]
+        })).catch(error => console.log(error));
+      getApiClient().addAction(`Interview #${state.numInterviews + 1} scheduled`, state.candidateId)
+        .catch(error => console.log(error));
+      getApiClient().updateStatus(getApiClient().getCandidate(parseInt(state.candidateId)),
+                           `Interview #${state.numInterviews + 1} scheduled`).catch(error => console.log(error));
+    }).catch(error => console.log(error));
+    dispatch({type: 'set-visible', visible: true});
+  }, [state]);
 
   return (
     <div>
       <NavBar/>
+      <h1 className='profile-name'>Interview Form</h1>
       {state.pageLoaded ?
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          <h1 className='form-title'>Interview Form</h1>
-          <CForm
-            className='form row g-3 needs-validation'
-            noValidate
-            validated={state.valid}
-            onSubmit={e => e.preventDefault()}
-            style={formStyle}
-            encType="multipart/form-data"
-          >
-            <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
-              <CFormLabel htmlFor='validationServer01'>Candidate</CFormLabel>
-              {state.redirected
-              ?
-                <h5>{location.state.candidate.firstName + ' ' + location.state.candidate.lastName}</h5>
-              :
-                <CFormSelect
-                  id='validationServer01'
-                  defaultValue='Choose...'
-                  required
-                  onChange={(event) => dispatch(
-                    {type: 'set-candidate-id', candidateId: event.target.value}
-                  )}
-                >
-                  <option disabled value='Choose...'>Choose...</option>
+        <div>
+          <CForm className='form row g-3 needs-validation'
+                 noValidate
+                 style={formStyle}
+                 validated={state.valid}
+                 onSubmit={handleSubmit}>
+            <CCol className='position-relative'
+                  md={6}
+                  style={{marginBottom: '1rem'}}>
+              <CFormLabel>Candidate</CFormLabel>
+              {state.redirected ?
+                <CFormInput defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
+                            plainText
+                            readOnly
+                            type='text'/> :
+                <CFormSelect defaultValue=''
+                             required
+                             onChange={(event) => dispatch(
+                               {type: 'set-candidate-id', candidateId: event.target.value}
+                             )}>
+                  <option disabled value=''>Choose...</option>
                   {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
-                    {candidate.firstName + ' ' + candidate.lastName}
+                    {candidate.firstName + ' ' + candidate.lastName}</option>)}
+                </CFormSelect>}
+              <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
+            </CCol>
+
+            <CCol className='position-relative'
+                  md={6}
+                  style={{marginBottom: '1rem'}}>
+              <CFormLabel>Job Position</CFormLabel>
+              {state.redirected ?
+                <CFormInput defaultValue={state.jobTitle}
+                            plainText
+                            readOnly
+                            type='text'/> :
+                <CFormSelect defaultValue=''
+                             required
+                             onChange={(event) => dispatch(
+                               {type: 'set-job-position-id', jobPositionId: event.target.value}
+                             )}>
+                  <option disabled value=''>Choose...</option>
+                  {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
+                    {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
                   </option>)}
                 </CFormSelect>}
-              <CFormFeedback tooltip invalid>Invalid candidate</CFormFeedback>
+              <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
             </CCol>
-            <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
-              <CFormLabel htmlFor='validationServer02'>Vacancy</CFormLabel>
-              {state.redirected
-                ?
-                <h5>{jobTitle}</h5>
-                :
-                <CFormSelect
-                  id='validationServer02'
-                  defaultValue='Choose...'
-                  required
-                  onChange={(event) => dispatch(
-                    {type: 'set-vacancy', vacancy: event.target.value}
-                  )}
-                >
-                  <option disabled value='Choose...'>Choose...</option>
-                  {state.vacancies.map(vacancy => <option key={vacancy.id} value={vacancy.id}>
-                    {vacancy.jobTitle + ' (' + vacancy.country + ')'}
-                  </option>)}
-                </CFormSelect>}
-              <CFormFeedback tooltip invalid>Invalid vacancy</CFormFeedback>
+
+            <CCol className='position-relative'
+                  md={6}
+                  style={{marginBottom: '1rem'}}>
+              <CFormLabel>Hiring Manager</CFormLabel>
+              <CFormSelect defaultValue=''
+                           required
+                           onChange={(event) => dispatch(
+                             {type: 'set-manager-id', managerId: event.target.value}
+                           )}>
+                <option disabled value=''>Choose...</option>
+                {state.managers.map(manager => <option key={manager.id} value={manager.id}>
+                    {manager.firstName + ' ' + manager.lastName}</option>)}
+              </CFormSelect>
+              <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
             </CCol>
-            <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
-              <CFormLabel htmlFor='validationServer03'>Time</CFormLabel>
-              <CFormInput type='datetime-local' id='validationServer03' required
+
+            <CCol className='position-relative'
+                  md={6}
+                  style={{marginBottom: '1rem'}}>
+              <CFormLabel>Date and time</CFormLabel>
+              <CFormInput required
+                          type='datetime-local'
                           onChange={(event) => dispatch(
                             {type: 'set-date-time', date_time: event.target.value}
                           )}/>
-              <CFormFeedback tooltip invalid>Invalid time</CFormFeedback>
+              <CFormFeedback invalid>Invalid date or time selected.</CFormFeedback>
             </CCol>
-            <CCol style={{marginBottom: '0.7rem'}} md={12} className='position-relative'>
-              <CFormLabel htmlFor='validationServer04'>Description</CFormLabel>
-              <CFormTextarea type='text' id='validationServer04' required rows='5'
-                            onChange={(event) => dispatch(
-                              {type: 'set-description', description: event.target.value}
-                            )}
-              />
-              <CFormFeedback tooltip invalid>Invalid description</CFormFeedback>
+
+            <CCol className='position-relative'
+                  md={12}
+                  style={{marginBottom: '0.7rem'}}>
+              <CFormLabel>Description</CFormLabel>
+              <CFormTextarea rows='5'
+                             type='text'
+                             onChange={(event) => dispatch(
+                               {type: 'set-description', description: event.target.value}
+                            )}/>
             </CCol>
-            <CCol xs={12}>
-              <center><CButton color='dark' type='submit' onClick={onSubmit}>Submit</CButton></center>
+
+            <CCol>
+              <center>
+                <CButton color='dark'
+                         type='submit'
+                         onClick={handleClick}>Submit</CButton>
+              </center>
             </CCol>
           </CForm>
-        </div>
-        : <Spinner />}
+
+          <CModal alignment='center'
+                  backdrop='static'
+                  visible={state.visible}
+                  onClose={() => dispatch({type: 'set-visible', visible: false})}>
+            <CModalBody>{'Interview with ' + state.candidate.firstName + ' ' +
+                         state.candidate.lastName + ' has been successfully scheduled.'}
+            </CModalBody>
+            <CModalFooter>
+              <CButton color='secondary'
+                       onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
+              <CButton color='info'
+                       onClick={() => {
+                         dispatch({type: 'set-visible', visible: false})
+                         navigate(`/candidate/${getHashCode(state.candidateId)}`);
+                       }}>View Candidate</CButton>
+            </CModalFooter>
+          </CModal>
+        </div> : <Spinner/>}
     </div>
   );
 };
