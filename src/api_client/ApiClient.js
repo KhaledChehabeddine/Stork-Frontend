@@ -38,7 +38,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, managerId, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -47,6 +47,7 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.phone = '+' + countryPhone + phone;
     data.jobPositionId = jobPositionId;
+    data.managerId = managerId;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
@@ -64,7 +65,7 @@ class ApiClient extends ApiClientBase {
     data.countryPhone = countryPhone
     data.phone = phone;
     data.email = email;
-    return this.Post('/manager/delete', data);
+    return this.Post('/manager/add', data);
   }
 
   deleteManager(id) {
