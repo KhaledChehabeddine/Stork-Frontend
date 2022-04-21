@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTableDataCell, CTableRow} from "@coreui/react";
 import '../../Styles/Table.css'
 import CIcon from "@coreui/icons-react";
-import {cilTrash} from "@coreui/icons";
+import {cilTrash, cilUserFollow} from "@coreui/icons";
 import getApiClient from "../../api_client/getApiClient";
 import {formatDate} from "../Utils/utils";
 
@@ -24,8 +24,11 @@ const VacancyRow = ({ vacancy, vacancies}) => {
       <CTableDataCell className="text-center">{vacancy.country}</CTableDataCell>
       <CTableDataCell className="text-center">{vacancy.city}</CTableDataCell>
       <CTableDataCell className="text-center">{formatDate(vacancy.datePosted)}</CTableDataCell>
-      <CTableDataCell>
-        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, width: "10%", height: "10%", marginRight: "20%", float: "right"}}>
+      <CTableDataCell className="text-center">
+        <button className="view-button" style={{margin:0, padding: "10px"}}>
+          <CIcon className="view-icon" icon={cilUserFollow}/>
+        </button>
+        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>
           <CIcon className="view-icon" icon={cilTrash}/>
         </button>
       </CTableDataCell>

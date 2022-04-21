@@ -98,14 +98,14 @@ const VacanciesPage = () => {
       {state.vacanciesLoaded
         ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
-            <CTable align="middle" className="mb-0" hover responsive>
+            <CTable style={{width: "100%"}} align="middle" className="mb-0 table" hover responsive>
               <CTableHead color="light">
                 <CTableRow className="header-row">
-                  <CTableHeaderCell className="text-center header-cell">
+                  <CTableHeaderCell className="text-center icon-cell">
                     <CIcon icon={cilBriefcase}/>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                    <div className="header-cell-content">
                       <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>

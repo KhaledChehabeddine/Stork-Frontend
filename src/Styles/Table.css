@@ -1,11 +1,21 @@
+.table {
+    table-layout : fixed;
+}
+
 .header-row {
     font-family: 'Raleway', sans-serif!important;
     text-transform: uppercase;
+    justify-content: center;
+    align-items: center;
 }
 
 .header-cell {
-    width: 15%;
-    line-height: 350%;
+}
+
+.header-cell-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 .table-row {
@@ -39,8 +49,8 @@
 }
 
 .view-button {
-    width: 20%;
-    height: 20%;
+    width: 50px;
+    height: 50px;
     border: 0;
     background-color: transparent;
 }

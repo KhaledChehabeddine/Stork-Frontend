@@ -144,7 +144,7 @@ const CandidateCardWrapper = () => {
       {state.pageLoaded === true
         ?
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: "center"}}>
-          <CTable style={{width: "100%"}} id="candidatesTable" align="middle" className="mb-0" hover responsive>
+          <CTable style={{width: "100%"}} align="middle" className="mb-0 table" hover responsive>
             <CTableHead color="light">
               <CTableRow className="header-row">
                 <CTableHeaderCell className="text-center icon-cell">
