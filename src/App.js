@@ -9,13 +9,13 @@ import getApiClient from "./api_client/getApiClient";
 import LoginForm from "./Components/Forms/LoginForm";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
-import VacancyForm from './Components/Forms/VacancyForm';
+import JobForm from './Components/Forms/JobForm';
 import VacanciesPage from "./Components/Pages/VacanciesPage";
 import CandidatesPage from "./Components/Pages/CandidatesPage";
 import ProfilePage from './Components/Pages/ProfilePage';
 import {getHashCode} from "./Components/Utils/utils";
 import ResumePage from "./Components/Pages/ResumePage";
-import HiringManagerForm from "./Components/Forms/HiringManagerForm";
+import ManagerForm from "./Components/Forms/ManagerForm";
 
 function App() {
   const [candidates, setCandidates] = useState([]);
@@ -43,9 +43,9 @@ function App() {
             <Route exact path='/candidate/add' element={<CandidateForm/>}/>
             <Route exact path='/candidate/all' element={<CandidatesPage/>}/>
             <Route exact path='/interview/add' element={<InterviewForm/>}/>
-            <Route exact path='/job/add' element={<VacancyForm/>}/>
+            <Route exact path='/job/add' element={<JobForm/>}/>
             <Route exact path='/job/all' element={<VacanciesPage/>}/>
-            <Route exact path='/manager/add' element={<HiringManagerForm/>}/>
+            <Route exact path='/manager/add' element={<ManagerForm/>}/>
             {candidates.map(candidate =>
               <Route exact key={candidate.id} path={`/candidate/${getHashCode(candidate.id)}`} element={<ProfilePage candidate={candidate}/>}/>)}
             {candidates.map(candidate =>

@@ -93,18 +93,20 @@ class ApiClient extends ApiClientBase {
     return this.Post('/candidate/delete', data);
   }
 
-  addInterview(candidateId, vacancyId, dateTime, description) {
+  addInterview(candidateId, dateTime, description, jobPositionId, managerId) {
     const data = {};
     data.candidateId = candidateId;
-    data.vacancyId = vacancyId;
     data.dateTime = dateTime;
     data.description = description;
+    data.jobPositionId = jobPositionId;
+    data.managerId = managerId;
     return this.Post('/interview/add', data);
   }
 
-  addVacancy(jobTitle, country, city, workType, employmentType, notes) {
+  addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes) {
     const data = {};
     data.jobTitle = jobTitle;
+    data.startDate = startDate;
     data.country = country;
     data.city = city;
     data.workType = workType;

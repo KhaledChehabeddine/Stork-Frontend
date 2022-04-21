@@ -17,7 +17,7 @@ const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
-const HiringManagerForm = () => {
+const ManagerForm = () => {
   const [countryPhone, setCountryPhone] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -157,4 +157,4 @@ const HiringManagerForm = () => {
   );
 }
 
-export default HiringManagerForm;
+export default ManagerForm;

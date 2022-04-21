@@ -17,10 +17,11 @@ import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
-const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
+const nameRegex = new RegExp('^[A-Za-z][A-Za-z ]{1,25}$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const initialState = {
+  candidate: null,
   country: null,
   countryPhone: null,
   email: '',
@@ -41,6 +42,8 @@ const reducer = (state, action) => {
   switch(action.type) {
     case 'load-page':
       return {...state, jobPositions: action.jobPositions, managers: action.managers};
+    case 'set-candidate':
+      return {...state, candidate: action.candidate};
     case 'set-country':
       return {...state, country: action.country};
     case 'set-country-code':
@@ -94,8 +97,8 @@ const CandidateForm = () => {
     dispatch({type: 'set-valid'});
   }
 
-  const onSubmit = useCallback( (event) => {
-    // event.preventDefault();
+  const handleClick = useCallback( (event) => {
+    event.preventDefault();
     if (!state.country) return;
     if (!state.countryPhone) return;
     if (!emailRegex.test(state.email)) return;
@@ -109,12 +112,12 @@ const CandidateForm = () => {
     getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
                                 state.email, state.phone, state.jobPositionId, state.managerId, 'Pending')
       .then(response => {
-          getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
-          getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
-        }).catch(error => console.log(error));
+        dispatch({type: 'set-candidate', candidate: response.data});
+        getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
+        getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
+      }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});
-  }, [state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
-            state.email, state.phone, state.jobPositionId, state.managerId, state.resumeFile]);
+  }, [state]);
 
   return (
     <div>
@@ -250,7 +253,7 @@ const CandidateForm = () => {
           <CFormSelect defaultValue=''
                        required
                        onChange={(event) => dispatch(
-                         {type: 'set-hiring-manager-id', managerId: event.target.value}
+                         {type: 'set-manager-id', managerId: event.target.value}
                        )}>
             <option disabled value=''>Choose...</option>
             {state.managers.map(manager => <option key={manager.id} value={manager.id}>
@@ -276,7 +279,7 @@ const CandidateForm = () => {
           <center>
             <CButton color='dark'
                      type='submit'
-                     onClick={onSubmit}>Submit</CButton>
+                     onClick={handleClick}>Submit</CButton>
           </center>
         </CCol>
       </CForm>
@@ -285,16 +288,14 @@ const CandidateForm = () => {
               backdrop='static'
               visible={state.visible}
               onClose={() => dispatch({type: 'set-visible', visible: false})}>
-        <CModalBody>
-          {state.firstName + ' ' + state.lastName + ' has been successfully added.'}
-        </CModalBody>
+        <CModalBody>{state.firstName + ' ' + state.lastName + ' has been successfully added.'}</CModalBody>
         <CModalFooter>
           <CButton color='secondary'
                    onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
           <CButton color='info'
                    onClick={() => {
                      dispatch({type: 'set-visible', visible: false})
-                     navigate('/interview/add');
+                     navigate('/interview/add', {state: {candidate: state.candidate}});
                    }}>Schedule Interview</CButton>
         </CModalFooter>
       </CModal>
