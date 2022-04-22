@@ -88,7 +88,7 @@ const CandidateForm = () => {
         dispatch({ type: 'set-job-position-id', jobPositionId: location.state.jobPosition.id });
       }
     }
-  }, []);
+  }, [location.state]);
 
   useEffect(() => {
     getApiClient().getAllVacancies().then(job_positions =>
@@ -136,7 +136,7 @@ const CandidateForm = () => {
     <div>
       <NavBar/>
 
-      <h1 className='profile-name'>Candidate Form</h1>
+      <h1 className='form-title'>Candidate Form</h1>
 
       <CForm className='form row g-3 needs-validation'
              encType='multipart/form-data'

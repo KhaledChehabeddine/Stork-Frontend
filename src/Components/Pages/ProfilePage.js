@@ -4,8 +4,8 @@ import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
 import {formatDate, getHashCode} from "../Utils/utils";
 import CIcon from "@coreui/icons-react";
-import {cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/icons";
-import {cilMail} from "@coreui/icons-pro";
+import {cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/icons";
+import {cilMail, cilNote} from "@coreui/icons-pro";
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
 import {
@@ -31,6 +31,8 @@ const reducer = (state, action) => {
       return { ...state, contactVisible: action.value };
     case 'set-contact-text':
       return { ...state, contactText: action.value };
+    case 'set-job-position':
+      return { ...state, jobPosition: action.jobPosition};
     default:
       return { ...state }
   }
@@ -42,7 +44,8 @@ const reducer = (state, action) => {
 }
 
 const ProfilePage = ({ candidate }) => {
-  const [resume, setResume] = useState(null);
+  const [resume, setResume] = useState(null)
+
   useEffect(() => {
     getApiClient().findResume(candidate.id)
       .then(response => {
@@ -51,6 +54,13 @@ const ProfilePage = ({ candidate }) => {
         }
       }).catch(error => console.log(error));
   }, [candidate.id]);
+
+
+  useEffect(() => {
+    getApiClient().findVacancy(candidate.jobPositionId).then(response => {
+      dispatch({type: 'set-job-position', jobPosition: response.data});
+    }).catch(error => console.log(error));
+  }, [candidate.jobPositionId]);
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, {
@@ -61,7 +71,8 @@ const ProfilePage = ({ candidate }) => {
     confirmRejection: false,
     contactVisible: false,
     emailText: '',
-    contactText: ''
+    contactText: '',
+    jobPosition: null
   });
 
   const showFile = useCallback((blob) => {
@@ -136,7 +147,7 @@ const ProfilePage = ({ candidate }) => {
       }).catch(error => console.log(error));
   }, [candidate]);
 
-  const getActionTable = (candidate) => {
+  const getActionTable = () => {
     if (state.actions.length === 0) return <h1 className="profile-name">You have not made any actions yet.</h1>
     else return <ActionTable actions={state.actions}/>
   }
@@ -147,21 +158,9 @@ const ProfilePage = ({ candidate }) => {
         ?
         <div>
           <NavBar />
-          <div style={{display: "flex", height: "110%"}}>
-            <div className="profile-card" style={{float: "left"}}>
-              <svg className="profile-wave-top" viewBox="0 0 1440 420" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <path id='sineWave' fill="black" fillOpacity="0.3" d="M0,160 C320,300,420,300,740,160 C1060,20,1120,20,1440,160 V0 H0"/>
-                </defs>
-                <use className="wave" href="#sineWave"/>
-                <use className="wave" x="-100%" href="#sineWave"/>
-                <use className="wave1" href="#sineWave"/>
-                <use className="wave1" x="-100%" href="#sineWave"/>
-                <use className="wave2" href="#sineWave"/>
-                <use className="wave2" x="-100%" href="#sineWave"/>
-              </svg>
-              <div style={{marginBottom: "30%"}}>
-                <h1 className="profile-name">{candidate.firstName + " " + candidate.lastName}</h1>
+            <div className="profile-card" style={{display: "flex", justifyContent: "space-evenly"}}>
+              <div className="profile-info">
+                <h1 className="profile-name" style={{paddingTop: "2%"}}>{candidate.firstName + " " + candidate.lastName}</h1>
                 <div className="profile-field">
                   <div className="profile-icon-container" style={{float: "left"}}>
                     {getGenderIcon(candidate)}
@@ -188,40 +187,30 @@ const ProfilePage = ({ candidate }) => {
                 </div>
                 <div className="profile-field">
                   <div className="profile-icon-container" style={{float: "left"}}>
+                    <CIcon className="profile-icon" icon={cilBriefcase}/>
+                  </div>
+                  <h3 className="card-text" style={{float: "right"}}>{state.jobPosition.jobTitle}</h3>
+                </div>
+                <div className="profile-field">
+                  <div className="profile-icon-container" style={{float: "left"}}>
                     <CIcon className="profile-icon" icon={cilCalendar}/>
                   </div>
                   <h3 className="card-text" style={{float: "right"}}>{formatDate(candidate.date)}</h3>
                 </div>
-                <div className="view-resume-container">
-                  <button className="view-resume" onClick={() => {showFile(resume)}}>View Resumé</button>
-                </div>
               </div>
-              <svg className="profile-wave-bottom" viewBox="0 0 1440 420" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <path id='sineWave' fillOpacity="0.2" d="M0,160 C320,300,420,300,740,160 C1060,20,1120,20,1440,160 V0 H0"/>
-                </defs>
-                <use className="wave" href="#sineWave"/>
-                <use className="wave" x="-100%" href="#sineWave"/>
-                <use className="wave1" href="#sineWave"/>
-                <use className="wave1" x="-100%" href="#sineWave"/>
-                <use className="wave2" href="#sineWave"/>
-                <use className="wave2" x="-100%" href="#sineWave"/>
-              </svg>
-            </div>
-            <div className="buttons-table" style={{float: "right", marginBottom:"5%"}}>
-              <div className="button-container" style={{paddingTop: "20%", marginBottom:"33%"}}>
-                <h1 className="profile-name">Actions</h1>
-                <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
-                <button className="action-button" onClick={() => {
-                  dispatch({ type: 'set-contact-visible', value: true });
-                }}>Contact</button>
-                <button className="action-button" onClick={() => {
-                  dispatch({ type: 'set-text-box-visible', value: true });
-                }}>Send Offer</button>
-                <button className="action-button" onClick={() => {
-                  dispatch({ type: 'set-confirm-rejection', value: true });
-                }}>Reject</button>
-              </div>
+            <div className="button-container" style={{float: "right", width: "35%"}}>
+              <h1 className="profile-name" style={{paddingTop: "2%"}}>Actions</h1>
+              <button className="action-button" onClick={() => {showFile(resume)}}>View Resumé</button>
+              <button className="action-button" onClick={scheduleInterview}>Schedule Interview</button>
+              <button className="action-button" onClick={() => {
+                dispatch({ type: 'set-text-box-visible', value: true });
+              }}>Send Offer</button>
+              <button className="action-button" onClick={() => {
+                dispatch({ type: 'set-confirm-rejection', value: true });
+              }}>Reject</button>
+              <button className="action-button" style={{marginBottom: "5%"}} onClick={() => {
+                dispatch({ type: 'set-contact-visible', value: true });
+              }}>Contact</button>
             </div>
           </div>
           <div>
@@ -276,11 +265,16 @@ const ProfilePage = ({ candidate }) => {
               </CModalFooter>
             </CModal>
           </div>
-          <div className="actions-table" style={{paddingBottom:"5%", marginBottom: "5%"}}>
+          <div className="profile-card" style={{paddingBottom:"5%", marginBottom: "5%"}}>
             {getActionTable(candidate)}
           </div>
-          <div className="actions-table" style={{paddingBottom:"5%"}}>
-            <h1 className="profile-name" align="center">Feedback Notes</h1>
+          <div className="profile-card" style={{paddingBottom:"5%"}}>
+            <div style={{display: "flex", paddingTop: "5%"}}>
+              <h1 className="feedback-title">Feedback Notes</h1>
+              <div style={{display: "inline-block", float: "right"}}>
+                <CIcon icon={cilNote}/>
+              </div>
+            </div>
 {/*            <div className="feedback-notes">
               <CInputGroup>
                 <CFormTextarea aria-label="With textarea">test</CFormTextarea>
