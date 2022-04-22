@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import '../../Styles/ProfilePage.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
@@ -36,12 +36,22 @@ const reducer = (state, action) => {
   }
 }
 
-const getGenderIcon = (candidate) => {
+  const getGenderIcon = (candidate) => {
   if (candidate.sex === "Male") return <CIcon className="profile-icon" icon={cilUser}/>
   else return <CIcon icon={cilUserFemale}/>
 }
 
 const ProfilePage = ({ candidate }) => {
+  const [resume, setResume] = useState(null);
+  useEffect(() => {
+    getApiClient().findResume(candidate.id)
+      .then(response => {
+        if (response.status === 200) {
+          setResume(response.data);
+        }
+      }).catch(error => console.log(error));
+  }, [candidate.id]);
+
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, {
     actions: [],
@@ -54,13 +64,42 @@ const ProfilePage = ({ candidate }) => {
     contactText: ''
   });
 
+  const showFile = useCallback((blob) => {
+    // const newBlob = new Blob([blob], {type: "application/pdf"});
+    // if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    //   console.log(1);
+    //   window.navigator.msSaveOrOpenBlob(newBlob);
+    // }
+    // Create blob link to download
+    console.log(blob);
+    const url = window.URL.createObjectURL(
+      new Blob([blob]),
+    );
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download',
+      `${candidate.firstName + ' ' + candidate.lastName}-Resume.pdf`,
+    );
+
+    // Append to html link element page
+    document.body.appendChild(link);
+
+    // Start download
+    link.click();
+
+    // Clean up and remove the link
+    link.parentNode.removeChild(link);
+  }, [candidate]);
+
+
   const scheduleInterview = useCallback(() => {
     navigate('/interview/add', {
       state: {
         candidate: candidate
       }
     });
-  }, []);
+  }, [candidate, navigate]);
 
   const sendOffer = useCallback((text) => {
     getApiClient().sendEmail(candidate.email, 'Job Offer', text);
@@ -69,7 +108,7 @@ const ProfilePage = ({ candidate }) => {
     alert('Email sent successfully!');
     dispatch({ type: 'set-text-box-visible', value: false });
     dispatch({ type: 'set-email-text', value: '' });
-  }, []);
+  }, [candidate]);
 
   const sendRejection = useCallback(() => {
     let rejectionText = 'Dear ' + candidate.firstName + ' ' + candidate.lastName + '\n'
@@ -81,14 +120,14 @@ const ProfilePage = ({ candidate }) => {
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
     alert('Candidate Rejected');
-  }, []);
+  }, [candidate]);
 
   const contact = useCallback((text) => {
     getApiClient().sendEmail(candidate.email, 'Application', text);
     alert('Message Sent');
     dispatch({ type: 'set-contact-visible', value: false });
     dispatch({ type: 'set-contact-text', value: '' });
-  }, []);
+  }, [candidate.email]);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id)
@@ -154,13 +193,7 @@ const ProfilePage = ({ candidate }) => {
                   <h3 className="card-text" style={{float: "right"}}>{formatDate(candidate.date)}</h3>
                 </div>
                 <div className="view-resume-container">
-                  <button className="view-resume" onClick={() => {
-                    navigate(`/resume/${getHashCode(candidate.id)}`, {
-                      state: {
-                        candidate: candidate
-                      }
-                    })
-                  }}>View Resumé</button>
+                  <button className="view-resume" onClick={() => {showFile(resume)}}>View Resumé</button>
                 </div>
               </div>
               <svg className="profile-wave-bottom" viewBox="0 0 1440 420" xmlns="http://www.w3.org/2000/svg">
