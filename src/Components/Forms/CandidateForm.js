@@ -10,7 +10,7 @@ import {
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
@@ -35,7 +35,8 @@ const initialState = {
   phone: '',
   resumeFile: null,
   valid: false,
-  visible: false
+  visible: false,
+  redirected: false
 };
 
 const reducer = (state, action) => {
@@ -68,6 +69,8 @@ const reducer = (state, action) => {
       return {...state, valid: true};
     case 'set-visible':
       return {...state, visible: action.visible};
+    case 'set-redirected':
+      return { ...state, redirected: action.redirected };
     default:
       return {...state};
   }
@@ -75,7 +78,17 @@ const reducer = (state, action) => {
 
 const CandidateForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.jobPosition) {
+        dispatch({ type: 'set-redirected', redirected: true });
+        dispatch({ type: 'set-job-position-id', jobPositionId: location.state.jobPosition.id });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     getApiClient().getAllVacancies().then(job_positions =>
@@ -233,16 +246,23 @@ const CandidateForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Job Position</CFormLabel>
-          <CFormSelect defaultValue=''
-                       required
-                       onChange={(event) => dispatch(
-                         {type: 'set-job-position-id', jobPositionId: event.target.value}
-                       )}>
-            <option disabled value=''>Choose...</option>
-            {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
-              {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
-            </option>)}
-          </CFormSelect>
+          {state.redirected
+            ?
+            <CFormInput defaultValue={location.state.jobPosition.jobTitle}
+                        plainText
+                        readOnly
+                        type='text'/>
+            :
+            <CFormSelect defaultValue=''
+                         required
+                         onChange={(event) => dispatch(
+                           {type: 'set-job-position-id', jobPositionId: event.target.value}
+                         )}>
+              <option disabled value=''>Choose...</option>
+              {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
+                {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
+              </option>)}
+            </CFormSelect>}
           <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
         </CCol>
 

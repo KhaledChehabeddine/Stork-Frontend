@@ -29,7 +29,6 @@ const initialState = {
   jobTitle: '',
   managerId: null,
   managers: [],
-  numInterviews: 0,
   pageLoaded: false,
   redirected: false,
   valid: false,
@@ -55,8 +54,6 @@ const reducer = (state, action) => {
       return {...state, jobTitle: action.jobTitle};
     case 'set-manager-id':
       return {...state, managerId: action.managerId};
-    case 'set-num-interviews':
-      return {...state, numInterviews: action.numInterviews};
     case 'set-redirected':
       return {...state, redirected: true};
     case 'set-valid':
@@ -118,16 +115,14 @@ const InterviewForm = () => {
     getApiClient().getCandidate(state.candidateId).then(response =>
       dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
     getApiClient().addInterview(state.candidateId, state.date_time, state.description,
-                                state.jobPositionId, state.managerId).then(response => {
-      getApiClient().getNumInterviewsPerCandidate(response.data.id).then(response =>
-        dispatch({
-          type: 'set-num-interviews',
-          numInterviews: response.data[0]
-        })).catch(error => console.log(error));
-      getApiClient().addAction(`Interview #${state.numInterviews + 1} scheduled`, state.candidateId)
-        .catch(error => console.log(error));
-      getApiClient().updateStatus(getApiClient().getCandidate(parseInt(state.candidateId)),
-                           `Interview #${state.numInterviews + 1} scheduled`).catch(error => console.log(error));
+                                state.jobPositionId, state.managerId).then(() => {
+      getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
+        console.log(response.data);
+        getApiClient().addAction(`Interview #${response.data} scheduled`, state.candidateId)
+          .catch(error => console.log(error));
+        getApiClient().updateStatus(state.candidate,
+          `Interview #${response.data} scheduled`).catch(error => console.log(error));
+      }).catch(error => console.log(error));
     }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});
   }, [state]);
