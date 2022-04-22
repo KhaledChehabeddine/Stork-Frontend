@@ -54,7 +54,7 @@ const JobForm = () => {
     <div>
       <NavBar/>
 
-      <h1 className='profile-name'>Job Position Form</h1>
+      <h1 className='form-title'>Job Position Form</h1>
 
       <CForm className='form row g-3 needs-validation'
              noValidate

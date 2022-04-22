@@ -130,7 +130,7 @@ const InterviewForm = () => {
   return (
     <div>
       <NavBar/>
-      <h1 className='profile-name'>Interview Form</h1>
+      <h1 className='form-title'>Interview Form</h1>
       {state.pageLoaded ?
         <div>
           <CForm className='form row g-3 needs-validation'
