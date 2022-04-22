@@ -5,14 +5,24 @@ import CIcon from "@coreui/icons-react";
 import {cilTrash, cilUserFollow} from "@coreui/icons";
 import getApiClient from "../../api_client/getApiClient";
 import {formatDate} from "../Utils/utils";
+import {useNavigate} from "react-router-dom";
 
 const VacancyRow = ({ vacancy, vacancies}) => {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
+
+  const addCandidateForJobPosition = useCallback(() => {
+    navigate('/candidate/add', {
+      state: {
+        jobPosition: vacancy
+      }
+    })
+  }, []);
 
   const deleteJobPosition = useCallback(() => {
     getApiClient().deleteVacancy(vacancy.id);
     setVisible(false);
-    window.location.reload(false);
+    window.location.reload();
   }, [vacancy]);
 
   return (
@@ -25,7 +35,7 @@ const VacancyRow = ({ vacancy, vacancies}) => {
       <CTableDataCell className="text-center">{vacancy.city}</CTableDataCell>
       <CTableDataCell className="text-center">{formatDate(vacancy.datePosted)}</CTableDataCell>
       <CTableDataCell className="text-center">
-        <button className="view-button" style={{margin:0, padding: "10px"}}>
+        <button onClick={addCandidateForJobPosition} className="view-button" style={{margin:0, padding: "10px"}}>
           <CIcon className="view-icon" icon={cilUserFollow}/>
         </button>
         <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>

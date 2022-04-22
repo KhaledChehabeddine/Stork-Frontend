@@ -24,6 +24,7 @@ const getCurrentDate = () => {
 };
 
 const formatDate = (date) => {
+  if (!date) return '';
   return date.substring(0, 16).split('T')[0];
 };
 

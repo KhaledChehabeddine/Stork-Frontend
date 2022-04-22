@@ -16,7 +16,7 @@ import getApiClient from "../../api_client/getApiClient";
 
 const CandidateRow = ({candidate, candidates}) => {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState();
 
   const deleteCandidate = useCallback(() => {
     getApiClient().deleteCandidate(candidate.id);
