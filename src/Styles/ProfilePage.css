@@ -1,6 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+.back-icon-container {
+    float: left;
+    margin-top: 3%;
+    margin-left: 4%;
+    width: 25px;
+    height: 25px;
+    border: 0;
+    background-color: transparent;
+}
+
+.back-icon {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .profile-card {
     position: relative;
     border-radius: 62px;

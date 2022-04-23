@@ -15,6 +15,16 @@ import CIcon from "@coreui/icons-react";
 import getApiClient from "../../api_client/getApiClient";
 
 const CandidateRow = ({candidate, candidates}) => {
+
+  const getRowColor = (candidate) => {
+    let status = (candidate.status).toLowerCase();
+    if (status.includes("pending")) return "pending-row";
+    else if (status.includes("interview")) return "interview-row";
+    else if (status.includes("sent")) return "offer-row";
+    else if (status.includes("accepted")) return "accepted-row";
+    else if (status.includes("rejected")) return "rejected-row";
+    else return "default-row"
+  }
   const navigate = useNavigate();
   const [visible, setVisible] = useState();
 
@@ -25,7 +35,7 @@ const CandidateRow = ({candidate, candidates}) => {
   }, [candidate]);
 
   return (
-    <CTableRow v-for="item in tableItems">
+    <CTableRow className={getRowColor(candidate)} v-for="item in tableItems">
       <CTableDataCell className="text-center">
         {candidates.indexOf(candidate) + 1}
       </CTableDataCell>
