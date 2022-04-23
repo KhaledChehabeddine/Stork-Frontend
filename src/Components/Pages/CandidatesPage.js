@@ -245,19 +245,18 @@ const CandidateCardWrapper = () => {
                     </button>
                   </div>
                 </CTableHeaderCell>
-                <CTableHeaderCell className="text-center header-cell">
+                <CTableHeaderCell className="text-center search-cell">
                   <div align="center" style={{display:"flex",  alignItems:"center"}}>
                     <CIcon className="search-icon" icon={cilSearch} />
                     <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
                       dispatch({type: 'set-candidates', candidates: (filterCandidates(state.candidates, event.target))})
-                    } placeholder="Search Candidates"/>
+                    } placeholder="Search For Candidates.."/>
                   </div>
                 </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody className="table-body">
-              {state.filteredCandidates.map(candidate => <CandidateRow key={candidate.id} candidate={candidate}
-                                                                       candidates={state.filteredCandidates} /> )}
+              {state.filteredCandidates.map(candidate => <CandidateRow key={candidate.id} candidate={candidate} candidates={state.filteredCandidates} />)}
             </CTableBody>
           </CTable>
         </div>
