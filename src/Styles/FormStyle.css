@@ -1,25 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
-.form-title {
-    font-family: 'League Spartan', sans-serif;
-    letter-spacing: 4px;
-    font-weight: bolder;
-    font-size: 150%;
-    text-transform: uppercase;
-    text-align: center;
-    padding-top: 5%;
-}
-
 .form {
+    width: 60% !important;
     font-family: 'Raleway', sans-serif;
     font-weight: bolder;
-    border-radius: 62px!important;
-    background: white;
-    box-shadow:  20px 20px 53px #dcdcdc,
-    -20px -20px 53px #e4e4e4 !important;
+    border-radius: 20px !important;
+    box-shadow:  5px 5px 10px #9d9d9d,
+                -5px -5px 10px #ffffff !important;
+    /*box-shadow:  20px 20px 53px #dcdcdc,*/
+    /*            -20px -20px 53px #e4e4e4 !important;*/
+}
+
+.form-title {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 150%;
+    font-weight: bolder;
+    letter-spacing: 4px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #FFF;
+    text-transform: uppercase;
 }
 
 .form-button {
-    border: 1px solid black !important;
-    font-weight: lighter!important;
+    border: 1px solid rgba(0,0,0,0.66) !important;
+    border-radius:40px !important;
+    color: black !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+}
+
+.form-button:hover {
+    color: white !important;
+    border: 1px solid rgba(0,0,0,0.66) !important;
+    background: rgba(0,0,0,0.66) !important;
 }

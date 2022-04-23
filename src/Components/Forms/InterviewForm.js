@@ -66,35 +66,36 @@ const reducer = (state, action) => {
 };
 
 const InterviewForm = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getApiClient().getAllCandidates().then(candidates => {
-      getApiClient().getAllVacancies().then(job_positions => {
-        getApiClient().getAllManagers().then(managers => {
+    getApiClient().getAllCandidates().then(candidates =>
+      getApiClient().getAllVacancies().then(job_positions =>
+        getApiClient().getAllManagers().then(managers =>
           dispatch({
             type: 'load-page',
             candidates: candidates.data,
             jobPositions: job_positions.data,
             managers: managers.data
-          });
-        }).catch(error => console.log(error))
-      }).catch(error => console.log(error))
-    }).catch(error => console.log(error));
-    if (location.state.candidate) {
-      dispatch({type: 'set-candidate', candidate: location.state.candidate});
-      dispatch({type: 'set-candidate-id', candidateId: location.state.candidate.id});
-      dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPositionId});
-      dispatch({type: 'set-redirected'});
-      getApiClient().findVacancy(location.state.candidate.jobPositionId).then(job_position =>
-        dispatch({
-          type: 'set-job-title',
-          jobTitle: job_position.data.jobTitle + ' (' + job_position.data.country + ')'
-        })
-      ).catch(error => console.log(error));
-    }
+          })
+        ).catch(error => console.log(error))
+      ).catch(error => console.log(error))
+    ).catch(error => console.log(error));
+    if (location.state)
+      if (location.state.candidate) {
+        dispatch({type: 'set-candidate', candidate: location.state.candidate});
+        dispatch({type: 'set-candidate-id', candidateId: location.state.candidate.id});
+        dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPositionId});
+        dispatch({type: 'set-redirected'});
+        getApiClient().findVacancy(location.state.candidate.jobPositionId).then(job_position =>
+          dispatch({
+            type: 'set-job-title',
+            jobTitle: job_position.data.jobTitle + ' (' + job_position.data.country + ')'
+          })
+        ).catch(error => console.log(error));
+      }
   }, [location]);
 
   const handleSubmit = (event) => {
