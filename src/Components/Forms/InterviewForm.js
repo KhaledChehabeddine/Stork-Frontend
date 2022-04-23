@@ -7,7 +7,7 @@ import {
   CFormInput,
   CFormLabel,
   CFormSelect,
-  CFormTextarea, CModal,
+  CFormTextarea, CHeader, CModal,
   CModalBody, CModalFooter
 } from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
@@ -132,7 +132,6 @@ const InterviewForm = () => {
     <div>
       <NavBar/>
       <div className="page-background">
-        <h1 className='form-title'>Interview Form</h1>
         {state.pageLoaded ?
           <div>
             <CForm className='form row g-3 needs-validation'
@@ -140,6 +139,11 @@ const InterviewForm = () => {
                    style={formStyle}
                    validated={state.valid}
                    onSubmit={handleSubmit}>
+
+              <CHeader>
+                <h1 className='form-title'>Interview Form</h1>
+              </CHeader>
+
               <CCol className='position-relative'
                     md={6}
                     style={{marginBottom: '1rem'}}>
