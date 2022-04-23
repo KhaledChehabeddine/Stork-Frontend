@@ -2,9 +2,9 @@ import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import '../../Styles/ProfilePage.css'
 import ActionTable from "../Tables/ActionTable";
 import NavBar from "../Utils/Navbar";
-import {formatDate, getHashCode} from "../Utils/utils";
+import {formatDate} from "../Utils/utils";
 import CIcon from "@coreui/icons-react";
-import {cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/icons";
+import {cilArrowCircleLeft, cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from "@coreui/icons";
 import {cilMail, cilNote} from "@coreui/icons-pro";
 import getApiClient from "../../api_client/getApiClient";
 import Spinner from "../Utils/Spinner";
@@ -23,6 +23,8 @@ const reducer = (state, action) => {
       return { ...state, actions: action.actions, actionsLoaded: true };
     case 'set-confirm-rejection':
       return { ...state, confirmRejection: action.value };
+    case 'set-confirm-acceptance':
+      return { ...state, confirmAcceptance: action.value };
     case 'set-text-box-visible':
       return { ...state, textBoxVisible: action.value };
     case 'set-email-text':
@@ -69,6 +71,7 @@ const ProfilePage = ({ candidate }) => {
     textBoxVisible: false,
     confirmSendOffer: false,
     confirmRejection: false,
+    confirmAcceptance: false,
     contactVisible: false,
     emailText: '',
     contactText: '',
@@ -130,7 +133,11 @@ const ProfilePage = ({ candidate }) => {
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-    alert('Candidate Rejected');
+  }, [candidate]);
+
+  const Acceptance = useCallback(() => {
+    getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
+    getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
   }, [candidate]);
 
   const contact = useCallback((text) => {
@@ -158,6 +165,9 @@ const ProfilePage = ({ candidate }) => {
         ?
         <div>
           <NavBar />
+          <button className="back-icon-container" onClick={() => navigate("/candidate/all")}>
+            <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
+          </button>
             <div className="profile-card" style={{display: "flex", justifyContent: "space-evenly"}}>
               <div className="profile-info">
                 <h1 className="profile-name" style={{paddingTop: "2%"}}>{candidate.firstName + " " + candidate.lastName}</h1>
@@ -208,6 +218,9 @@ const ProfilePage = ({ candidate }) => {
               <button className="action-button" onClick={() => {
                 dispatch({ type: 'set-confirm-rejection', value: true });
               }}>Reject</button>
+              <button className="action-button" onClick={() => {
+                dispatch({ type: 'set-confirm-acceptance', value: true });
+              }}>Accept</button>
               <button className="action-button" style={{marginBottom: "5%"}} onClick={() => {
                 dispatch({ type: 'set-contact-visible', value: true });
               }}>Contact</button>
@@ -224,6 +237,18 @@ const ProfilePage = ({ candidate }) => {
               <CModalBody>Are you sure you want reject this candidate?</CModalBody>
               <CModalFooter>
                 <button className="confirm-button" onClick={sendRejection}>Confirm</button>
+              </CModalFooter>
+            </CModal>
+            <CModal alignment="center"
+                    backdrop={"static"}
+                    visible={state.confirmAcceptance}
+                    onClose={() => dispatch({type: 'set-confirm-acceptance', value: false})}>
+              <CModalHeader>
+                <CModalTitle>Accept</CModalTitle>
+              </CModalHeader>
+              <CModalBody>Are you sure you want accept this candidate?</CModalBody>
+              <CModalFooter>
+                <button className="confirm-button" onClick={Acceptance}>Confirm</button>
               </CModalFooter>
             </CModal>
             <CModal alignment="center"
