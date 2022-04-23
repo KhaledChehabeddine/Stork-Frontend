@@ -134,7 +134,7 @@ const ProfilePage = ({candidate}) => {
   return (
     <>
       {state.actionsLoaded ?
-        <div>
+        <div className="page-background">
           <NavBar/>
           <div className='profile-card'
                style={{display: 'flex', justifyContent: 'space-evenly'}}>
@@ -191,6 +191,8 @@ const ProfilePage = ({candidate}) => {
             <button className='action-button'
                     onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
             <button className='action-button'
+                    onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
+            <button className='action-button'
                     style={{marginBottom: '5%'}}
                     onClick={() => dispatch({ type: 'set-contact-visible', value: true })}>Contact</button>
           </div>
@@ -211,6 +213,21 @@ const ProfilePage = ({candidate}) => {
                      onClick={sendRejection}>Confirm</CButton>
           </CModalFooter>
         </CModal>
+          <CModal alignment='center'
+                  backdrop='static'
+                  visible={state.confirmAcceptance}
+                  onClose={() => dispatch({type: 'set-confirm-acceptance', value: false})}>
+            <CModalHeader>
+              <CModalTitle>{'Accept ' + candidate.firstName + ' ' + candidate.lastName}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>Are you sure you want to accept this candidate?</CModalBody>
+            <CModalFooter>
+              <CButton color='dark'
+                       shape='rounded-pill'
+                       variant='outline'
+                       onClick={Acceptance}>Confirm</CButton>
+            </CModalFooter>
+          </CModal>
           <CModal alignment='center'
                   backdrop={'static'}
                   visible={state.textBoxVisible}
