@@ -8,11 +8,11 @@ import {
   CFormLabel,
   CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter
 } from '@coreui/react';
+import getApiClient from '../../api_client/getApiClient';
+import NavBar from '../Utils/Navbar';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
 import {useLocation, useNavigate} from 'react-router-dom';
-import getApiClient from '../../api_client/getApiClient';
-import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 
@@ -29,14 +29,15 @@ const initialState = {
   gender: null,
   jobPositionId: null,
   jobPositions: [],
+  jobTitle: '',
   lastName: '',
   managerId: null,
   managers: [],
   phone: '',
+  redirected: false,
   resumeFile: null,
   valid: false,
   visible: false,
-  redirected: false
 };
 
 const reducer = (state, action) => {
@@ -57,6 +58,8 @@ const reducer = (state, action) => {
       return {...state, gender: action.gender};
     case 'set-job-position-id':
       return {...state, jobPositionId: action.jobPositionId};
+    case 'set-job-title':
+      return {...state, jobTitle: action.jobTitle};
     case 'set-last-name':
       return {...state, lastName: action.lastName};
     case 'set-manager-id':
@@ -70,25 +73,16 @@ const reducer = (state, action) => {
     case 'set-visible':
       return {...state, visible: action.visible};
     case 'set-redirected':
-      return { ...state, redirected: action.redirected };
+      return { ...state, redirected: true };
     default:
       return {...state};
   }
 };
 
 const CandidateForm = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    if (location.state) {
-      if (location.state.jobPosition) {
-        dispatch({ type: 'set-redirected', redirected: true });
-        dispatch({ type: 'set-job-position-id', jobPositionId: location.state.jobPosition.id });
-      }
-    }
-  }, [location.state]);
 
   useEffect(() => {
     getApiClient().getAllVacancies().then(job_positions =>
@@ -98,8 +92,18 @@ const CandidateForm = () => {
           jobPositions: job_positions.data,
           managers: managers.data
         })
-      )).catch(error => console.log(error))
-  }, []);
+      ).catch(error => console.log(error))
+    ).catch(error => console.log(error));
+    if (location.state)
+      if (location.state.jobPosition) {
+        dispatch({type: 'set-job-position-id', jobPositionId: location.state.jobPosition.id});
+        dispatch({
+          type: 'set-job-title',
+          jobTitle: location.state.jobPosition.jobTitle + ' (' + location.state.jobPosition.country + ')'
+        });
+        dispatch({type: 'set-redirected'});
+      }
+  }, [location.state]);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -248,13 +252,11 @@ const CandidateForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Job Position</CFormLabel>
-          {state.redirected
-            ?
-            <CFormInput defaultValue={location.state.jobPosition.jobTitle}
+          {state.redirected ?
+            <CFormInput defaultValue={state.jobTitle}
                         plainText
                         readOnly
-                        type='text'/>
-            :
+                        type='text'/> :
             <CFormSelect defaultValue=''
                          required
                          onChange={(event) => dispatch(
@@ -299,11 +301,10 @@ const CandidateForm = () => {
 
         <CCol>
           <center>
-            {/*<button className='action-button'>Submit</button>*/}
-            <CButton className='form-button'
-                     // color='dark'
-                     variant='outline'
+            <CButton color='dark'
+                     shape='rounded-pill'
                      type='submit'
+                     variant='outline'
                      onClick={handleClick}>Submit</CButton>
           </center>
         </CCol>

@@ -66,6 +66,9 @@ const ProfilePage = ({candidate}) => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
+    getApiClient().getActionsByCandidateId(candidate.id).then(response => {
+      dispatch({ type: 'set-actions', actions: response.data });
+    }).catch(error => console.log(error));
   }, [candidate.id, candidate.jobPositionId, state.jobPosition]);
 
   const setGenderIcon = () => {
@@ -115,13 +118,6 @@ const ProfilePage = ({candidate}) => {
     dispatch({ type: 'set-contact-text', value: '' });
   }, [candidate.email]);
 
-  useEffect(() => {
-    getApiClient().getActionsByCandidateId(candidate.id)
-      .then(response => {
-        dispatch({ type: 'set-actions', actions: response.data });
-      }).catch(error => console.log(error));
-  }, [candidate]);
-
   const getActionTable = () => {
     return state.actions.length ? <ActionTable actions={state.actions}/> :
       <h1 className='profile-name'>You have not made any actions yet.</h1>
@@ -131,136 +127,139 @@ const ProfilePage = ({candidate}) => {
     <>
       {state.actionsLoaded ?
         <div>
-          <NavBar />
-            <div className='profile-card'
-                 style={{display: 'flex', justifyContent: 'space-evenly'}}>
-              <div className='profile-info'>
-                <h1 className='profile-name'
-                    style={{paddingTop: '2%'}}>{candidate.firstName + ' ' + candidate.lastName}</h1>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}>{setGenderIcon()}</div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{candidate.sex}</h3>
-                </div>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}><CIcon icon={cilHome}/></div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{candidate.country}</h3>
-                </div>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}><CIcon icon={cilPhone}/></div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{candidate.phone}</h3>
-                </div>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}><CIcon icon={cilMail}/></div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{candidate.email}</h3>
-                </div>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}><CIcon icon={cilBriefcase}/></div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{state.jobPosition.jobTitle}</h3>
-                </div>
-                <div className='profile-field'>
-                  <div className='profile-icon-container'
-                       style={{float: 'left'}}><CIcon icon={cilCalendar}/></div>
-                  <h3 className='card-text'
-                      style={{float: 'right'}}>{formatDate(candidate.date)}</h3>
-                </div>
-              </div>
-            <div className='button-container'
-                 style={{float: 'right', width: '35%'}}>
+          <NavBar/>
+          <div className='profile-card'
+               style={{display: 'flex', justifyContent: 'space-evenly'}}>
+            <div className='profile-info'>
               <h1 className='profile-name'
-                  style={{paddingTop: '2%'}}>Actions</h1>
-              <button className='action-button'
-                      onClick={() => downloadResume()}>View Resume</button>
-              <button className='action-button'
-                      onClick={scheduleInterview}>Schedule Interview</button>
-              <button className='action-button'
-                      onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
-              <button className='action-button'
-                      onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
-              <button className='action-button'
-                      style={{marginBottom: '5%'}}
-                      onClick={() => dispatch({ type: 'set-contact-visible', value: true })}>Contact</button>
+                  style={{paddingTop: '2%'}}>{candidate.firstName + ' ' + candidate.lastName}</h1>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}>{setGenderIcon()}</div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{candidate.sex}</h3>
+              </div>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}><CIcon icon={cilHome}/></div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{candidate.country}</h3>
+              </div>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}><CIcon icon={cilPhone}/></div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{candidate.phone}</h3>
+              </div>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}><CIcon icon={cilMail}/></div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{candidate.email}</h3>
+              </div>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}><CIcon icon={cilBriefcase}/></div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{state.jobPosition.jobTitle}</h3>
+              </div>
+              <div className='profile-field'>
+                <div className='profile-icon-container'
+                     style={{float: 'left'}}><CIcon icon={cilCalendar}/></div>
+                <h3 className='card-text'
+                    style={{float: 'right'}}>{formatDate(candidate.date)}</h3>
+              </div>
             </div>
+          <div className='button-container'
+               style={{float: 'right', width: '35%'}}>
+            <h1 className='profile-name'
+                style={{paddingTop: '2%'}}>Actions</h1>
+            <button className='action-button'
+                    onClick={() => downloadResume()}>View Resume</button>
+            <button className='action-button'
+                    onClick={scheduleInterview}>Schedule Interview</button>
+            <button className='action-button'
+                    onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
+            <button className='action-button'
+                    onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
+            <button className='action-button'
+                    style={{marginBottom: '5%'}}
+                    onClick={() => dispatch({ type: 'set-contact-visible', value: true })}>Contact</button>
           </div>
-          
+        </div>
+
+        <CModal alignment='center'
+                backdrop='static'
+                visible={state.confirmRejection}
+                onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
+          <CModalHeader>
+            <CModalTitle>{'Reject ' + candidate.firstName + ' ' + candidate.lastName}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
+          <CModalFooter>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={sendRejection}>Confirm</CButton>
+          </CModalFooter>
+        </CModal>
           <CModal alignment='center'
-                  backdrop='static'
-                  visible={state.confirmRejection}
-                  onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
+                  backdrop={'static'}
+                  visible={state.textBoxVisible}
+                  onClose={() => dispatch({type: 'set-text-box-visible', value: false})}>
             <CModalHeader>
-              <CModalTitle>{'Reject ' + candidate.firstName + ' ' + candidate.lastName}</CModalTitle>
+              <CModalTitle>Write a letter</CModalTitle>
             </CModalHeader>
-            <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
+            <CModalBody>
+              <textarea
+                placeholder='Type an offer...'
+                style={{width: '100%', height: '250px'}}
+                onChange={(event) => {
+                dispatch({ type: 'set-email-text', value: event.target.value });
+              }}/>
+            </CModalBody>
             <CModalFooter>
-              <CButton color='dark'
-                       shape='rounded-pill'
-                       variant='outline'
-                       onClick={sendRejection}>Confirm</CButton>
+              <button className='confirm-button' onClick={() => sendOffer(state.emailText)}>Confirm</button>
             </CModalFooter>
           </CModal>
-            <CModal alignment='center'
-                    backdrop={'static'}
-                    visible={state.textBoxVisible}
-                    onClose={() => dispatch({type: 'set-text-box-visible', value: false})}>
-              <CModalHeader>
-                <CModalTitle>Write a letter</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <textarea
-                  placeholder='Type an offer...'
-                  style={{width: '100%', height: '250px'}}
-                  onChange={(event) => {
-                  dispatch({ type: 'set-email-text', value: event.target.value });
-                }}/>
-              </CModalBody>
-              <CModalFooter>
-                <button className='confirm-button' onClick={() => sendOffer(state.emailText)}>Confirm</button>
-              </CModalFooter>
-            </CModal>
-            <CModal alignment='center'
-                    backdrop={'static'}
-                    visible={state.contactVisible}
-                    onClose={() => dispatch({type: 'set-contact-visible', value: false})}>
-              <CModalHeader>
-                <CModalTitle>Write a letter</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <textarea
-                  placeholder='Type a message...'
-                  style={{width: '100%', height: '250px'}}
-                  onChange={(event) => {
-                    dispatch({ type: 'set-contact-text', value: event.target.value });
-                }}/>
-              </CModalBody>
-              <CModalFooter>
-                <button className='confirm-button' onClick={() => contact(state.contactText)}>Confirm</button>
-              </CModalFooter>
-            </CModal>
-          <div className='profile-card' style={{paddingBottom:'5%', marginBottom: '5%'}}>
-            {getActionTable(candidate)}
-          </div>
-          <div className='profile-card' style={{paddingBottom:'5%'}}>
-            <div style={{display: 'flex', paddingTop: '5%'}}>
-              <h1 className='feedback-title'>Feedback Notes</h1>
-              <div style={{display: 'inline-block', float: 'right'}}>
-                <CIcon icon={cilNote}/>
-              </div>
+          <CModal alignment='center'
+                  backdrop={'static'}
+                  visible={state.contactVisible}
+                  onClose={() => dispatch({type: 'set-contact-visible', value: false})}>
+            <CModalHeader>
+              <CModalTitle>Write a letter</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <textarea
+                placeholder='Type a message...'
+                style={{width: '100%', height: '250px'}}
+                onChange={(event) => {
+                  dispatch({ type: 'set-contact-text', value: event.target.value });
+              }}/>
+            </CModalBody>
+            <CModalFooter>
+              <button className='confirm-button'
+                      onClick={() => contact(state.contactText)}>Confirm</button>
+            </CModalFooter>
+          </CModal>
+        <div className='profile-card'
+             style={{paddingBottom:'5%', marginBottom: '5%'}}>
+          {getActionTable(candidate)}
+        </div>
+        <div className='profile-card'
+             style={{paddingBottom:'5%'}}>
+          <div style={{display: 'flex', paddingTop: '5%'}}>
+            <h1 className='feedback-title'>Feedback Notes</h1>
+            <div style={{display: 'inline-block', float: 'right'}}>
+              <CIcon icon={cilNote}/>
             </div>
-{/*            <div className='feedback-notes'>
-              <CInputGroup>
-                <CFormTextarea aria-label='With textarea'>test</CFormTextarea>
-              </CInputGroup>
-            </div>*/}
           </div>
+{/*            <div className='feedback-notes'>
+            <CInputGroup>
+              <CFormTextarea aria-label='With textarea'>test</CFormTextarea>
+            </CInputGroup>
+          </div>*/}
+        </div>
         </div>
         : <Spinner/>}
     </>
