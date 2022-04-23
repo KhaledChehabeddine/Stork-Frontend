@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+.page-background {
+    background-color: #ffffff;
+    background-image:  linear-gradient(30deg, #f7f7f7 12%, transparent 12.5%, transparent 87%, #f7f7f7 87.5%, #f7f7f7), linear-gradient(150deg, #f7f7f7 12%, transparent 12.5%, transparent 87%, #f7f7f7 87.5%, #f7f7f7), linear-gradient(30deg, #f7f7f7 12%, transparent 12.5%, transparent 87%, #f7f7f7 87.5%, #f7f7f7), linear-gradient(150deg, #f7f7f7 12%, transparent 12.5%, transparent 87%, #f7f7f7 87.5%, #f7f7f7), linear-gradient(60deg, #f7f7f777 25%, transparent 25.5%, transparent 75%, #f7f7f777 75%, #f7f7f777), linear-gradient(60deg, #f7f7f777 25%, transparent 25.5%, transparent 75%, #f7f7f777 75%, #f7f7f777);
+    background-size: 74px 130px;
+    background-position: 0 0, 0 0, 37px 65px, 37px 65px, 0 0, 37px 65px;
+}
 
 .form {
     width: 60% !important;
@@ -22,16 +28,23 @@
 }
 
 .form-button {
-    border: 1px solid rgba(0,0,0,0.66) !important;
-    border-radius:40px !important;
-    color: black !important;
-    letter-spacing: 1px;
+    font-size: 1vw;
+    width: 20%;
+    height: 40px;
+    margin-bottom: 5%;
+    text-align: center;
+    border: 2px solid grey;
+    border-radius:40px;
+    background: transparent;
     text-transform: uppercase;
+    letter-spacing:1px;
+    cursor: pointer;
     transition: all 0.25s ease;
 }
 
 .form-button:hover {
-    color: white !important;
-    border: 1px solid rgba(0,0,0,0.66) !important;
-    background: rgba(0,0,0,0.66) !important;
+    border: 0;
+    color:white;
+    background: rgba(0,0,0,0.66);
 }
+

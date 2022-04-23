@@ -51,9 +51,8 @@ const JobForm = () => {
   }, [city, country, employmentType, jobTitle, notes, startDate, workType]);
 
   return (
-    <div>
+    <div className="page-background">
       <NavBar/>
-
       <h1 className='form-title'>Job Position Form</h1>
 
       <CForm className='form row g-3 needs-validation'
@@ -150,9 +149,9 @@ const JobForm = () => {
 
         <CCol>
           <center>
-            <CButton color='dark'
-                     type='submit'
-                     onClick={handleClick}>Submit</CButton>
+            <button className="form-button"
+                    type='submit'
+                    onClick={handleClick}>Submit</button>
           </center>
         </CCol>
       </CForm>

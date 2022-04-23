@@ -55,9 +55,8 @@ const ManagerForm = () => {
   };
 
   return (
-    <div>
+    <div className="page-background">
       <NavBar/>
-
       <h1 className='form-title'>Hiring Manager Form</h1>
 
       <CForm className='form row g-3 needs-validation'
@@ -137,9 +136,9 @@ const ManagerForm = () => {
 
         <CCol xs={12}>
           <center>
-            <CButton color='dark'
-                     type='submit'
-                     onClick={onSubmit}>Submit</CButton>
+            <button className="form-button"
+                    type='submit'
+                    onClick={onSubmit}>Submit</button>
           </center>
         </CCol>
       </CForm>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState} from 'react';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
@@ -8,11 +8,9 @@ import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTable
 
 const Home = () => {
   return (
-    <div align='center' id='home'>
+    <div className="page-background" align='center' id='home'>
       <NavBar/>
-      <div className='form-header' style={{ marginTop:'50px'}}></div>
-
-      <div>
+      <div style={{ marginTop:'50px'}}>
         <UpcomingEvents/>
       </div>
     </div>
