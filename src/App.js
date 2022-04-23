@@ -9,6 +9,7 @@ import LoginForm from "./Components/Forms/LoginForm";
 import ManagerForm from "./Components/Forms/ManagerForm";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
+import AboutUsPage from "./Components/Pages/AboutUsPage";
 import ProfilePage from './Components/Pages/ProfilePage';
 import ResumePage from "./Components/Pages/ResumePage";
 import VacanciesPage from "./Components/Pages/VacanciesPage";
@@ -54,6 +55,9 @@ function App() {
             <Route element={<Home/>}
                    exact
                    path='/home'/>
+            <Route element={<AboutUsPage/>}
+                   exact
+                   path='/aboutus'/>
             <Route element={<CandidateForm/>}
                    exact
                    path='/candidate/add'/>

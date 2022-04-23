@@ -94,12 +94,13 @@ const VacanciesPage = () => {
   }, []);
   return (
     <>
-      <NavBar />
-      {state.vacanciesLoaded
-        ?
+      <div className="page-background">
+        <NavBar />
+        {state.vacanciesLoaded
+          ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
             <CTable style={{width: "100%"}} align="middle" className="mb-0 table" hover responsive>
-              <CTableHead color="light">
+              <CTableHead style={{backgroundColor: "transparent"}}>
                 <CTableRow className="header-row">
                   <CTableHeaderCell className="text-center icon-cell">
                     <CIcon icon={cilBriefcase}/>
@@ -148,12 +149,12 @@ const VacanciesPage = () => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center", float:"right"}}>
+                  <CTableHeaderCell className="text-center search-cell">
+                    <div style={{display:"flex",  alignItems:"center"}}>
                       <CIcon className="search-icon" icon={cilSearch} />
                       <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
                         dispatch({type: 'set-positions', vacancies: (filterPositions(state.vacancies, event.target))})
-                      } placeholder="Search For Positions"/>
+                      } placeholder="Search For Positions.."/>
                     </div>
                   </CTableHeaderCell>
                 </CTableRow>
@@ -163,7 +164,8 @@ const VacanciesPage = () => {
               </CTableBody>
             </CTable>
           </div>
-        : <Spinner />}
+          : <Spinner />}
+      </div>
     </>
   );
 };

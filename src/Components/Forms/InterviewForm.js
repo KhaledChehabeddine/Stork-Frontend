@@ -131,123 +131,125 @@ const InterviewForm = () => {
   return (
     <div>
       <NavBar/>
-      <h1 className='form-title'>Interview Form</h1>
-      {state.pageLoaded ?
-        <div>
-          <CForm className='form row g-3 needs-validation'
-                 noValidate
-                 style={formStyle}
-                 validated={state.valid}
-                 onSubmit={handleSubmit}>
-            <CCol className='position-relative'
-                  md={6}
-                  style={{marginBottom: '1rem'}}>
-              <CFormLabel>Candidate</CFormLabel>
-              {state.redirected ?
-                <CFormInput defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
-                            plainText
-                            readOnly
-                            type='text'/> :
+      <div className="page-background">
+        <h1 className='form-title'>Interview Form</h1>
+        {state.pageLoaded ?
+          <div>
+            <CForm className='form row g-3 needs-validation'
+                   noValidate
+                   style={formStyle}
+                   validated={state.valid}
+                   onSubmit={handleSubmit}>
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
+                <CFormLabel>Candidate</CFormLabel>
+                {state.redirected ?
+                  <CFormInput defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
+                              plainText
+                              readOnly
+                              type='text'/> :
+                  <CFormSelect defaultValue=''
+                               required
+                               onChange={(event) => dispatch(
+                                 {type: 'set-candidate-id', candidateId: event.target.value}
+                               )}>
+                    <option disabled value=''>Choose...</option>
+                    {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
+                      {candidate.firstName + ' ' + candidate.lastName}</option>)}
+                  </CFormSelect>}
+                <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
+              </CCol>
+
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
+                <CFormLabel>Job Position</CFormLabel>
+                {state.redirected ?
+                  <CFormInput defaultValue={state.jobTitle}
+                              plainText
+                              readOnly
+                              type='text'/> :
+                  <CFormSelect defaultValue=''
+                               required
+                               onChange={(event) => dispatch(
+                                 {type: 'set-job-position-id', jobPositionId: event.target.value}
+                               )}>
+                    <option disabled value=''>Choose...</option>
+                    {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
+                      {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
+                    </option>)}
+                  </CFormSelect>}
+                <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
+              </CCol>
+
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
+                <CFormLabel>Hiring Manager</CFormLabel>
                 <CFormSelect defaultValue=''
                              required
                              onChange={(event) => dispatch(
-                               {type: 'set-candidate-id', candidateId: event.target.value}
+                               {type: 'set-manager-id', managerId: event.target.value}
                              )}>
                   <option disabled value=''>Choose...</option>
-                  {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
-                    {candidate.firstName + ' ' + candidate.lastName}</option>)}
-                </CFormSelect>}
-              <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
-            </CCol>
-
-            <CCol className='position-relative'
-                  md={6}
-                  style={{marginBottom: '1rem'}}>
-              <CFormLabel>Job Position</CFormLabel>
-              {state.redirected ?
-                <CFormInput defaultValue={state.jobTitle}
-                            plainText
-                            readOnly
-                            type='text'/> :
-                <CFormSelect defaultValue=''
-                             required
-                             onChange={(event) => dispatch(
-                               {type: 'set-job-position-id', jobPositionId: event.target.value}
-                             )}>
-                  <option disabled value=''>Choose...</option>
-                  {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
-                    {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
-                  </option>)}
-                </CFormSelect>}
-              <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
-            </CCol>
-
-            <CCol className='position-relative'
-                  md={6}
-                  style={{marginBottom: '1rem'}}>
-              <CFormLabel>Hiring Manager</CFormLabel>
-              <CFormSelect defaultValue=''
-                           required
-                           onChange={(event) => dispatch(
-                             {type: 'set-manager-id', managerId: event.target.value}
-                           )}>
-                <option disabled value=''>Choose...</option>
-                {state.managers.map(manager => <option key={manager.id} value={manager.id}>
+                  {state.managers.map(manager => <option key={manager.id} value={manager.id}>
                     {manager.firstName + ' ' + manager.lastName}</option>)}
-              </CFormSelect>
-              <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
-            </CCol>
+                </CFormSelect>
+                <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
+              </CCol>
 
-            <CCol className='position-relative'
-                  md={6}
-                  style={{marginBottom: '1rem'}}>
-              <CFormLabel>Date and time</CFormLabel>
-              <CFormInput required
-                          type='datetime-local'
-                          onChange={(event) => dispatch(
-                            {type: 'set-date-time', date_time: event.target.value}
-                          )}/>
-              <CFormFeedback invalid>Invalid date or time selected.</CFormFeedback>
-            </CCol>
-
-            <CCol className='position-relative'
-                  md={12}
-                  style={{marginBottom: '0.7rem'}}>
-              <CFormLabel>Description</CFormLabel>
-              <CFormTextarea rows='5'
-                             type='text'
-                             onChange={(event) => dispatch(
-                               {type: 'set-description', description: event.target.value}
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
+                <CFormLabel>Date and time</CFormLabel>
+                <CFormInput required
+                            type='datetime-local'
+                            onChange={(event) => dispatch(
+                              {type: 'set-date-time', date_time: event.target.value}
                             )}/>
-            </CCol>
+                <CFormFeedback invalid>Invalid date or time selected.</CFormFeedback>
+              </CCol>
 
-            <CCol>
-              <center>
-                <CButton color='dark'
-                         type='submit'
-                         onClick={handleClick}>Submit</CButton>
-              </center>
-            </CCol>
-          </CForm>
+              <CCol className='position-relative'
+                    md={12}
+                    style={{marginBottom: '0.7rem'}}>
+                <CFormLabel>Description</CFormLabel>
+                <CFormTextarea rows='5'
+                               type='text'
+                               onChange={(event) => dispatch(
+                                 {type: 'set-description', description: event.target.value}
+                               )}/>
+              </CCol>
 
-          <CModal alignment='center'
-                  backdrop='static'
-                  visible={state.visible}
-                  onClose={() => dispatch({type: 'set-visible', visible: false})}>
-            <CModalBody>{'Interview with ' + state.candidate.firstName + ' ' +
-                         state.candidate.lastName + ' has been successfully scheduled.'}
-            </CModalBody>
-            <CModalFooter>
-              <CButton color='secondary'
-                       onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
-              <CButton color='info'
-                       onClick={() => {
-                         dispatch({type: 'set-visible', visible: false})
-                         navigate(`/candidate/${getHashCode(state.candidateId)}`);
-                       }}>View Candidate</CButton>
-            </CModalFooter>
-          </CModal>
-        </div> : <Spinner/>}
+              <CCol>
+                <center>
+                  <button className="form-button"
+                          type='submit'
+                          onClick={handleClick}>Submit</button>
+                </center>
+              </CCol>
+            </CForm>
+
+            <CModal alignment='center'
+                    backdrop='static'
+                    visible={state.visible}
+                    onClose={() => dispatch({type: 'set-visible', visible: false})}>
+              <CModalBody>{'Interview with ' + state.candidate.firstName + ' ' +
+              state.candidate.lastName + ' has been successfully scheduled.'}
+              </CModalBody>
+              <CModalFooter>
+                <CButton color='secondary'
+                         onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
+                <CButton color='info'
+                         onClick={() => {
+                           dispatch({type: 'set-visible', visible: false})
+                           navigate(`/candidate/${getHashCode(state.candidateId)}`);
+                         }}>View Candidate</CButton>
+              </CModalFooter>
+            </CModal>
+          </div> : <Spinner/>}
+      </div>
     </div>
   );
 };

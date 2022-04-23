@@ -137,9 +137,8 @@ const CandidateForm = () => {
   }, [state]);
 
   return (
-    <div style={{backgroundColor: '#F5F5F5'}}>
+    <div className="page-background">
       <NavBar/>
-
       <CForm className='form row g-3 needs-validation'
              encType='multipart/form-data'
              noValidate
@@ -224,24 +223,24 @@ const CandidateForm = () => {
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Phone Number</CFormLabel>
           <CInputGroup>
-              <CFormSelect defaultValue=''
-                           required
-                           type='tel'
-                           onChange={(event) => dispatch(
-                             {type: 'set-country-code', countryPhone: event.target.value}
-                           )}>
-                <option disabled value=''>+</option>
-                {Object.values(countries).filter((phoneCode, index) => {
-                    return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
-                  <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
-              </CFormSelect>
-              <CFormInput className='w-auto'
-                          placeholder='ex: 44521276'
-                          required
-                          type='tel'
-                          onChange={(event) => dispatch(
-                            {type: 'set-phone', phone: event.target.value}
-                          )}/>
+            <CFormSelect defaultValue=''
+                         required
+                         type='tel'
+                         onChange={(event) => dispatch(
+                           {type: 'set-country-code', countryPhone: event.target.value}
+                         )}>
+              <option disabled value=''>+</option>
+              {Object.values(countries).filter((phoneCode, index) => {
+                return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
+                <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
+            </CFormSelect>
+            <CFormInput className='w-auto'
+                        placeholder='ex: 44521276'
+                        required
+                        type='tel'
+                        onChange={(event) => dispatch(
+                          {type: 'set-phone', phone: event.target.value}
+                        )}/>
             <CFormFeedback invalid>
               Must be 5-12 characters long and only consist of digits and a valid prefix.
             </CFormFeedback>
@@ -301,11 +300,9 @@ const CandidateForm = () => {
 
         <CCol>
           <center>
-            <CButton color='dark'
-                     shape='rounded-pill'
-                     type='submit'
-                     variant='outline'
-                     onClick={handleClick}>Submit</CButton>
+            <button className="form-button"
+                    type='submit'
+                    onClick={handleClick}>Submit</button>
           </center>
         </CCol>
       </CForm>

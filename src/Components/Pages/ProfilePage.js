@@ -24,6 +24,7 @@ const initialState = {
   actionsLoaded: false,
   confirmSendOffer: false,
   confirmRejection: false,
+  confirmAcceptance: false,
   contactText: '',
   contactVisible: false,
   emailText: '',
@@ -38,6 +39,8 @@ const reducer = (state, action) => {
       return {...state, actions: action.actions, actionsLoaded: true};
     case 'set-confirm-rejection':
       return {...state, confirmRejection: action.value};
+    case 'set-confirm-acceptance':
+      return { ...state, confirmAcceptance: action.value };
     case 'set-contact-text':
       return {...state, contactText: action.value};
     case 'set-contact-visible':
@@ -101,14 +104,19 @@ const ProfilePage = ({candidate}) => {
   }, [candidate]);
 
   const sendRejection = useCallback(() => {
-     const rejectText = 'Dear ' + candidate.firstName + ' ' + candidate.lastName + '\n'
-                      + 'Hope this email finds you well.\n'
-                      + 'We are very sad to inform you that your application has not been considered successful.\n\n'
-                      + 'Regards,\n'
+    let rejectionText = 'Dear ' + candidate.firstName + ' ' + candidate.lastName + ',\n'
+                      + 'Thank you for your interest in the ' + state.jobPosition.jobTitle + ' position.\n'
+                      + 'After careful consideration, we regret to inform you that you were not selected for the position.\n\n'
+                      + 'Best Regards,\n'
                       + window.localStorage.getItem('name');
-    getApiClient().sendEmail(candidate.email, 'Application', rejectText)
+    getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
+  }, [candidate, state.jobPosition.jobTitle]);
+
+  const Acceptance = useCallback(() => {
+    getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
+    getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
   }, [candidate]);
 
   const contact = useCallback((text) => {

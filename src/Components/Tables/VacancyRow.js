@@ -22,9 +22,8 @@ const VacancyRow = ({vacancy, vacancies}) => {
   }, [vacancy]);
 
   return (
-    <CTableRow className="table-row"
-               v-for="item in tableItems">
-      <CTableDataCell className="text-center">{vacancies.indexOf(vacancy) + 1}</CTableDataCell>
+    <CTableRow style={{backgroundColor:"white"}} className="table-row" v-for="item in tableItems">
+      <CTableDataCell className="text-center">{vacancies.indexOf(vacancy)+1}</CTableDataCell>
       <CTableDataCell>{vacancy.jobTitle}</CTableDataCell>
       <CTableDataCell className="text-center">{vacancy.country}</CTableDataCell>
       <CTableDataCell className="text-center">{vacancy.city}</CTableDataCell>
