@@ -6,7 +6,7 @@ import {
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect, CInputGroup, CModal, CModalBody, CModalFooter
+  CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter
 } from '@coreui/react';
 import {countries, genders} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -133,10 +133,8 @@ const CandidateForm = () => {
   }, [state]);
 
   return (
-    <div>
+    <div style={{backgroundColor: '#F5F5F5'}}>
       <NavBar/>
-
-      <h1 className='form-title'>Candidate Form</h1>
 
       <CForm className='form row g-3 needs-validation'
              encType='multipart/form-data'
@@ -144,6 +142,10 @@ const CandidateForm = () => {
              style={formStyle}
              validated={state.valid}
              onSubmit={handleSubmit}>
+        <CHeader>
+          <h1 className='form-title'>Candidate Form</h1>
+        </CHeader>
+
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>
@@ -297,7 +299,10 @@ const CandidateForm = () => {
 
         <CCol>
           <center>
-            <CButton color='dark'
+            {/*<button className='action-button'>Submit</button>*/}
+            <CButton className='form-button'
+                     // color='dark'
+                     variant='outline'
                      type='submit'
                      onClick={handleClick}>Submit</CButton>
           </center>
