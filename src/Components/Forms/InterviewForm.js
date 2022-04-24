@@ -98,17 +98,9 @@ const InterviewForm = () => {
       }
   }, [location]);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    dispatch({type: 'set-valid'});
-  };
-
   const handleClick = useCallback((event) => {
     event.preventDefault();
+    dispatch({type: 'set-valid'});
     if (!state.candidateId) return;
     if (!state.date_time) return;
     if (!state.jobPositionId) return;
@@ -138,8 +130,7 @@ const InterviewForm = () => {
             <CForm className='form row g-3 needs-validation'
                    noValidate
                    style={formStyle}
-                   validated={state.valid}
-                   onSubmit={handleSubmit}>
+                   validated={state.valid}>
               <CCol className='position-relative'
                     md={6}
                     style={{marginBottom: '1rem'}}>

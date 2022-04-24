@@ -66,13 +66,19 @@ const ProfilePage = ({candidate}) => {
     getApiClient().findResume(candidate.id).then(resume => {
         dispatch({type: 'set-resume', resume: resume.data});
     }).catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
+  }, []);
+
+  useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
       dispatch({ type: 'set-actions', actions: response.data });
     }).catch(error => console.log(error));
-  }, [candidate.id, candidate.jobPositionId, state.jobPosition]);
+  }, []);
 
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
@@ -112,7 +118,7 @@ const ProfilePage = ({candidate}) => {
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-  }, [candidate, state.jobPosition.jobTitle]);
+  }, [candidate]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));

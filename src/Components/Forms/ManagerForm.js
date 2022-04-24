@@ -27,17 +27,9 @@ const ManagerForm = () => {
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValid(true);
-  }
-
   const onSubmit = (event) => {
     event.preventDefault();
+    setValid(true);
     if (!countryPhone) return;
     if (!emailRegex.test(email)) return;
     if (!gender) return;
@@ -62,8 +54,7 @@ const ManagerForm = () => {
       <CForm className='form row g-3 needs-validation'
              noValidate
              style={formStyle}
-             validated={valid}
-             onSubmit={handleSubmit}>
+             validated={valid}>
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>
