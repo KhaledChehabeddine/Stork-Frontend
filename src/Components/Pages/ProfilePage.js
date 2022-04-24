@@ -4,7 +4,6 @@ import React, {useCallback, useEffect, useReducer} from 'react';
 import {cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from '@coreui/icons';
 import {cilMail, cilNote} from '@coreui/icons-pro';
 import {
-  CButton,
   CModal,
   CModalBody,
   CModalFooter,
@@ -66,19 +65,19 @@ const ProfilePage = ({candidate}) => {
     getApiClient().findResume(candidate.id).then(resume => {
         dispatch({type: 'set-resume', resume: resume.data});
     }).catch(error => console.log(error));
-  }, []);
+  }, [candidate.id]);
 
   useEffect(() => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
-  }, []);
+  }, [candidate.jobPositionId]);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
       dispatch({ type: 'set-actions', actions: response.data });
     }).catch(error => console.log(error));
-  }, []);
+  }, [candidate.id]);
 
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
@@ -118,7 +117,7 @@ const ProfilePage = ({candidate}) => {
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-  }, [candidate]);
+  }, [candidate, state.jobPosition.jobTitle]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
@@ -213,10 +212,7 @@ const ProfilePage = ({candidate}) => {
           </CModalHeader>
           <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
           <CModalFooter>
-            <CButton color='dark'
-                     shape='rounded-pill'
-                     variant='outline'
-                     onClick={sendRejection}>Confirm</CButton>
+            <button className="form-button" onClick={sendRejection}>Confirm</button>
           </CModalFooter>
         </CModal>
           <CModal alignment='center'
@@ -228,10 +224,7 @@ const ProfilePage = ({candidate}) => {
             </CModalHeader>
             <CModalBody>Are you sure you want to accept this candidate?</CModalBody>
             <CModalFooter>
-              <CButton color='dark'
-                       shape='rounded-pill'
-                       variant='outline'
-                       onClick={Acceptance}>Confirm</CButton>
+              <button className="form-button" onClick={Acceptance}>Confirm</button>
             </CModalFooter>
           </CModal>
           <CModal alignment='center'
@@ -250,7 +243,7 @@ const ProfilePage = ({candidate}) => {
               }}/>
             </CModalBody>
             <CModalFooter>
-              <button className='confirm-button' onClick={() => sendOffer(state.emailText)}>Confirm</button>
+              <button className='form-button' onClick={() => sendOffer(state.emailText)}>Confirm</button>
             </CModalFooter>
           </CModal>
           <CModal alignment='center'
@@ -269,7 +262,7 @@ const ProfilePage = ({candidate}) => {
               }}/>
             </CModalBody>
             <CModalFooter>
-              <button className='confirm-button'
+              <button className='form-button'
                       onClick={() => contact(state.contactText)}>Confirm</button>
             </CModalFooter>
           </CModal>

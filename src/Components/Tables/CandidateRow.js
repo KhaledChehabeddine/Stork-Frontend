@@ -66,7 +66,7 @@ const CandidateRow = ({candidate, candidates}) => {
         </CModalHeader>
         <CModalBody>Are you sure you want to delete this candidate?</CModalBody>
         <CModalFooter>
-          <button className="confirm-button" onClick={deleteCandidate}>Confirm</button>
+          <button className="form-button" onClick={deleteCandidate}>Confirm</button>
         </CModalFooter>
       </CModal>
     </CTableRow>

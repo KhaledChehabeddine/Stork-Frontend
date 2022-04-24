@@ -129,10 +129,8 @@ const InterviewForm = () => {
   }, [state]);
 
   return (
-    <div>
+    <div className="page-background">
       <NavBar/>
-      <div className="page-background">
-        <h1 className='form-title'>Interview Form</h1>
         {state.pageLoaded ?
           <div>
             <CForm className='form row g-3 needs-validation'
@@ -253,7 +251,6 @@ const InterviewForm = () => {
               </CModalFooter>
             </CModal>
           </div> : <Spinner/>}
-      </div>
     </div>
   );
 };

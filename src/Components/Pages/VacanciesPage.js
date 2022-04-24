@@ -103,10 +103,10 @@ const VacanciesPage = () => {
               <CTableHead style={{backgroundColor: "transparent"}}>
                 <CTableRow className="header-row">
                   <CTableHeaderCell className="text-center icon-cell">
-                    <CIcon icon={cilBriefcase}/>
+                    <CIcon className="header-container" icon={cilBriefcase}/>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
-                    <div className="header-cell-content">
+                    <div className="header-container" style={{display:"flex",  alignItems:"center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -117,7 +117,7 @@ const VacanciesPage = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -128,7 +128,7 @@ const VacanciesPage = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -139,7 +139,7 @@ const VacanciesPage = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-date', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>

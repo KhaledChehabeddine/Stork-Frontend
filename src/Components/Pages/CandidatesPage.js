@@ -150,10 +150,10 @@ const CandidateCardWrapper = () => {
               <CTableHead style={{backgroundColor: "transparent"}}>
                 <CTableRow className="header-row">
                   <CTableHeaderCell className="text-center icon-cell">
-                    <CIcon icon={cilPeople}/>
+                    <CIcon className="header-container" icon={cilPeople}/>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center" }}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center"}}>
                       <button onClick={event => {
                         dispatch({
                           type: 'sort-by-name',
@@ -172,7 +172,7 @@ const CandidateCardWrapper = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => {
                         dispatch({
                           type: 'sort-by-email',
@@ -191,7 +191,7 @@ const CandidateCardWrapper = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => {
                         dispatch({
                           type: 'sort-by-phone',
@@ -210,7 +210,7 @@ const CandidateCardWrapper = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => {
                         dispatch({
                           type: 'sort-by-date',
@@ -229,7 +229,7 @@ const CandidateCardWrapper = () => {
                     </div>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="text-center header-cell">
-                    <div style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => {
                         dispatch({
                           type: 'sort-by-status',

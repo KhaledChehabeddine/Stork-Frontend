@@ -49,7 +49,7 @@ const VacancyRow = ({vacancy, vacancies}) => {
         </CModalHeader>
         <CModalBody>Are you sure you want to delete this job position?</CModalBody>
         <CModalFooter>
-          <button className="confirm-button" onClick={deleteJobPosition}>Confirm</button>
+          <button className="form-button" onClick={deleteJobPosition}>Confirm</button>
         </CModalFooter>
       </CModal>
     </CTableRow>
