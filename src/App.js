@@ -32,7 +32,7 @@ function App() {
       .then(response => {setCandidates(response.data)}).catch(error => console.log(error));
     getApiClient().getAllVacancies()
       .then(response => {setJobPositions(response.data)}).catch(error => console.log(error));
-  }, []);
+  }, [candidates, jobPositions]);
 
   return (
     <Router>

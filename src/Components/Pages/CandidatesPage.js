@@ -137,7 +137,7 @@ const CandidateCardWrapper = () => {
       .then(response => {
         dispatch({ type: 'page-loaded', candidates: response.data, filteredCandidates: response.data });
       }).catch(error => {console.log(error)});
-  }, []);
+  }, [state.candidates]);
 
   return (
     <>

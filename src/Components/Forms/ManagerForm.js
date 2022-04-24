@@ -4,7 +4,7 @@ import {
   CCol,
   CForm, CFormFeedback,
   CFormInput,
-  CFormLabel, CFormSelect, CInputGroup, CModal, CModalBody, CModalFooter
+  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter
 } from '@coreui/react';
 import {formStyle} from '../Utils/Styles';
 import {countries, genders} from '../Utils/utils';
@@ -55,6 +55,11 @@ const ManagerForm = () => {
              noValidate
              style={formStyle}
              validated={valid}>
+
+        <CHeader>
+          <h1 className='form-title'>Hiring Manager Form</h1>
+        </CHeader>
+
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>

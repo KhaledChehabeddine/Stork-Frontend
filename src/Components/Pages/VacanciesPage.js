@@ -91,7 +91,7 @@ const VacanciesPage = () => {
       .then(response => {
         dispatch({ type: 'vacancies-loaded', vacancies: response.data, filteredPositions: response.data });
       }).catch(error => console.log(error));
-  }, []);
+  }, [state.vacancies]);
   return (
     <>
       <div className="page-background">

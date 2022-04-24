@@ -106,7 +106,7 @@ class ApiClient extends ApiClientBase {
   addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes) {
     const data = {};
     data.jobTitle = jobTitle;
-    data.startDate = startDate;
+    data.expectedStartDate = startDate;
     data.country = country;
     data.city = city;
     data.workType = workType;

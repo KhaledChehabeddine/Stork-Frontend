@@ -7,7 +7,7 @@ import {
   CFormInput,
   CFormLabel,
   CFormSelect,
-  CFormTextarea, CModal,
+  CFormTextarea, CHeader, CModal,
   CModalBody, CModalFooter
 } from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
@@ -98,9 +98,17 @@ const InterviewForm = () => {
       }
   }, [location]);
 
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    dispatch({type: 'set-valid'});
+  };
+
   const handleClick = useCallback((event) => {
     event.preventDefault();
-    dispatch({type: 'set-valid'});
     if (!state.candidateId) return;
     if (!state.date_time) return;
     if (!state.jobPositionId) return;
@@ -131,6 +139,11 @@ const InterviewForm = () => {
                    noValidate
                    style={formStyle}
                    validated={state.valid}>
+
+              <CHeader>
+                <h1 className='form-title'>Interview Form</h1>
+              </CHeader>
+
               <CCol className='position-relative'
                     md={6}
                     style={{marginBottom: '1rem'}}>

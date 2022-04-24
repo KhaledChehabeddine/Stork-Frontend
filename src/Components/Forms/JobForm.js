@@ -7,7 +7,7 @@ import {
   CFormFeedback,
   CFormTextarea,
   CFormSelect,
-  CButton, CModalBody, CModalFooter, CModal
+  CButton, CModalBody, CModalFooter, CModal, CHeader
 } from '@coreui/react';
 import {countries} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -45,12 +45,16 @@ const JobForm = () => {
   return (
     <div className="page-background">
       <NavBar/>
-      <h1 className='form-title'>Job Position Form</h1>
 
       <CForm className='form row g-3 needs-validation'
              noValidate
              style={formStyle}
              validated={valid}>
+
+        <CHeader>
+          <h1 className='form-title'>Job Position Form</h1>
+        </CHeader>
+
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>

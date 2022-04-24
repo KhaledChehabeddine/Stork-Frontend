@@ -63,7 +63,7 @@ const VacancyPage = ({vacancy}) => {
               <div className='profile-icon-container'
                    style={{float: 'left'}}><CIcon icon={cilCalendarEvent}/></div>
               <h3 className='card-text'
-                  style={{float: 'right'}}>{formatDate(vacancy.startDate)}</h3>
+                  style={{float: 'right'}}>{formatDate(vacancy.expectedStartDate)}</h3>
             </div>
           </div>
           <div className='button-container'
