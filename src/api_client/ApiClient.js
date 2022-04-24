@@ -193,6 +193,12 @@ class ApiClient extends ApiClientBase {
         console.log(error);
       });
   }
+
+  getInterviewsByManagerId(managerId){
+    const data = {};
+    data.managerId = managerId;
+    return this.Get('/interview/manager', data);
+  }
 }
 
 export default ApiClient;
