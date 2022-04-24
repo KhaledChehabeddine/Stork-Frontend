@@ -12,12 +12,14 @@ import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
+import {useData} from "../../Context/Use";
 
 const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const ManagerForm = () => {
+  const { values: { managers }, actions: { setManagers } } = useData();
   const [countryPhone, setCountryPhone] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -37,7 +39,12 @@ const ManagerForm = () => {
     if (!nameRegex.test(lastName)) return;
     if (!phoneRegex.test(phone)) return;
     getApiClient().addManager(firstName, lastName, gender, countryPhone, phone, email)
-      .catch(error => console.log(error));
+      .then(response => {
+        if (response.status === 200) {
+          managers.add(response.data);
+          setManagers(managers);
+        }
+      }).catch(error => console.log(error));
     setVisible(true);
   };
 

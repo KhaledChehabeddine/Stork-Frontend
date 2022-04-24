@@ -7,6 +7,7 @@ import Spinner from "../Utils/Spinner";
 import CIcon from "@coreui/icons-react";
 import {cilArrowBottom, cilArrowTop, cilBriefcase, cilSearch} from "@coreui/icons";
 import Input from "../Utils/Input";
+import {useData} from "../../Context/Use";
 
 const filterPositions = (vacancies, input) => {
   let filter, value, i, title, filteredPositions = [];
@@ -81,17 +82,15 @@ const reducer = (state, action) => {
 }
 
 const VacanciesPage = () => {
+  const { values: { jobPositions } } = useData();
   const [state, dispatch] = useReducer(reducer, {
     vacanciesLoaded: false,
     vacancies: [],
     filteredPositions: []
   });
   useEffect(() => {
-    getApiClient().getAllVacancies()
-      .then(response => {
-        dispatch({ type: 'vacancies-loaded', vacancies: response.data, filteredPositions: response.data });
-      }).catch(error => console.log(error));
-  }, [state.vacancies]);
+    dispatch({ type: 'vacancies-loaded', vacancies: jobPositions, filteredPositions: jobPositions});
+  }, [jobPositions]);
   return (
     <>
       <div className="page-background">

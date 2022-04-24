@@ -16,8 +16,10 @@ import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
+import {useData} from "../../Context/Use";
 
 const JobForm = () => {
+  const { values: { jobPositions }, actions: { setJobPositions } } = useData();
   const navigate = useNavigate();
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
@@ -29,7 +31,7 @@ const JobForm = () => {
   const [visible, setVisible] = useState(false);
   const [workType, setWorkType] = useState(null);
 
-  const handleClick = useCallback((event) => {
+  const handleSubmit = useCallback((event) => {
     event.preventDefault();
     setValid(true);
     if (!city) return;
@@ -38,7 +40,12 @@ const JobForm = () => {
     if (!jobTitle) return;
     if (!workType) return;
     getApiClient().addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes)
-      .catch(error => console.log(error));
+      .then(response => {
+        if (response.status === 200) {
+          jobPositions.push(response.data);
+          setJobPositions(jobPositions);
+        }
+      }).catch(error => console.log(error));
     setVisible(true);
   }, [city, country, employmentType, jobTitle, notes, startDate, workType]);
 
@@ -146,7 +153,7 @@ const JobForm = () => {
           <center>
             <button className="form-button"
                     type='submit'
-                    onClick={handleClick}>Submit</button>
+                    onClick={handleSubmit}>Submit</button>
           </center>
         </CCol>
       </CForm>
@@ -163,6 +170,7 @@ const JobForm = () => {
                    onClick={() => {
                      setVisible(false);
                      navigate('/job/all');
+                     window.location.reload();
                    }}>View Jobs</CButton>
         </CModalFooter>
       </CModal>

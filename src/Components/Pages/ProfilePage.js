@@ -57,7 +57,7 @@ const reducer = (state, action) => {
   }
 }
 
-const ProfilePage = ({candidate}) => {
+const ProfilePage = ({ candidate }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -71,7 +71,7 @@ const ProfilePage = ({candidate}) => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
-  }, [candidate]);
+  }, [candidate.jobPositionId]);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
@@ -95,9 +95,10 @@ const ProfilePage = ({candidate}) => {
     return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
   }
 
-  const getActionButtons = (candidate) => {
+  const getActionButtons = () => {
     let status = (candidate.status).toLowerCase();
-    if (status.includes("pending") || status.includes("interview")) return <div>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
+    if (status.includes("pending") || status.includes("interview"))
+      return <div>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
     else if (status.includes("sent")) return <div>{acceptButton()}</div>;
     else if (status.includes("accepted")) return null;
     else if (status.includes("rejected")) return null;
@@ -114,7 +115,7 @@ const ProfilePage = ({candidate}) => {
       method: 'GET',
       responseType: 'blob'
     }).then((response) => {
-      const blob = new Blob([response.data], {type: 'application/pdf',});
+      const blob = new Blob([response.data], { type: 'application/pdf' });
       const fileURL = URL.createObjectURL(blob);
       window.open(fileURL);
     }).catch(error => console.log(error));
