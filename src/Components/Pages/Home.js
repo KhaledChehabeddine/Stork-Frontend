@@ -27,13 +27,6 @@ const UpcomingEvents = () => {
   useEffect(()=> {
     getApiClient().getAllVacancies()
       .then(response => {
-        // const tempEvents = response.data.slice();
-        // tempEvents.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
-        // const today = new Date();
-        // today.setHours(0);
-        // today.setMinutes(0);
-        // today.setSeconds(0);
-        //setEvents(tempEvents.filter((element) => new Date(element.dateTime).getTime() >= today.getTime()));
         setLoaded(true);
         setEvents(response.data);
       })
