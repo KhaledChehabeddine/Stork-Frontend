@@ -1,23 +1,35 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import '../../Styles/ProfilePage.css'
-import Navbar from "../Utils/Navbar";
-import CIcon from "@coreui/icons-react";
-import {cilBriefcase, cilBuilding, cilGlobeAlt, cilHome} from "@coreui/icons";
-import {cilCalendarEvent, cilCity, cilRemoteControl} from "@coreui/icons-pro";
-import {formatDate} from "../Utils/utils";
-import {useNavigate} from "react-router-dom";
-import {CCard, CCardBody, CCardText, CCardTitle, CCol, CRow} from "@coreui/react";
+import Navbar from '../Utils/Navbar';
+import CIcon from '@coreui/icons-react';
+import {cilBriefcase, cilBuilding, cilGlobeAlt, cilHome} from '@coreui/icons';
+import {cilCalendarEvent, cilCity, cilRemoteControl} from '@coreui/icons-pro';
+import {formatDate} from '../Utils/utils';
+import {useNavigate} from 'react-router-dom';
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCardText,
+  CCardTitle,
+  CCol,
+  CListGroup,
+  CListGroupItem, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
+  CRow
+} from '@coreui/react';
+import getApiClient from '../../api_client/getApiClient';
+import JobForm from "../Forms/JobForm";
 
 const VacancyPage = ({vacancy}) => {
   const navigate = useNavigate();
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
 
   const setWorkTypeIcon = () => {
-    if (vacancy.workType === 'On-site') return <CIcon icon={cilBuilding}/>;
-    if (vacancy.workType === 'Hybrid') return <CIcon icon={cilHome}/>;
-    return <CIcon icon={cilRemoteControl}/>;
-    // if (vacancy.workType === 'On-site') return <CIcon icon={cilBuilding}/>;
-    // if (vacancy.workType === 'Hybrid') return <CIcon icon={cilHome}/>;
-    // return <CIcon icon={cilRemoteControl}/>;
+    if (vacancy.workType === 'On-site') return <CIcon className='me-3' icon={cilBuilding}/>;
+    if (vacancy.workType === 'Hybrid') return <CIcon className='me-3' icon={cilHome}/>;
+    return <CIcon className='me-3' icon={cilRemoteControl}/>;
   }
 
   const getCandidates = () => {
@@ -30,81 +42,142 @@ const VacancyPage = ({vacancy}) => {
     navigate('/candidate/add', {state: {jobPosition: vacancy}});
   }, [navigate, vacancy]);
 
+  const getJobDetails = useCallback(() => {
+    setEditVisible(true);
+  });
+
+  const editJobPosition = useCallback(() => {
+
+  });
+
+  const deleteJobPosition = useCallback(() => {
+    getApiClient().deleteVacancy(vacancy.id);
+    setDeleteVisible(false);
+    navigate('/job/all');
+  }, [navigate, vacancy.id]);
+
   return (
-    <div className='page-background'>
+    <div className='full-height page-background'>
       <div>
         <Navbar/>
-        <center>
-          <CCard style={{marginTop: '1rem', display: 'flex', width: '50%'}}>
+        
+        <CCard className='m-auto mt-5 w-75 p-5'
+               style={{borderRadius: '2rem'}}>
+          <CCardBody>
             <CRow>
-              <CCol sm={6}>
-                <CCardBody>
-                  <CCardTitle>{vacancy.jobTitle}</CCardTitle>
-                  <CRow>
-                    {setWorkTypeIcon()}
-                    {/*<CIcon icon={setWorkTypeIcon()}/>*/}
-                    <CCardText>{vacancy.workType}</CCardText>
-                  </CRow>
-                </CCardBody>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardTitle className='mb-4 fw-bold fs-2'>{vacancy.jobTitle}</CCardTitle>
               </CCol>
-
-              <CCol sm={6}>
-                <CCardBody>
-                  <CCardTitle>Actions</CCardTitle>
-                </CCardBody>
+              <CCol className='d-sm-flex justify-content-sm-center'>
+                <CCardTitle className='mb-4 fw-bold fs-2'>Actions</CCardTitle>
               </CCol>
             </CRow>
-          </CCard>
-        </center>
 
-        {/*<div className='profile-card'*/}
-        {/*     style={{display: 'flex', justifyContent: 'space-evenly'}}>*/}
-        {/*  <div className='profile-info'>*/}
-        {/*    <h1 className='profile-name'*/}
-        {/*        style={{paddingTop: '2%'}}>{vacancy.jobTitle}</h1>*/}
-        {/*    <div className='profile-field'>*/}
-        {/*      <div className='profile-icon-container'*/}
-        {/*           style={{float: 'left'}}><CIcon icon={cilGlobeAlt}/></div>*/}
-        {/*      <h3 className='card-text'*/}
-        {/*          style={{float: 'right'}}>{vacancy.country}</h3>*/}
-        {/*    </div>*/}
-        {/*    <div className='profile-field'>*/}
-        {/*      <div className='profile-icon-container'*/}
-        {/*           style={{float: 'left'}}><CIcon icon={cilCity}/></div>*/}
-        {/*      <h3 className='card-text'*/}
-        {/*          style={{float: 'right'}}>{vacancy.city}</h3>*/}
-        {/*    </div>*/}
-        {/*    <div className='profile-field'>*/}
-        {/*      <div className='profile-icon-container'*/}
-        {/*           style={{float: 'left'}}>{setWorkTypeIcon()}</div>*/}
-        {/*      <h3 className='card-text'*/}
-        {/*          style={{float: 'right'}}>{vacancy.workType}</h3>*/}
-        {/*    </div>*/}
-        {/*    <div className='profile-field'>*/}
-        {/*      <div className='profile-icon-container'*/}
-        {/*           style={{float: 'left'}}><CIcon icon={cilBriefcase}/></div>*/}
-        {/*      <h3 className='card-text'*/}
-        {/*          style={{float: 'right'}}>{vacancy.employmentType}</h3>*/}
-        {/*    </div>*/}
-        {/*    <div className='profile-field'>*/}
-        {/*      <div className='profile-icon-container'*/}
-        {/*           style={{float: 'left'}}><CIcon icon={cilCalendarEvent}/></div>*/}
-        {/*      <h3 className='card-text'*/}
-        {/*          style={{float: 'right'}}>{formatDate(vacancy.expectedStartDate)}</h3>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  <div className='button-container'*/}
-        {/*       style={{float: 'right', width: '35%'}}>*/}
-        {/*    <h1 className='profile-name'*/}
-        {/*        style={{paddingTop: '2%'}}>Actions</h1>*/}
-        {/*    <button className='action-button'*/}
-        {/*            onClick={() => addCandidate()}>Add Candidate</button>*/}
-        {/*    <button className='action-button'*/}
-        {/*            onClick={'DO NOTHING'}>Edit Job Position</button>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-        {/*<div className='profile-card'*/}
-        {/*     style={{paddingBottom:'5%', marginBottom: '5%'}}>{getCandidates()}</div>*/}
+            <CRow className='mb-3'>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardText className='mb-2'>
+                  <CIcon className='me-3' icon={cilGlobeAlt}/>
+                  {vacancy.country}
+                </CCardText>
+              </CCol>
+              <CCol className='d-sm-flex justify-content-sm-center'>
+                <CButton className='w-50'
+                         color='dark'
+                         shape='rounded-pill'
+                         variant='outline'
+                         onClick={addCandidate}>Add Candidate</CButton>
+              </CCol>
+            </CRow>
+
+            <CRow className='mb-3'>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardText className='mb-2'>
+                  <CIcon className='me-3' icon={cilCity}/>
+                  {vacancy.city}
+                </CCardText>
+              </CCol>
+              <CCol className='d-sm-flex justify-content-sm-center'>
+                <CButton className='w-50'
+                         color='dark'
+                         shape='rounded-pill'
+                         variant='outline'
+                         onClick={getJobDetails}>Edit Job Position</CButton>
+              </CCol>
+            </CRow>
+
+            <CRow className='mb-3'>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardText className='mb-2'>
+                  <CIcon className='me-3' icon={cilBriefcase}/>
+                  {vacancy.employmentType}
+                </CCardText>
+              </CCol>
+              <CCol className='d-sm-flex justify-content-sm-center'>
+                <CButton className='w-50'
+                         color='dark'
+                         shape='rounded-pill'
+                         variant='outline'
+                         onClick={() => setDeleteVisible(true)}>Delete Job Position</CButton>
+              </CCol>
+            </CRow>
+
+            <CRow className='mb-3'>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardText className='mb-2'>
+                  {setWorkTypeIcon()}
+                  {vacancy.workType}
+                </CCardText>
+              </CCol>
+            </CRow>
+
+            <CRow>
+              <CCol className='position-relative'
+                    style={{left: '10%'}}>
+                <CCardText>
+                  <CIcon className='me-3' icon={cilCalendarEvent}/>
+                  {formatDate(vacancy.expectedStartDate)}
+                </CCardText>
+              </CCol>
+            </CRow>
+          </CCardBody>
+        </CCard>
+        
+        <CModal alignment='center'
+                backdrop='static'
+                visible={deleteVisible}>
+          <CModalBody>Are you sure you want to delete this job position?</CModalBody>
+          <CModalFooter>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={() => setDeleteVisible(false)}>Close</CButton>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={deleteJobPosition}>Confirm</CButton>
+          </CModalFooter>
+        </CModal>
+
+        <CModal alignment='center'
+                backdrop='static'
+                visible={editVisible}>
+          <CModalBody><JobForm/></CModalBody>
+          <CModalFooter>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={() => setEditVisible(false)}>Close</CButton>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={editJobPosition}>Confirm</CButton>
+          </CModalFooter>
+        </CModal>
         </div>
     </div>
   );
