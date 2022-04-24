@@ -28,7 +28,7 @@ const VacancyPage = ({vacancy}) => {
 
   return (
     <>
-      <div>
+      <div className="page-background">
         <Navbar/>
         <div className='profile-card'
              style={{display: 'flex', justifyContent: 'space-evenly'}}>
