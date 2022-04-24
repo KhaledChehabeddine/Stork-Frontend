@@ -27,17 +27,9 @@ const ManagerForm = () => {
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValid(true);
-  }
-
   const onSubmit = (event) => {
     event.preventDefault();
+    setValid(true);
     if (!countryPhone) return;
     if (!emailRegex.test(email)) return;
     if (!gender) return;
@@ -57,11 +49,12 @@ const ManagerForm = () => {
   return (
     <div className="page-background">
       <NavBar/>
+      <h1 className='form-title'>Hiring Manager Form</h1>
+
       <CForm className='form row g-3 needs-validation'
              noValidate
              style={formStyle}
-             validated={valid}
-             onSubmit={handleSubmit}>
+             validated={valid}>
 
         <CHeader>
           <h1 className='form-title'>Hiring Manager Form</h1>

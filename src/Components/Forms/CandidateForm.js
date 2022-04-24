@@ -105,17 +105,9 @@ const CandidateForm = () => {
       }
   }, [location.state]);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    dispatch({type: 'set-valid'});
-  }
-
   const handleClick = useCallback( (event) => {
     event.preventDefault();
+    dispatch({ type: 'set-valid' });
     if (!state.country) return;
     if (!state.countryPhone) return;
     if (!emailRegex.test(state.email)) return;
@@ -143,8 +135,7 @@ const CandidateForm = () => {
              encType='multipart/form-data'
              noValidate
              style={formStyle}
-             validated={state.valid}
-             onSubmit={handleSubmit}>
+             validated={state.valid}>
         <CHeader>
           <h1 className='form-title'>Candidate Form</h1>
         </CHeader>

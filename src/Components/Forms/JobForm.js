@@ -29,17 +29,9 @@ const JobForm = () => {
   const [visible, setVisible] = useState(false);
   const [workType, setWorkType] = useState(null);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValid(true);
-  }
-
   const handleClick = useCallback((event) => {
     event.preventDefault();
+    setValid(true);
     if (!city) return;
     if (!country) return;
     if (!employmentType) return;
@@ -53,11 +45,11 @@ const JobForm = () => {
   return (
     <div className="page-background">
       <NavBar/>
+
       <CForm className='form row g-3 needs-validation'
              noValidate
              style={formStyle}
-             validated={valid}
-             onSubmit={handleSubmit}>
+             validated={valid}>
 
         <CHeader>
           <h1 className='form-title'>Job Position Form</h1>

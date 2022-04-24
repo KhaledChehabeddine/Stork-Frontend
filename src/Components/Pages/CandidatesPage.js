@@ -62,19 +62,20 @@ const rSortByPhone = candidates => candidates.sort((a, b) => {
   return phoneB - phoneA;
 })
 
+const interviewRegex = new RegExp('interview #[1-9][0-9]* scheduled');
+
 const statusReducer = status => {
+  if (interviewRegex.test(status.toLowerCase())) return 2;
   switch (status.toLowerCase()) {
     case 'pending':
       return 1;
-    case 'first interview scheduled':
-      return 2;
     case 'second interview scheduled':
       return 3;
     case 'offer sent':
       return 4;
-    case 'offer accepted':
+    case 'accepted':
       return 5;
-    case 'offer rejected':
+    case 'rejected':
       return 6;
     default:
       return 100;
@@ -136,7 +137,7 @@ const CandidateCardWrapper = () => {
       .then(response => {
         dispatch({ type: 'page-loaded', candidates: response.data, filteredCandidates: response.data });
       }).catch(error => {console.log(error)});
-  }, []);
+  }, [state.candidates]);
 
   return (
     <>

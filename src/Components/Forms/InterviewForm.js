@@ -132,13 +132,13 @@ const InterviewForm = () => {
     <div>
       <NavBar/>
       <div className="page-background">
+        <h1 className='form-title'>Interview Form</h1>
         {state.pageLoaded ?
           <div>
             <CForm className='form row g-3 needs-validation'
                    noValidate
                    style={formStyle}
-                   validated={state.valid}
-                   onSubmit={handleSubmit}>
+                   validated={state.valid}>
 
               <CHeader>
                 <h1 className='form-title'>Interview Form</h1>
