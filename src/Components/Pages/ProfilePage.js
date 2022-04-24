@@ -79,6 +79,20 @@ const ProfilePage = ({candidate}) => {
     }).catch(error => console.log(error));
   }, [candidate.id]);
 
+  const interviewButton = () => {
+    return <button className='action-button' onClick={scheduleInterview}>Schedule Interview</button>
+  }
+
+  const getActionButtons = (candidate) => {
+    let status = (candidate.status).toLowerCase();
+    if (status.includes("pending")) return "pending-row";
+    else if (status.includes("interview")) return "interview-row";
+    else if (status.includes("sent")) return "offer-row";
+    else if (status.includes("accepted")) return "accepted-row";
+    else if (status.includes("rejected")) return "rejected-row";
+    else return "default-row"
+  }
+
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
   }
@@ -189,8 +203,7 @@ const ProfilePage = ({candidate}) => {
                 style={{paddingTop: '2%'}}>Actions</h1>
             <button className='action-button'
                     onClick={() => downloadResume()}>View Resume</button>
-            <button className='action-button'
-                    onClick={scheduleInterview}>Schedule Interview</button>
+            {interviewButton()}
             <button className='action-button'
                     onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
             <button className='action-button'
