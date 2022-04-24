@@ -15,6 +15,7 @@ import {formStyle} from '../Utils/Styles';
 import {useLocation, useNavigate} from 'react-router-dom';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
+import {useData} from "../../Context/Use";
 
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const nameRegex = new RegExp('^[A-Za-z][A-Za-z ]{1,25}$');
@@ -80,20 +81,17 @@ const reducer = (state, action) => {
 };
 
 const CandidateForm = () => {
+  const { values: { candidates, jobPositions, managers }, actions: { setCandidates } } = useData();
   const location = useLocation();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getApiClient().getAllVacancies().then(job_positions =>
-      getApiClient().getAllManagers().then(managers =>
-        dispatch({
-          type: 'load-page',
-          jobPositions: job_positions.data,
-          managers: managers.data
-        })
-      ).catch(error => console.log(error))
-    ).catch(error => console.log(error));
+    dispatch({
+      type: 'load-page',
+      jobPositions: jobPositions,
+      managers: managers
+    })
     if (location.state)
       if (location.state.jobPosition) {
         dispatch({type: 'set-job-position-id', jobPositionId: location.state.jobPosition.id});
@@ -103,7 +101,7 @@ const CandidateForm = () => {
         });
         dispatch({type: 'set-redirected'});
       }
-  }, [location.state]);
+  }, [jobPositions, location.state, managers]);
 
   const handleClick = useCallback( (event) => {
     event.preventDefault();
@@ -124,6 +122,8 @@ const CandidateForm = () => {
         dispatch({type: 'set-candidate', candidate: response.data});
         getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
         getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
+        candidates.push(response.data);
+        setCandidates(candidates);
       }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});
   }, [state]);
@@ -308,8 +308,9 @@ const CandidateForm = () => {
                    onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
           <CButton color='info'
                    onClick={() => {
-                     dispatch({type: 'set-visible', visible: false})
+                     dispatch({type: 'set-visible', visible: false});
                      navigate('/interview/add', {state: {candidate: state.candidate}});
+                     window.location.reload();
                    }}>Schedule Interview</CButton>
         </CModalFooter>
       </CModal>

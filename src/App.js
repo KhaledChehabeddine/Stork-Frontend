@@ -1,5 +1,5 @@
 import './App.css';
-import Provider from "./Context/provider";
+import Provider from "./Context/Provider";
 import Routing from "./Routing";
 
 const App = () => {

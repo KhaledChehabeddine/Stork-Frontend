@@ -18,11 +18,11 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {getHashCode} from "./Components/Utils/utils";
 import {useCallback, useEffect, useState} from "react";
 import './App.css';
-import Provider from "./Context/provider";
-import {useData} from "./Context/use";
+import Provider from "./Context/Provider";
+import {useData} from "./Context/Use";
 
 const Routing = () => {
-  const { values: { jobPositions, candidates }, actions: { setJobPositions, setCandidates } } = useData();
+  const { values: { jobPositions, candidates } } = useData();
 
   const isLoggedIn = useCallback(() => {
     return window.localStorage.getItem('email');
@@ -31,7 +31,7 @@ const Routing = () => {
   return (
     <Router>
       <Routes>
-        <Route element={ <NavigateToAfter time={2} path='/login' /> } exact path='*' />
+        <Route element={ <NavigateToAfter time={2} path={isLoggedIn() ? '/404' : '/login'} /> } exact path='*' />
         <Route element={ <LandingPage /> } exact path='/' />
         <Route element={ <PageNotAvailable /> } exact path='/404' />
         <Route element={ <LoginForm /> } exact path='/login' />

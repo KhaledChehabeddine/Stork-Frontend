@@ -16,25 +16,9 @@ import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-import Calendar from '../Calendar/1';
+// import Calendar from '../Calendar/1';
 import '../../Styles/FormStyle.css';
-
-const initialState = {
-  candidate: {firstName: '', lastName: ''},
-  candidateId: null,
-  candidates: [],
-  date_time: null,
-  description: "",
-  jobPositionId: null,
-  jobPositions: [],
-  jobTitle: '',
-  managerId: null,
-  managers: [],
-  pageLoaded: false,
-  redirected: false,
-  valid: false,
-  visible: false
-}
+import {useData} from "../../Context/Use";
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -69,23 +53,33 @@ const reducer = (state, action) => {
 };
 
 const InterviewForm = () => {
+  const { values: { jobPositions, candidates, managers } } = useData();
   const location = useLocation();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, {
+    candidate: {firstName: '', lastName: ''},
+    candidateId: null,
+    candidates: [],
+    date_time: null,
+    description: "",
+    jobPositionId: null,
+    jobPositions: [],
+    jobTitle: '',
+    managerId: null,
+    managers: [],
+    pageLoaded: false,
+    redirected: false,
+    valid: false,
+    visible: false
+  });
 
   useEffect(() => {
-    getApiClient().getAllCandidates().then(candidates =>
-      getApiClient().getAllVacancies().then(job_positions =>
-        getApiClient().getAllManagers().then(managers =>
-          dispatch({
-            type: 'load-page',
-            candidates: candidates.data,
-            jobPositions: job_positions.data,
-            managers: managers.data
-          })
-        ).catch(error => console.log(error))
-      ).catch(error => console.log(error))
-    ).catch(error => console.log(error));
+    dispatch({
+      type: 'load-page',
+      candidates: candidates,
+      jobPositions: jobPositions,
+      managers: managers
+    })
     if (location.state)
       if (location.state.candidate) {
         dispatch({type: 'set-candidate', candidate: location.state.candidate});
@@ -99,19 +93,11 @@ const InterviewForm = () => {
           })
         ).catch(error => console.log(error));
       }
-  }, [location]);
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    dispatch({type: 'set-valid'});
-  };
+  }, [candidates, jobPositions, location, managers]);
 
   const handleClick = useCallback((event) => {
     event.preventDefault();
+    dispatch({ type: 'set-valid' });
     if (!state.candidateId) return;
     if (!state.date_time) return;
     if (!state.jobPositionId) return;
@@ -119,14 +105,14 @@ const InterviewForm = () => {
     getApiClient().getCandidate(state.candidateId).then(response =>
       dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
     getApiClient().addInterview(state.candidateId, state.date_time, state.description,
-                                state.jobPositionId, state.managerId).then(() => {
-      getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
-        console.log(response.data);
-        getApiClient().addAction(`Interview #${response.data} scheduled`, state.candidateId)
-          .catch(error => console.log(error));
-        getApiClient().updateStatus(state.candidate,
-          `Interview #${response.data} scheduled`).catch(error => console.log(error));
-      }).catch(error => console.log(error));
+                                state.jobPositionId, state.managerId)
+      .then(() => {
+        getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
+          getApiClient().addAction(`Interview #${response.data} scheduled`, state.candidateId)
+            .catch(error => console.log(error));
+          getApiClient().updateStatus(state.candidate,
+            `Interview #${response.data} scheduled`).catch(error => console.log(error));
+        }).catch(error => console.log(error));
     }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});
   }, [state]);
@@ -140,14 +126,10 @@ const InterviewForm = () => {
                    noValidate
                    style={formStyle}
                    validated={state.valid}>
-
               <CHeader>
                 <h1 className='form-title'>Interview Form</h1>
               </CHeader>
-
-              <CCol className='position-relative'
-                    md={6}
-                    style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
                 <CFormLabel>Candidate</CFormLabel>
                 {state.redirected ?
                   <CFormInput defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
@@ -166,9 +148,7 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative'
-                    md={6}
-                    style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
                 <CFormLabel>Job Position</CFormLabel>
                 {state.redirected ?
                   <CFormInput defaultValue={state.jobTitle}
@@ -188,9 +168,7 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative'
-                    md={6}
-                    style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
                 <CFormLabel>Hiring Manager</CFormLabel>
                 <CFormSelect defaultValue=''
                              required
@@ -204,9 +182,7 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative'
-                    md={6}
-                    style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
                 <CFormLabel>Date and time</CFormLabel>
                 <CFormInput required
                             type='datetime-local'
@@ -216,22 +192,17 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid date or time selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative'
-                    md={12}
-                    style={{marginBottom: '0.7rem'}}>
+              <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
                 <CFormLabel>Description</CFormLabel>
                 <CFormTextarea rows='5'
                                type='text'
                                onChange={(event) => dispatch(
-                                 {type: 'set-description', description: event.target.value}
-                               )}/>
+                                 {type: 'set-description', description: event.target.value})}/>
               </CCol>
 
               <CCol>
                 <center>
-                  <button className="form-button"
-                          type='submit'
-                          onClick={handleClick}>Submit</button>
+                  <button className="form-button" type='submit' onClick={handleClick}>Submit</button>
                 </center>
               </CCol>
             </CForm>
@@ -248,8 +219,9 @@ const InterviewForm = () => {
                          onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
                 <CButton color='info'
                          onClick={() => {
-                           dispatch({type: 'set-visible', visible: false})
+                           dispatch({type: 'set-visible', visible: false});
                            navigate(`/candidate/${getHashCode(state.candidateId)}`);
+                           window.location.reload();
                          }}>View Candidate</CButton>
               </CModalFooter>
             </CModal>

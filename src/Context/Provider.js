@@ -1,8 +1,6 @@
 import {useEffect, useState} from 'react';
-import { Data } from './context';
+import { Data } from './Context';
 import getApiClient from "../api_client/getApiClient";
-import App from "../App";
-import Routing from "../Routing";
 
 const Provider = ({ children }) => {
   const [jobPositions, setJobPositions] = useState([]);
@@ -35,7 +33,6 @@ const Provider = ({ children }) => {
           setInterviews(response.data);
         }
       }).catch(error => console.log(error));
-    console.log(candidates);
   }, []);
 
   const value = {

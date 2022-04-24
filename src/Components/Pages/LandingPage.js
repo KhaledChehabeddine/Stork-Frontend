@@ -5,7 +5,7 @@ import Jumbotron from "../Utils/Jumbotron";
 
 const LandingPage = (props) => {
   const isLoggedIn = useCallback(() => {
-    if (window.localStorage.getItem('username')) return true; else return false;
+    if (window.localStorage.getItem('email')) return true; else return false;
   }, []);
   return (
     <>

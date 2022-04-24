@@ -7,6 +7,7 @@ import CIcon from "@coreui/icons-react";
 import {cilPeople, cilSearch, cilArrowBottom, cilArrowTop} from "@coreui/icons";
 import CandidateRow from "../Tables/CandidateRow";
 import Input from "../Utils/Input";
+import {useData} from "../../Context/Use";
 
 const filterCandidates = (candidates, input) => {
   let filter, value, i, name, filteredCandidates = [];
@@ -122,9 +123,9 @@ const reducer = (state, action) => {
 }
 
 const CandidateCardWrapper = () => {
+  const { values: { candidates } } = useData();
   const [state, dispatch] = useReducer(reducer, {
     pageLoaded: false,
-    candidates: [],
     filteredCandidates: [],
     nameSortReverse: false,
     emailSortReverse: false,
@@ -133,11 +134,9 @@ const CandidateCardWrapper = () => {
     statusSortReverse: false
   });
   useEffect(() => {
-    getApiClient().getAllCandidates()
-      .then(response => {
-        dispatch({ type: 'page-loaded', candidates: response.data, filteredCandidates: response.data });
-      }).catch(error => {console.log(error)});
-  }, [state.candidates]);
+    if (candidates)
+      dispatch({ type: 'page-loaded', candidates: candidates, filteredCandidates: candidates });
+  }, [candidates]);
 
   return (
     <>
