@@ -25,16 +25,17 @@ const UpcomingEvents = () => {
   const [candidates, setCandidates] = useState({});
 
   useEffect(()=> {
-    getApiClient().getAllInterviews()
+    getApiClient().getAllVacancies()
       .then(response => {
-        const tempEvents = response.data.slice();
-        tempEvents.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
-        const today = new Date();
-        today.setHours(0);
-        today.setMinutes(0);
-        today.setSeconds(0);
-        setEvents(tempEvents.filter((element) => new Date(element.dateTime).getTime() >= today.getTime()));
+        // const tempEvents = response.data.slice();
+        // tempEvents.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+        // const today = new Date();
+        // today.setHours(0);
+        // today.setMinutes(0);
+        // today.setSeconds(0);
+        //setEvents(tempEvents.filter((element) => new Date(element.dateTime).getTime() >= today.getTime()));
         setLoaded(true);
+        setEvents(response.data);
       })
       .catch(error => {
         setErrorMessage(error.message);
@@ -56,14 +57,14 @@ const UpcomingEvents = () => {
   return (
     <div className='upcoming-events-container'>
       <h2>
-        Upcoming Events
+        Latest Updates
       </h2>
       <CTable striped hover bordered>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope='col' colSpan='1'>Title</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Job Postition</CTableHeaderCell>
             <CTableHeaderCell scope='col' colSpan='1'>Candidate</CTableHeaderCell>
-            <CTableHeaderCell scope='col' colSpan='1'>Date</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Status</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -77,24 +78,26 @@ const UpcomingEvents = () => {
             </CTableRow>
           }
           {
-            (showingMore ? events : events.slice(0, 10)).map(element => (
+            (showingMore ? events : events.slice(0, 3)).map(element => (
               <CTableRow key={element.id}>
-                <CTableDataCell>{element.description}</CTableDataCell>
+                <CTableDataCell>{element.jobTitle}</CTableDataCell>
                 <CTableDataCell>
-                  {candidates[element.candidateId]
-                    ?
+                  {candidates[element.candidateId] ?
                     candidates[element.candidateId].firstName + ' ' + candidates[element.candidateId].lastName
                     :
                     ''
                   }
                 </CTableDataCell>
-                <CTableDataCell>{formatDateTime(element.dateTime)}</CTableDataCell>
+                <CTableDataCell>
+                  {candidates[element.candidateId] ?
+                    candidates[element.candidateId].status : ''}
+                </CTableDataCell>
               </CTableRow>
             ))
           }
-          {!showingMore && events.length > 10 && // conditional rendering
+          {!showingMore && events.length > 3 && // conditional rendering
             <CTableRow>
-              <CTableDataCell colSpan='3'>
+              <CTableDataCell colSpan='4'>
                 <div onClick={() => setShowingMore(true)} className='view-more-button'>
                   View more
                 </div>

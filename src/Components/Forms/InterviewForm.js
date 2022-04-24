@@ -16,6 +16,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
+import Calendar from '../Calendar/1';
 import '../../Styles/FormStyle.css';
 
 const initialState = {
@@ -44,6 +45,8 @@ const reducer = (state, action) => {
       return {...state, candidate: action.candidate};
     case 'set-candidate-id':
       return {...state, candidateId: action.candidateId};
+    case 'set-vacancy-id':
+      return {...state, vacancyId: action.vacancyId};
     case 'set-date-time':
       return {...state, date_time: action.date_time};
     case 'set-description':

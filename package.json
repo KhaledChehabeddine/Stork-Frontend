@@ -11,6 +11,7 @@
     "@coreui/react": "^4.1.2",
     "@coreui/react-pro": "^4.2.0-rc.0",
     "@emailjs/browser": "^3.6.2",
+    "@syncfusion/ej2-react-schedule": "^20.1.50",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
