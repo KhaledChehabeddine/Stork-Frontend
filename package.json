@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@coreui/coreui": "^4.1.0",
+    "@coreui/coreui-pro": "^4.2.0-rc.0",
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-pro": "^2.0.3",
     "@coreui/icons-react": "^2.0.1",
     "@coreui/react": "^4.1.2",
+    "@coreui/react-pro": "^4.2.0-rc.0",
     "@emailjs/browser": "^3.6.2",
     "@syncfusion/ej2-react-schedule": "^20.1.50",
     "@testing-library/jest-dom": "^5.16.1",

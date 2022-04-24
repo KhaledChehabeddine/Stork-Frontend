@@ -1,54 +1,71 @@
 @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-.profile-card {
-    position: relative;
-    margin-top: 5%;
-    margin-left: 10%;
-    width: 35%;
-    height: 70%;
-    border-radius: 62px;
-    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
-    box-shadow:  31px 31px 50px #868686,
-    -31px -31px 50px #ffffff;
+.back-icon-container {
+    float: left;
+    margin-top: 3%;
+    margin-left: 4%;
+    width: 25px;
+    height: 25px;
+    border: 0;
+    background-color: transparent;
 }
 
-.buttons-table {
+.back-icon {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.profile-card {
+    background-color: white;
     position: relative;
-    margin-top: 5%;
-    margin-right: 10%;
-    margin-left: 10%;
-    width: 35%;
-    height: 70%;
     border-radius: 62px;
-    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
-    box-shadow:  31px 31px 50px #868686,
-    -31px -31px 50px #ffffff;
+    margin: 5% 10%;
+    padding-bottom: 5%;
+    padding-top: 5%;
+    box-shadow:  20px 20px 53px #d0d0d0,
+    -20px -20px 53px #f0f0f0;
+}
+
+.profile-info {
+    font-size: 1.25vw;
+    float: left;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .button-container {
-    padding-top: 5%;
+    font-size: 1.25vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    text-align: center;
 }
 
 .action-button {
-    font-family: 'Josefin Sans', sans-serif;
-    width: 60% !important;
-    line-height: 250%;
+    width: 80%;
+    height: 40px;
     margin-bottom: 5%;
+    text-align: center;
+    border: 2px solid grey;
+    border-radius:40px;
+    background: transparent;
     text-transform: uppercase;
-    color: black;
-    background-color: transparent;
-    border: 1px solid black!important;
-    border-radius: 50px;
-    box-sizing: border-box;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    letter-spacing:1px;
+    cursor: pointer;
+    transition: all 0.25s ease;
 }
+
+.action-button:hover {
+    border: 0;
+    color: white;
+    background: rgba(0,0,0,0.66);
+}
+
 .profile-field {
-    padding-left: 10%;
     display: flex;
-    padding-bottom: 2%;
 }
 
 .card-text {
@@ -67,11 +84,17 @@
     font-weight: bolder;
     font-size: 150%;
     text-transform: uppercase;
-    text-align: center;
-    padding-top: 5%;
-    padding-bottom: 5%;
+    padding-bottom: 2%;
 }
 
+.feedback-title {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 150%;
+    text-transform: uppercase;
+    text-align: center;
+}
 .view-resume-container {
     padding-top: 5%;
     display: flex;
@@ -81,7 +104,7 @@
 
 .view-resume {
     font-family: 'Josefin Sans', sans-serif;
-    width: 35%;
+    width: 100%;
     line-height: 250%;
     text-transform: uppercase;
     color: black;
@@ -92,69 +115,32 @@
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.actions-table {
-    margin-left: 10%;
-    width: 80%;
-    border-radius: 62px;
-    background: linear-gradient(145deg, #e3e3e3, #f0f0f0);
-    box-shadow:  31px 31px 50px #868686,
-    -31px -31px 50px #ffffff;
-}
-.actions-table-rows {
-    background-color: white !important;
-}
-.profile-wave-top {
-    border-top-left-radius: 62px;
-    border-top-right-radius: 62px;
+.feedback-notes {
+    margin: auto;
+    width: 90%;
 }
 
-.profile-wave-bottom {
-    transform: rotate(180deg) scaleX(-1);
-    border-top-left-radius: 62px;
-    border-top-right-radius: 62px;
-    position: absolute;
-    bottom: 0;
+.aboutus-photo {
+    border-radius: 100px;
+    width: 15%;
+    height: 15%;
 }
 
-.wave {
-    width: 100%;
-    animation: wave 8s linear infinite;
+.profile-name {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 150%;
+    text-transform: uppercase;
+    padding-bottom: 2%;
 }
 
-.wave1 {
-    animation: wave1 10s linear infinite;
-}
-
-.wave2 {
-    animation: wave2 12s linear infinite;
-}
-
-@keyframes wave {
-    0 % {
-        transform: translateX(50%);
-    }
-
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-@keyframes wave1 {
-    0 % {
-        transform: scaleY(2.8) translateX(0%);
-    }
-
-    100% {
-        transform: scaleY(1.0) translateX(100%);
-    }
-}
-
-@keyframes wave2 {
-    0 % {
-        transform: scaleY(2.5) translateX(0%);
-    }
-
-    100% {
-        transform: scaleY(1.4) translateX(100%);
-    }
+.role-name {
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    color: grey;
+    font-weight: bolder;
+    font-size: 100%;
+    text-transform: uppercase;
+    padding-bottom: 2%;
 }

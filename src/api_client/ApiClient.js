@@ -28,12 +28,6 @@ class ApiClient extends ApiClientBase {
     }
   }
 
-  deleteEmployee(id) {
-    const data = new FormData();
-    data.append('id', id);
-    return this.Post('/employee/delete', data);
-  }
-
   getAllCandidates() {
     return this.Get('/candidate/all');
   }
@@ -44,7 +38,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, managerId, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -53,9 +47,31 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.phone = '+' + countryPhone + phone;
     data.jobPositionId = jobPositionId;
+    data.managerId = managerId;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
+  }
+
+  getAllManagers() {
+    return this.Get('/manager/all');
+  }
+
+  addManager(firstName, lastName, gender, countryPhone, phone, email) {
+    const data = {};
+    data.firstName = firstName;
+    data.lastName = lastName;
+    data.gender = gender;
+    data.countryPhone = countryPhone
+    data.phone = phone;
+    data.email = email;
+    return this.Post('/manager/add', data);
+  }
+
+  deleteManager(id) {
+    const data = new FormData();
+    data.append('id', id);
+    return this.Post('/manager/delete', data);
   }
 
   addResume(id, resume) {
@@ -77,18 +93,20 @@ class ApiClient extends ApiClientBase {
     return this.Post('/candidate/delete', data);
   }
 
-  addInterview(candidateId, vacancyId, dateTime, description) {
+  addInterview(candidateId, dateTime, description, jobPositionId, managerId) {
     const data = {};
     data.candidateId = candidateId;
-    data.vacancyId = vacancyId;
     data.dateTime = dateTime;
     data.description = description;
+    data.jobPositionId = jobPositionId;
+    data.managerId = managerId;
     return this.Post('/interview/add', data);
   }
 
-  addVacancy(jobTitle, country, city, workType, employmentType, notes) {
+  addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes) {
     const data = {};
     data.jobTitle = jobTitle;
+    data.expectedStartDate = startDate;
     data.country = country;
     data.city = city;
     data.workType = workType;

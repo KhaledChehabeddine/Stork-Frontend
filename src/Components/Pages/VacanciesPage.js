@@ -33,6 +33,10 @@ const sortByCity = vacancies => vacancies.sort((a, b) => {
   return a.city.localeCompare(b.city);
 })
 
+const sortByDate = vacancies => vacancies.sort((a, b) => {
+  return a.id - b.id;
+})
+
 const rSortByTitle = vacancies => vacancies.sort((a, b) => {
   return b.jobTitle.localeCompare(a.jobTitle);
 })
@@ -43,6 +47,10 @@ const rSortByCountry = vacancies => vacancies.sort((a, b) => {
 
 const rSortByCity = vacancies => vacancies.sort((a, b) => {
   return b.city.localeCompare(a.city);
+})
+
+const rSortByDate = vacancies => vacancies.sort((a, b) => {
+  return b.id - a.id;
 })
 
 const reducer = (state, action) => {
@@ -57,18 +65,22 @@ const reducer = (state, action) => {
       return { ...state, filteredPositions: sortByCountry(state.vacancies) };
     case 'sort-by-city':
       return { ...state, filteredPositions: sortByCity(state.vacancies) };
+    case 'sort-by-date':
+      return { ...state, filteredPositions: sortByDate(state.vacancies) };
     case 'reverse-sort-by-title':
       return { ...state, filteredPositions: rSortByTitle(state.vacancies) };
     case 'reverse-sort-by-country':
       return { ...state, filteredPositions: rSortByCountry(state.vacancies) };
     case 'reverse-sort-by-city':
       return { ...state, filteredPositions: rSortByCity(state.vacancies) };
+    case 'reverse-sort-by-date':
+      return { ...state, filteredPositions: rSortByDate(state.vacancies) };
     default:
       return { ...state }
   }
 }
 
-const VacanciesPage = (props) => {
+const VacanciesPage = () => {
   const [state, dispatch] = useReducer(reducer, {
     vacanciesLoaded: false,
     vacancies: [],
@@ -79,21 +91,22 @@ const VacanciesPage = (props) => {
       .then(response => {
         dispatch({ type: 'vacancies-loaded', vacancies: response.data, filteredPositions: response.data });
       }).catch(error => console.log(error));
-  }, []);
+  }, [state.vacancies]);
   return (
     <>
-      <NavBar />
-      {state.vacanciesLoaded
-        ?
+      <div className="page-background">
+        <NavBar />
+        {state.vacanciesLoaded
+          ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
-            <CTable align="middle" className="mb-0" hover responsive>
-              <CTableHead color="light">
+            <CTable style={{width: "100%"}} align="middle" className="mb-0 table" hover responsive>
+              <CTableHead style={{backgroundColor: "transparent"}}>
                 <CTableRow className="header-row">
-                  <CTableHeaderCell className="text-center header-cell">
-                    <CIcon icon={cilBriefcase}/>
+                  <CTableHeaderCell className="text-center icon-cell">
+                    <CIcon className="header-container" icon={cilBriefcase}/>
                   </CTableHeaderCell>
                   <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                    <div className="header-container" style={{display:"flex",  alignItems:"center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-title', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -103,8 +116,8 @@ const VacanciesPage = (props) => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-country', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -114,8 +127,8 @@ const VacanciesPage = (props) => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
                       <button onClick={event => dispatch({type: 'sort-by-city', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
                         <CIcon className="sort-icon" icon={cilArrowTop}/>
                       </button>
@@ -125,12 +138,23 @@ const VacanciesPage = (props) => {
                       </button>
                     </div>
                   </CTableHeaderCell>
-                  <CTableHeaderCell className="header-cell">
-                    <div style={{display:"flex",  alignItems:"center", float:"right"}}>
+                  <CTableHeaderCell className="text-center header-cell">
+                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
+                      <button onClick={event => dispatch({type: 'sort-by-date', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-top">
+                        <CIcon className="sort-icon" icon={cilArrowTop}/>
+                      </button>
+                      Date Posted
+                      <button onClick={event => dispatch({type: 'reverse-sort-by-date', vacancies: (filterPositions(state.vacancies, event.target))})} className="sort-button-bottom">
+                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
+                      </button>
+                    </div>
+                  </CTableHeaderCell>
+                  <CTableHeaderCell className="text-center search-cell">
+                    <div style={{display:"flex",  alignItems:"center"}}>
                       <CIcon className="search-icon" icon={cilSearch} />
                       <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
                         dispatch({type: 'set-positions', vacancies: (filterPositions(state.vacancies, event.target))})
-                      } placeholder="Search For Positions"/>
+                      } placeholder="Search For Positions.."/>
                     </div>
                   </CTableHeaderCell>
                 </CTableRow>
@@ -140,7 +164,8 @@ const VacanciesPage = (props) => {
               </CTableBody>
             </CTable>
           </div>
-        : <Spinner />}
+          : <Spinner />}
+      </div>
     </>
   );
 };

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import CIcon from "@coreui/icons-react";
 import {cilHamburgerMenu} from "@coreui/icons";
 import {useNavigate} from "react-router";
+import DropdownItem from "react-bootstrap/DropdownItem";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ const NavBar = () => {
                 <CIcon className="hamburger-icon" icon={cilHamburgerMenu}/>
               </Dropdown.Toggle>
               <Dropdown.Menu>
+                <DropdownItem onClick={() => navigate("/aboutus")}>About Us</DropdownItem>
+                <Dropdown.Divider />
                 <Dropdown.Item onClick={signOutHandler}>Sign Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

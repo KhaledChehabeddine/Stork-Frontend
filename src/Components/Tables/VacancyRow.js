@@ -2,28 +2,41 @@ import React, {useCallback, useState} from 'react';
 import {CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTableDataCell, CTableRow} from "@coreui/react";
 import '../../Styles/Table.css'
 import CIcon from "@coreui/icons-react";
-import {cilTrash} from "@coreui/icons";
+import {cilArrowCircleRight, cilTrash, cilUserFollow} from "@coreui/icons";
 import getApiClient from "../../api_client/getApiClient";
+import {formatDate, getHashCode} from "../Utils/utils";
+import {useNavigate} from "react-router-dom";
 
-const VacancyRow = ({ vacancy, vacancies}) => {
+const VacancyRow = ({vacancy, vacancies}) => {
+  const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
+
+  const addCandidateForJobPosition = useCallback(() => {
+    navigate('/candidate/add', {state: {jobPosition: vacancy}});
+  }, [navigate, vacancy]);
 
   const deleteJobPosition = useCallback(() => {
     getApiClient().deleteVacancy(vacancy.id);
     setVisible(false);
-    window.location.reload(false);
+    window.location.reload();
   }, [vacancy]);
 
   return (
-    <CTableRow className="table-row" v-for="item in tableItems">
-      <CTableDataCell className="text-center">
-        {vacancies.indexOf(vacancy)+1}
-      </CTableDataCell>
+    <CTableRow style={{backgroundColor:"white"}} className="table-row" v-for="item in tableItems">
+      <CTableDataCell className="text-center">{vacancies.indexOf(vacancy)+1}</CTableDataCell>
       <CTableDataCell>{vacancy.jobTitle}</CTableDataCell>
-      <CTableDataCell>{vacancy.country}</CTableDataCell>
-      <CTableDataCell>{vacancy.city}</CTableDataCell>
-      <CTableDataCell>
-        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, width: "10%", height: "10%", marginRight: "20%", float: "right"}}>
+      <CTableDataCell className="text-center">{vacancy.country}</CTableDataCell>
+      <CTableDataCell className="text-center">{vacancy.city}</CTableDataCell>
+      <CTableDataCell className="text-center">{formatDate(vacancy.datePosted)}</CTableDataCell>
+      <CTableDataCell className="text-center">
+        <button className="view-button" style={{margin:0, padding: "10px"}}
+                onClick={() => navigate(`/job/${getHashCode(vacancy.id)}`)}>
+          <CIcon className="view-icon" icon={cilArrowCircleRight}/>
+        </button>
+        <button onClick={addCandidateForJobPosition} className="view-button" style={{margin:0, padding: "10px"}}>
+          <CIcon className="view-icon" icon={cilUserFollow}/>
+        </button>
+        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>
           <CIcon className="view-icon" icon={cilTrash}/>
         </button>
       </CTableDataCell>
@@ -36,7 +49,7 @@ const VacancyRow = ({ vacancy, vacancies}) => {
         </CModalHeader>
         <CModalBody>Are you sure you want to delete this job position?</CModalBody>
         <CModalFooter>
-          <button className="confirm-button" onClick={deleteJobPosition}>Confirm</button>
+          <button className="form-button" onClick={deleteJobPosition}>Confirm</button>
         </CModalFooter>
       </CModal>
     </CTableRow>
