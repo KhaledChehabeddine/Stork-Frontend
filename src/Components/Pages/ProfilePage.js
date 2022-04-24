@@ -95,10 +95,10 @@ const ProfilePage = ({candidate}) => {
     return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
   }
 
-  const getActionButtons = (candidate) => {
+  const getActionButtons = () => {
     let status = (candidate.status).toLowerCase();
-    if (status.includes("pending") || status.includes("interview")) return <div>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
-    else if (status.includes("sent")) return <div>{acceptButton()}</div>;
+    if (status.includes("pending") || status.includes("interview")) return <div style={{textAlign: "center"}}>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
+    else if (status.includes("sent")) return <div style={{textAlign: "center"}}>{acceptButton()}</div>;
     else if (status.includes("accepted")) return null;
     else if (status.includes("rejected")) return null;
     else return null
