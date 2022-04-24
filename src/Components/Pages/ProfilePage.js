@@ -71,13 +71,38 @@ const ProfilePage = ({candidate}) => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
-  }, [candidate.jobPositionId]);
+  }, [candidate]);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
       dispatch({ type: 'set-actions', actions: response.data });
     }).catch(error => console.log(error));
   }, [candidate.id]);
+
+  const interviewButton = () => {
+    return <button className='action-button' onClick={scheduleInterview}>Schedule Interview</button>
+  }
+
+  const offerButton = () => {
+    return <button className='action-button' onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
+  }
+
+  const rejectButton = () => {
+    return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
+  }
+
+  const acceptButton = () => {
+    return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
+  }
+
+  const getActionButtons = (candidate) => {
+    let status = (candidate.status).toLowerCase();
+    if (status.includes("pending") || status.includes("interview")) return <div>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
+    else if (status.includes("sent")) return <div>{acceptButton()}</div>;
+    else if (status.includes("accepted")) return null;
+    else if (status.includes("rejected")) return null;
+    else return null
+  }
 
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
@@ -117,7 +142,7 @@ const ProfilePage = ({candidate}) => {
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-  }, [candidate, state.jobPosition.jobTitle]);
+  }, [candidate]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
@@ -189,14 +214,7 @@ const ProfilePage = ({candidate}) => {
                 style={{paddingTop: '2%'}}>Actions</h1>
             <button className='action-button'
                     onClick={() => downloadResume()}>View Resume</button>
-            <button className='action-button'
-                    onClick={scheduleInterview}>Schedule Interview</button>
-            <button className='action-button'
-                    onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
-            <button className='action-button'
-                    onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
-            <button className='action-button'
-                    onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
+            {getActionButtons()}
             <button className='action-button'
                     style={{marginBottom: '5%'}}
                     onClick={() => dispatch({ type: 'set-contact-visible', value: true })}>Contact</button>
