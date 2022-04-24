@@ -40,7 +40,7 @@ const UpcomingEvents = () => {
         setErrorMessage(error.message);
         console.log(error);
       });
-  }, [events]);
+  }, []);
 
   useEffect(() => {
     getApiClient().getAllCandidates()
@@ -51,7 +51,7 @@ const UpcomingEvents = () => {
         }
         setCandidates(curr);
       }).catch(error => console.log(error));
-  }, [candidates]);
+  }, []);
 
   return (
     <div className='upcoming-events-container'>

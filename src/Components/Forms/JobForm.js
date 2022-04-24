@@ -17,7 +17,7 @@ import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 
-const JobForm = () => {
+const JobForm = ({ jobPositions, setJobPositions }) => {
   const navigate = useNavigate();
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
@@ -38,7 +38,12 @@ const JobForm = () => {
     if (!jobTitle) return;
     if (!workType) return;
     getApiClient().addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes)
-      .catch(error => console.log(error));
+      .then(response => {
+        if (response.status === 200) {
+          jobPositions.push(response.data);
+          setJobPositions(jobPositions);
+        }
+      }).catch(error => console.log(error));
     setVisible(true);
   }, [city, country, employmentType, jobTitle, notes, startDate, workType]);
 
