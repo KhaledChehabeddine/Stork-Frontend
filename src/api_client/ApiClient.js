@@ -282,6 +282,12 @@ class ApiClient extends ApiClientBase {
   updateCandidate(candidate) {
     return this.Put('/candidate/update', candidate);
   }
+
+  getInterviewsByManagerId(managerId){
+    const data = {};
+    data.managerId = managerId;
+    return this.Get('/interview/manager', data);
+  }
 }
 
 export default ApiClient;

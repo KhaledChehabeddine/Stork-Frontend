@@ -19,12 +19,10 @@ import Spinner from '../Utils/Spinner';
 // import Calendar from '../Calendar/1';
 import '../../Styles/FormStyle.css';
 import {useData} from "../../Context/Use";
+import Calendar from '../Calendar/Calendar';
 
 const reducer = (state, action) => {
   switch(action.type) {
-    case 'load-page':
-      return {...state, candidates: action.candidates, jobPositions: action.jobPositions,
-              managers: action.managers, pageLoaded: true};
     case 'set-candidate':
       return {...state, candidate: action.candidate};
     case 'set-candidate-id':
@@ -47,39 +45,74 @@ const reducer = (state, action) => {
       return {...state, valid: true};
     case 'set-visible':
       return {...state, visible: action.visible};
+    case 'set-interviews':
+      return {...state, interviews: action.interviews};
+    case 'set-error':
+      return {...state, errorMessage: action.message};
     default:
       return {...state};
   }
 };
 
+function overlaps(interview, datetime) {
+  const s1 = new Date(interview.dateTime).getTime();
+  const e1 = s1 + 1800 * 1000;
+  const s2 = new Date(datetime).getTime();
+  const e2 = s2 + 1800 * 1000;
+  if (s1 === s2) return true;
+  if ((s1 === e2) || (s2 === e1)) return false;
+  if (e1 === e2) return true;
+  if (s1 > s2 && s1 < e2) return true;
+  if (e1 > s2 && e1 < e2) return true;
+  return false;
+}
+
+function timeConflict(interviews, datetime) {
+  for (let i = 0; i < interviews.length; ++i) {
+    if (overlaps(interviews[i], datetime)) return true;
+  }
+  return false;
+}
+
 const InterviewForm = () => {
-  const { values: { jobPositions, candidates, managers } } = useData();
+  const { values: { jobPositions, candidates, managers } } = useData(); // context, to avoid repitition, and to manage the state
   const location = useLocation();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, {
     candidate: {firstName: '', lastName: ''},
     candidateId: null,
-    candidates: [],
     date_time: null,
     description: "",
     jobPositionId: null,
-    jobPositions: [],
     jobTitle: '',
     managerId: null,
-    managers: [],
-    pageLoaded: false,
+    pageLoaded: true,
     redirected: false,
     valid: false,
-    visible: false
+    visible: false,
+    interviews: [],
+    errorMessage: ""
   });
 
+
+
+  const interviewEvents= state.interviews.map(interview => ({
+    id: interview.id, 
+    start: new Date(interview.dateTime), 
+    end: new Date(new Date(interview.dateTime).getTime() + 1800 * 1000),
+    title: interview.description
+  }))
+  const { managerId }= state; // destructure.
   useEffect(() => {
-    dispatch({
-      type: 'load-page',
-      candidates: candidates,
-      jobPositions: jobPositions,
-      managers: managers
-    })
+    if (managerId == null) return;
+    getApiClient().getInterviewsByManagerId(managerId)
+      .then(response => {
+        dispatch({type: 'set-interviews', interviews: response.data});
+        // response.data is the data given from the backend.
+      }).catch(error => console.log(error));
+  }, [managerId]); // anything inside the dependency list if it changes the effect runs again.
+
+  useEffect(() => {
     if (location.state)
       if (location.state.candidate) {
         dispatch({type: 'set-candidate', candidate: location.state.candidate});
@@ -93,15 +126,31 @@ const InterviewForm = () => {
           })
         ).catch(error => console.log(error));
       }
-  }, [candidates, jobPositions, location, managers]);
+  }, [location]);
 
   const handleClick = useCallback((event) => {
     event.preventDefault();
     dispatch({ type: 'set-valid' });
-    if (!state.candidateId) return;
-    if (!state.date_time) return;
-    if (!state.jobPositionId) return;
-    if (!state.managerId) return;
+    if (!state.candidateId) {
+      dispatch({type: 'set-error', message: "Select a candidate!"});
+      return;
+    }
+    if (!state.date_time) {
+      dispatch({type: 'set-error', message: "Select an interview time!"});
+      return;
+    }
+    if (!state.jobPositionId) {
+      dispatch({type: 'set-error', message: "Select a job position!"});
+      return;
+    }
+    if (!state.managerId) {
+      dispatch({type: 'set-error', message: "Select a hiring manager!"});
+      return;
+    }
+    if (timeConflict(state.interviews, state.date_time)) {
+      dispatch({type: 'set-error', message: "There is a time conflict, check the calendar!"});
+      return;
+    }
     getApiClient().getCandidate(state.candidateId).then(response =>
       dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
     getApiClient().addInterview(state.candidateId, state.date_time, state.description,
@@ -142,7 +191,7 @@ const InterviewForm = () => {
                                  {type: 'set-candidate-id', candidateId: event.target.value}
                                )}>
                     <option disabled value=''>Choose...</option>
-                    {state.candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
+                    {candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
                       {candidate.firstName + ' ' + candidate.lastName}</option>)}
                   </CFormSelect>}
                 <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
@@ -161,7 +210,7 @@ const InterviewForm = () => {
                                  {type: 'set-job-position-id', jobPositionId: event.target.value}
                                )}>
                     <option disabled value=''>Choose...</option>
-                    {state.jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
+                    {jobPositions.map(jobPosition => <option key={jobPosition.id} value={jobPosition.id}>
                       {jobPosition.jobTitle + ' (' + jobPosition.country + ')'}
                     </option>)}
                   </CFormSelect>}
@@ -176,7 +225,7 @@ const InterviewForm = () => {
                                {type: 'set-manager-id', managerId: event.target.value}
                              )}>
                   <option disabled value=''>Choose...</option>
-                  {state.managers.map(manager => <option key={manager.id} value={manager.id}>
+                  {managers.map(manager => <option key={manager.id} value={manager.id}>
                     {manager.firstName + ' ' + manager.lastName}</option>)}
                 </CFormSelect>
                 <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
@@ -193,6 +242,12 @@ const InterviewForm = () => {
               </CCol>
 
               <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
+                <CFormLabel>Hiring Manager's Calendar</CFormLabel>
+                  <Calendar events={interviewEvents} />
+              </CCol>
+
+            
+              <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
                 <CFormLabel>Description</CFormLabel>
                 <CFormTextarea rows='5'
                                type='text'
@@ -203,6 +258,7 @@ const InterviewForm = () => {
               <CCol>
                 <center>
                   <button className="form-button" type='submit' onClick={handleClick}>Submit</button>
+                  {state.errorMessage && <p style={{color: 'red'}}>{state.errorMessage}</p>}
                 </center>
               </CCol>
             </CForm>
