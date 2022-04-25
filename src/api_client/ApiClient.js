@@ -122,7 +122,7 @@ class ApiClient extends ApiClientBase {
     data.candidateId = candidateId;
     data.dateTime = dateTime;
     data.description = description;
-    data.jobPositionId = jobPositionId;
+    data.vacancyId = jobPositionId;
     data.managerId = managerId;
     return this.Post('/interview/add', data);
   }
@@ -287,6 +287,12 @@ class ApiClient extends ApiClientBase {
     const data = {};
     data.managerId = managerId;
     return this.Get('/interview/manager', data);
+  }
+
+  getFeedbacksByCandidateId(candidateId) {
+    const data = {};
+    data.candidateId = candidateId;
+    return this.Get('/feedback/all/candidate', data);
   }
 }
 
