@@ -15,7 +15,7 @@ const LandingPage = () => {
         <Navigate to={'/home'} />
         :
         <div className="landing-page">
-          <Background/>
+          <Background styling={"background"}/>
           <LandingPageNavBar/>
           <Jumbotron/>
         </div>}

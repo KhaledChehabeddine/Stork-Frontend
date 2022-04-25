@@ -93,7 +93,7 @@ const VacanciesPage = () => {
   }, [jobPositions]);
   return (
     <>
-      <div className="page-background">
+      <div>
         <NavBar />
         {state.vacanciesLoaded
           ?

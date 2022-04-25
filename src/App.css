@@ -33,6 +33,10 @@ body {
   }
 }
 
+.navbar-background {
+  height: 14vh!important;
+}
+
 .background {
   z-index:-1;
   position: fixed;
@@ -55,7 +59,6 @@ body {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
-
 
 .background span:nth-child(0) {
   color: #660000;
