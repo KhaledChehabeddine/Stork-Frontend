@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CIcon from '@coreui/icons-react';
 import React, {useCallback, useEffect, useReducer} from 'react';
-import {cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from '@coreui/icons';
+import {cilArrowCircleLeft, cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from '@coreui/icons';
 import {cilMail, cilNote} from '@coreui/icons-pro';
 import {
   CModal,
@@ -189,6 +189,11 @@ const ProfilePage = ({ candidate }) => {
       {state.actionsLoaded ?
         <div>
           <NavBar/>
+          <div style={{height: "10px"}}>
+            <button className="back-icon-container" style={{paddingLeft: "2%"}}>
+              <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
+            </button>
+          </div>
           <div className='profile-card'
                style={{display: 'flex', justifyContent: 'space-evenly'}}>
             <div className='profile-info'>
