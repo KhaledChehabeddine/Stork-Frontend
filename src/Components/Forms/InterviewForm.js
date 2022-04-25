@@ -16,7 +16,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-// import Calendar from '../Calendar/1';
 import '../../Styles/FormStyle.css';
 import {useData} from "../../Context/Use";
 import Calendar from '../Calendar/Calendar';
@@ -130,6 +129,7 @@ const InterviewForm = () => {
 
   const handleClick = useCallback((event) => {
     event.preventDefault();
+    console.log(state.jobPositionId);
     dispatch({ type: 'set-valid' });
     if (!state.candidateId) {
       dispatch({type: 'set-error', message: "Select a candidate!"});
@@ -153,14 +153,16 @@ const InterviewForm = () => {
     }
     getApiClient().getCandidate(state.candidateId).then(response =>
       dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
-    getApiClient().addInterview(state.candidateId, state.date_time, state.description,
-                                state.jobPositionId, state.managerId)
+    getApiClient().addInterview(state.candidateId, state.date_time, state.description, state.jobPositionId, state.managerId)
       .then(() => {
         getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
           getApiClient().addAction(`Interview #${response.data} scheduled`, state.candidateId)
+            .then(response => {
+              console.log(response);
+            }).catch(error => console.log(error));
+          getApiClient().updateStatus(state.candidate, `Interview #${response.data} scheduled`)
+            .then(r => console.log(r))
             .catch(error => console.log(error));
-          getApiClient().updateStatus(state.candidate,
-            `Interview #${response.data} scheduled`).catch(error => console.log(error));
         }).catch(error => console.log(error));
     }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});

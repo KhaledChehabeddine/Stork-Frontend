@@ -62,12 +62,6 @@ const ProfilePage = ({ candidate }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getApiClient().findResume(candidate.id).then(resume => {
-        dispatch({type: 'set-resume', resume: resume.data});
-    }).catch(error => console.log(error));
-  }, [candidate.id]);
-
-  useEffect(() => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
