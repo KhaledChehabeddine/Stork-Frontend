@@ -63,6 +63,7 @@ const ProfilePage = ({ candidate }) => {
 
   useEffect(() => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
+      console.log(job_position);
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
   }, [candidate.jobPositionId]);

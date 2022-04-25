@@ -282,7 +282,7 @@ class ApiClient extends ApiClientBase {
     return this.Put('/candidate/update', candidate);
   }
 
-  getInterviewsByManagerId(managerId){
+  getInterviewsByManagerId(managerId) {
     const data = {};
     data.managerId = managerId;
     return this.Get('/interview/manager', data);
@@ -294,8 +294,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/feedback/all/candidate', data);
   }
 
-  scheduleCalendarEvent(summary, location, description, startDate, endDate, timeZone, candidateEmail, managerEmail) {
-    const gapi = require('gapi');
+  getManager(managerId) {
+    const data = {};
+    data.id = managerId;
+    return this.Get('/manager/find', data);
   }
 }
 

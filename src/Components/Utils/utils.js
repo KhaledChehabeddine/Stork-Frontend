@@ -49,4 +49,14 @@ const getPasswordHash = (password) => {
   return String(sha256(password));
 };
 
-export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime, getPasswordHash};
+const add30Mins = (datetime) => {
+  let s = datetime.substring(0, 8);
+  let d = new Date(datetime);
+  d.setMinutes(d.getMinutes() + 30);
+  s += d.toString().split(' ')[2] + 'T' + d.toString().split(' ')[4].substring(0, 5);
+  return s;
+}
+
+
+export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime, getPasswordHash,
+add30Mins};
