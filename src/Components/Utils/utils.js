@@ -42,6 +42,11 @@ const countries = {
 const genders = [
   'Male',
   'Female'
-]
+];
 
-export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime};
+const getPasswordHash = (password) => {
+  const sha256 = require('crypto-js/sha256');
+  return String(sha256(password));
+};
+
+export {getHashCode, getSearchParams, getCurrentDate, formatDate, countries, genders, formatDateTime, getPasswordHash};

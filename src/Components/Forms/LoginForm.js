@@ -5,6 +5,7 @@ import Input from '../Utils/Input';
 import { useNavigate } from "react-router-dom";
 import "../../Styles/LoginPageStyle.css"
 import getApiClient from "../../api_client/getApiClient";
+import {getPasswordHash} from "../Utils/utils";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -18,13 +19,25 @@ const LoginForm = () => {
   }, [navigate]);
 
   const authLogin = useCallback(() => {
-    const response = getApiClient().authenticateUser(username, password);
-    //  .then(response => {
-          window.localStorage.setItem('name', response.data.name);
+    console.log(getPasswordHash(password));
+    getApiClient().authenticateUser(username, password)
+      .then(response => {
+        console.log(response.data);
+        if (response.status === 200) {
+          window.localStorage.setItem('name', response.data.firstName + ' ' + response.data.lastName);
           window.localStorage.setItem('email', response.data.email);
+          window.localStorage.setItem('username', response.data.username);
+          window.localStorage.setItem('id', response.data.id);
           navigate('/home');
           window.location.reload();
-    //  }).catch(error => console.log(error));
+        }
+      }).catch(error => {
+        if (error.response.status === 404) {
+          alert(error.response.data);
+        } else {
+          console.log(error);
+        }
+    });
   }, [navigate, username, password]);
 
   return (
