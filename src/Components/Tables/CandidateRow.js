@@ -28,8 +28,11 @@ const CandidateRow = ({candidate, candidates}) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState();
 
-  const deleteCandidate = useCallback(() => {
-    getApiClient().deleteCandidate(candidate.id);
+  const deleteCandidate = useCallback((e) => {
+    e.preventDefault();
+    getApiClient().deleteCandidate(candidate.id)
+      .then(r => console.log(r))
+      .catch(error => console.log(error));
     setVisible(false);
     window.location.reload();
   }, [candidate]);
@@ -66,7 +69,7 @@ const CandidateRow = ({candidate, candidates}) => {
         </CModalHeader>
         <CModalBody>Are you sure you want to delete this candidate?</CModalBody>
         <CModalFooter>
-          <button className="form-button" onClick={deleteCandidate}>Confirm</button>
+          <button className="form-button" onClick={(e) => deleteCandidate(e)}>Confirm</button>
         </CModalFooter>
       </CModal>
     </CTableRow>
