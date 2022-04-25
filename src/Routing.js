@@ -20,6 +20,7 @@ import {useCallback, useEffect, useState} from "react";
 import './App.css';
 import Provider from "./Context/Provider";
 import {useData} from "./Context/Use";
+import LandingPageAboutUs from "./Components/Pages/LandingPageAboutUs";
 
 const Routing = () => {
   const { values: { jobPositions, candidates } } = useData();
@@ -33,13 +34,14 @@ const Routing = () => {
       <Routes>
         <Route element={ <NavigateToAfter time={2} path={isLoggedIn() ? '/404' : '/login'} /> } exact path='*' />
         <Route element={ <LandingPage /> } exact path='/' />
+        <Route element={ <LandingPageAboutUs /> } exact path='/aboutus/1'/>
         <Route element={ <PageNotAvailable /> } exact path='/404' />
         <Route element={ <LoginForm /> } exact path='/login' />
         {isLoggedIn()
           ?
           <>
             <Route element={ <Home /> } exact path='/home'/>
-            <Route element={ <AboutUsPage /> } exact path='/aboutus'/>
+            <Route element={ <AboutUsPage /> } exact path='/aboutus/2'/>
             <Route element={ <CandidateForm /> } exact path='/candidate/add'/>
             <Route element={ <CandidatesPage /> } exact path='/candidate/all'/>
             <Route element={ <InterviewForm /> } exact path='/interview/add'/>

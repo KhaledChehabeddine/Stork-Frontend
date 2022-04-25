@@ -45,7 +45,7 @@ const NavBar = () => {
                 <CIcon className="hamburger-icon" icon={cilHamburgerMenu}/>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <DropdownItem onClick={() => navigate("/aboutus")}>About Us</DropdownItem>
+                <DropdownItem onClick={() => navigate("/aboutus/2")}>About Us</DropdownItem>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={signOutHandler}>Sign Out</Dropdown.Item>
               </Dropdown.Menu>

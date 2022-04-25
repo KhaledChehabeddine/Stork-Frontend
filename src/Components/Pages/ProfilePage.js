@@ -143,11 +143,13 @@ const ProfilePage = ({ candidate }) => {
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
+    dispatch({ type: 'set-text-box-visible', value: false });
   }, [candidate]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
     getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
+    dispatch({ type: 'set-text-box-visible', value: false });
   }, [candidate]);
 
   const contact = useCallback((text) => {
@@ -155,6 +157,7 @@ const ProfilePage = ({ candidate }) => {
     alert('Message Sent');
     dispatch({ type: 'set-contact-visible', value: false });
     dispatch({ type: 'set-contact-text', value: '' });
+    dispatch({ type: 'set-text-box-visible', value: false });
   }, [candidate.email]);
 
   const getActionTable = () => {

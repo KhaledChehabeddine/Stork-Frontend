@@ -2,10 +2,11 @@ import React, {useCallback} from 'react';
 import { Navigate } from 'react-router-dom';
 import LandingPageNavBar from "../Utils/LandingPageNavbar";
 import Jumbotron from "../Utils/Jumbotron";
+import Background from "../Utils/Background";
 
-const LandingPage = (props) => {
+const LandingPage = () => {
   const isLoggedIn = useCallback(() => {
-    if (window.localStorage.getItem('email')) return true; else return false;
+    return !!window.localStorage.getItem('email');
   }, []);
   return (
     <>
@@ -14,6 +15,7 @@ const LandingPage = (props) => {
         <Navigate to={'/home'} />
         :
         <div className="landing-page">
+          <Background/>
           <LandingPageNavBar/>
           <Jumbotron/>
         </div>}

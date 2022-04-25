@@ -138,9 +138,19 @@
 .role-name {
     font-family: 'League Spartan', sans-serif;
     letter-spacing: 4px;
-    color: grey;
+    color: black;
     font-weight: bolder;
     font-size: 100%;
     text-transform: uppercase;
     padding-bottom: 2%;
 }
+
+.aboutus-card {
+    background-color: rgba(255,255,255,0.4);
+    position: relative;
+    border-radius: 62px;
+    margin: 5% 10%;
+    padding-bottom: 5%;
+    padding-top: 5%;
+}
+

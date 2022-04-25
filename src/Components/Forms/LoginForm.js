@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "../../Styles/LoginPageStyle.css"
 import getApiClient from "../../api_client/getApiClient";
 import {getPasswordHash} from "../Utils/utils";
+import Background from "../Utils/Background";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const LoginForm = () => {
   return (
     <>
       <div className="login-page full-height full-width">
+        <Background/>
         <div className="login-brand full-height" style={{width:'50%', float:'left'}}>
           <div className="login-brand full-width" style={{height:'60%', float:'left', borderRight:'0.5px solid white' }}>
             <a style={{fontSize:'80px', color:'white'}} href="/" className="login-logo">STOЯK</a>

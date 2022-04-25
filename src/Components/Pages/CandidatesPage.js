@@ -1,5 +1,4 @@
 import React, {useEffect, useReducer} from "react";
-import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
@@ -61,27 +60,7 @@ const rSortByPhone = candidates => candidates.sort((a, b) => {
   phoneA = parseInt((a.phone).substring(1, a.phone.length));
   phoneB = parseInt((b.phone).substring(1, b.phone.length));
   return phoneB - phoneA;
-})
-
-const interviewRegex = new RegExp('interview #[1-9][0-9]* scheduled');
-
-const statusReducer = status => {
-  if (interviewRegex.test(status.toLowerCase())) return 2;
-  switch (status.toLowerCase()) {
-    case 'pending':
-      return 1;
-    case 'second interview scheduled':
-      return 3;
-    case 'offer sent':
-      return 4;
-    case 'accepted':
-      return 5;
-    case 'rejected':
-      return 6;
-    default:
-      return 100;
-  }
-};
+});
 
 const sortByStatus = candidates => candidates.sort((a,b) => {
   return statusReducer(a.status) - statusReducer(b.status);
@@ -90,6 +69,16 @@ const sortByStatus = candidates => candidates.sort((a,b) => {
 const rSortByStatus = candidates => candidates.sort((a, b) => {
   return statusReducer(b.status) - statusReducer(a.status);
 });
+
+const statusReducer = status => {
+  let state = status.toLowerCase();
+  if (state.includes('pending')) return 1;
+  else if (state.includes('interview')) return 2;
+  else if (state.includes('offer')) return 3;
+  else if (state.includes('accepted')) return 4;
+  else if (state.includes('rejected')) return 5;
+  else return 100;
+};
 
 const reducer = (state, action) => {
   switch(action.type) {
