@@ -3,7 +3,7 @@ import '../../Styles/ProfilePage.css'
 import Navbar from '../Utils/Navbar';
 import CIcon from '@coreui/icons-react';
 import {
-  cilArrowBottom,
+  cilArrowBottom, cilArrowCircleLeft,
   cilArrowTop,
   cilBriefcase,
   cilBuilding,
@@ -157,20 +157,24 @@ const VacancyPage = ({vacancy}) => {
   };
 
   return (
-    <div className='full-height'>
-      <div>
-        <Navbar/>
-
-        <CCard className='m-auto mt-5 mb-5 w-75 p-5'
+    <>
+      <Navbar/>
+      <div style={{height: "10px"}}>
+        <button className="back-icon-container" style={{paddingLeft: "2%"}}>
+          <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
+        </button>
+      </div>
+      <div className='full-height'>
+        <CCard className='m-auto mt-5 mb-5 w-75 p-5 profile-card'
                style={{borderRadius: '2rem'}}>
           <CCardBody>
             <CRow>
               <CCol className='position-relative'
                     style={{left: '10%'}}>
-                <CCardTitle className='mb-4 fw-bold fs-2'>{vacancy.jobTitle}</CCardTitle>
+                <CCardTitle className='mb-4 fw-bold fs-2 profile-name'>{vacancy.jobTitle}</CCardTitle>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
-                <CCardTitle className='mb-4 fw-bold fs-2'>Actions</CCardTitle>
+                <CCardTitle className='mb-4 fw-bold fs-2 profile-name'>Actions</CCardTitle>
               </CCol>
             </CRow>
 
@@ -183,7 +187,7 @@ const VacancyPage = ({vacancy}) => {
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
-                <CButton className='w-50'
+                <CButton className='w-50 action-button-2'
                          color='dark'
                          shape='rounded-pill'
                          variant='outline'
@@ -200,7 +204,7 @@ const VacancyPage = ({vacancy}) => {
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
-                <CButton className='w-50'
+                <CButton className='w-50 action-button-2'
                          color='dark'
                          shape='rounded-pill'
                          variant='outline'
@@ -217,7 +221,7 @@ const VacancyPage = ({vacancy}) => {
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
-                <CButton className='w-50'
+                <CButton className='w-50 action-button-2'
                          color='dark'
                          shape='rounded-pill'
                          variant='outline'
@@ -470,8 +474,8 @@ const VacancyPage = ({vacancy}) => {
             </CTableBody>
           </CTable>
         </div>
-        </div>
-    </div>
+      </div>
+    </>
   );
 };
 
