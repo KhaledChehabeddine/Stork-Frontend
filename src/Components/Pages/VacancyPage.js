@@ -44,6 +44,12 @@ const VacancyPage = ({vacancy}) => {
 
   const {values: {candidates}} = useData();
 
+  const getCandidates = () => {
+    setJobCandidates(candidates.filter((candidate) => {return candidate.jobPositionId === vacancy.id;}));
+  };
+
+  useEffect(getCandidates, [candidates, vacancy.id]);
+
   const navigate = useNavigate();
   const [city, setCity] = useState(vacancy.city);
   const [country, setCountry] = useState(vacancy.country);
@@ -55,10 +61,7 @@ const VacancyPage = ({vacancy}) => {
   const [notes, setNotes] = useState(vacancy.notes);
   const [startDate, setStartDate] = useState(vacancy.expectedStartDate);
   const [valid, setValid] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [workType, setWorkType] = useState(vacancy.workType);
-
-  useEffect(() => getCandidates());
 
   const setWorkTypeIcon = () => {
     if (workType === 'On-site') return <CIcon className='me-3' icon={cilBuilding}/>;
@@ -70,9 +73,31 @@ const VacancyPage = ({vacancy}) => {
     navigate('/candidate/add', {state: {jobPosition: vacancy}});
   }, [navigate, vacancy]);
 
-  const getCandidates = () => {
-    setJobCandidates(candidates.filter((candidate) => {return candidate.jobPositionId === vacancy.id;}));
-  }
+  const editJobPosition = useCallback((event) => {
+    event.preventDefault();
+    setValid(true);
+    if (!city) return;
+    if (!country) return;
+    if (!employmentType) return;
+    if (!jobTitle) return;
+    if (!startDate) return;
+    if (!workType) return;
+    setEditVisible(false);
+    vacancy.city = city;
+    vacancy.country = country;
+    vacancy.employmentType = employmentType;
+    vacancy.expectedStartDate = startDate;
+    vacancy.jobTitle = jobTitle;
+    vacancy.notes = notes;
+    vacancy.workType = workType;
+    getApiClient().updateJobPosition(vacancy);
+  }, [city, country, employmentType, jobTitle, notes, startDate, vacancy, workType]);
+
+  const deleteJobPosition = useCallback(() => {
+    getApiClient().deleteVacancy(vacancy.id);
+    setDeleteVisible(false);
+    navigate('/job/all');
+  }, [navigate, vacancy.id]);
 
   const sortByName = (candidates) => candidates.sort((a, b) => {
     const result = a.firstName.localeCompare(b.firstName);
@@ -123,7 +148,7 @@ const VacancyPage = ({vacancy}) => {
     filter = input.value.toUpperCase();
     for (i = 0; i < candidates.length; i++) {
       name = candidates[i].firstName + ' ' + candidates[i].lastName + ' ' + candidates[i].email + ' ' +
-             candidates[i].phone + ' ' + candidates[i].date + ' ' + candidates[i].status;
+        candidates[i].phone + ' ' + candidates[i].date + ' ' + candidates[i].status;
       value = name || name.innerText;
       if (value.toUpperCase().indexOf(filter) > -1)
         filteredCandidates.push(candidates[i]);
@@ -131,36 +156,18 @@ const VacancyPage = ({vacancy}) => {
     return filteredCandidates;
   };
 
-  const deleteJobPosition = useCallback(() => {
-    getApiClient().deleteVacancy(vacancy.id);
-    setDeleteVisible(false);
-    navigate('/job/all');
-  }, [navigate, vacancy.id]);
-
-  const editJobPosition = useCallback((event) => {
-    event.preventDefault();
-    setValid(true);
-    if (!city) return;
-    if (!country) return;
-    if (!employmentType) return;
-    if (!jobTitle) return;
-    if (!startDate) return;
-    if (!workType) return;
-    setEditVisible(false);
-  }, [city, country, employmentType, jobTitle, startDate, workType]);
-
   return (
     <div className='full-height'>
       <div>
         <Navbar/>
-        
-        <CCard className='m-auto mt-5 w-75 p-5'
+
+        <CCard className='m-auto mt-5 mb-5 w-75 p-5'
                style={{borderRadius: '2rem'}}>
           <CCardBody>
             <CRow>
               <CCol className='position-relative'
                     style={{left: '10%'}}>
-                <CCardTitle className='mb-4 fw-bold fs-2'>{jobTitle}</CCardTitle>
+                <CCardTitle className='mb-4 fw-bold fs-2'>{vacancy.jobTitle}</CCardTitle>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
                 <CCardTitle className='mb-4 fw-bold fs-2'>Actions</CCardTitle>
@@ -172,7 +179,7 @@ const VacancyPage = ({vacancy}) => {
                     style={{left: '10%'}}>
                 <CCardText className='mb-2'>
                   <CIcon className='me-3' icon={cilGlobeAlt}/>
-                  {country}
+                  {vacancy.country}
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
@@ -189,7 +196,7 @@ const VacancyPage = ({vacancy}) => {
                     style={{left: '10%'}}>
                 <CCardText className='mb-2'>
                   <CIcon className='me-3' icon={cilCity}/>
-                  {city}
+                  {vacancy.city}
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
@@ -206,7 +213,7 @@ const VacancyPage = ({vacancy}) => {
                     style={{left: '10%'}}>
                 <CCardText className='mb-2'>
                   <CIcon className='me-3' icon={cilBriefcase}/>
-                  {employmentType}
+                  {vacancy.employmentType}
                 </CCardText>
               </CCol>
               <CCol className='d-sm-flex justify-content-sm-center'>
@@ -223,7 +230,7 @@ const VacancyPage = ({vacancy}) => {
                     style={{left: '10%'}}>
                 <CCardText className='mb-2'>
                   {setWorkTypeIcon()}
-                  {workType}
+                  {vacancy.workType}
                 </CCardText>
               </CCol>
             </CRow>
@@ -240,93 +247,6 @@ const VacancyPage = ({vacancy}) => {
           </CCardBody>
         </CCard>
 
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <CTable style={{width: '100%'}} align='middle' className='mb-0 table' hover responsive>
-            <CTableHead style={{backgroundColor: 'transparent'}}>
-              <CTableRow className='header-row'>
-                <CTableHeaderCell className='text-center icon-cell'>
-                  <CIcon className='header-container' icon={cilPeople}/>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='header-cell'>
-                  <div className='header-container' style={{display:'flex',  alignItems:'center'}}>
-                    <button className='sort-button-top'
-                            onClick={setJobCandidates(sortByName(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowTop}/>
-                    </button>
-                    Candidates
-                    <button className='sort-button-bottom'
-                            onClick={setJobCandidates(rSortByName(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
-                    </button>
-                  </div>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='text-center header-cell'>
-                  <div className='header-container' style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
-                    <button className='sort-button-top'
-                            onClick={setJobCandidates(sortByEmail(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowTop}/>
-                    </button>
-                    Email
-                    <button className='sort-button-bottom'
-                            onClick={setJobCandidates(rSortByEmail(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
-                    </button>
-                  </div>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='text-center header-cell'>
-                  <div className='header-container' style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
-                    <button className='sort-button-top'
-                            onClick={setJobCandidates(sortByPhone(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowTop}/>
-                    </button>
-                    Phone Number
-                    <button className='sort-button-bottom'>
-                      <CIcon className='sort-icon' icon={cilArrowBottom}
-                             onClick={setJobCandidates(rSortByPhone(candidates))}/>
-                    </button>
-                  </div>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='text-center header-cell'>
-                  <div className='header-container' style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
-                    <button className='sort-button-top'
-                            onClick={setJobCandidates(sortByDate(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowTop}/>
-                    </button>
-                    Date Applied
-                    <button className='sort-button-bottom'
-                            onClick={setJobCandidates(rSortByDate(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
-                    </button>
-                  </div>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='text-center header-cell'>
-                  <div className='header-container' style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
-                    <button className='sort-button-top'
-                            onClick={setJobCandidates(sortByStatus(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowTop}/>
-                    </button>
-                    Status
-                    <button className='sort-button-bottom'
-                            onClick={setJobCandidates(rSortByStatus(candidates))}>
-                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
-                    </button>
-                  </div>
-                </CTableHeaderCell>
-                <CTableHeaderCell className='text-center search-cell'>
-                  <div style={{display:'flex',  alignItems:'center'}}>
-                    <CIcon className='search-icon' icon={cilSearch} />
-                    <Input className='search-bar' type='text' id='searchInput' placeholder='Search For Candidates..'
-                           onKeyUp={event => setJobCandidates(filterCandidates(candidates, event.target))}/>
-                  </div>
-                </CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody className='table-body'>
-              {candidates.map(candidate => <CandidateRow key={candidate.id} candidate={candidate} candidates={candidates} />)}
-            </CTableBody>
-          </CTable>
-        </div>
-
         <CModal size='lg'
                 alignment='center'
                 backdrop='static'
@@ -336,13 +256,13 @@ const VacancyPage = ({vacancy}) => {
               <CForm noValidate
                      validated={valid}>
                 <CHeader>
-                  <h1 className='form-title'>{jobTitle}</h1>
+                  <h1 className='form-title'>{vacancy.jobTitle}</h1>
                 </CHeader>
 
                 <CRow className='mb-3 mt-3'>
                   <CCol>
                     <CFormLabel>Job Title</CFormLabel>
-                    <CFormInput defaultValue={jobTitle}
+                    <CFormInput defaultValue={vacancy.jobTitle}
                                 placeholder='ex: Software Engineer'
                                 required
                                 type='text'
@@ -352,7 +272,7 @@ const VacancyPage = ({vacancy}) => {
 
                   <CCol>
                     <CFormLabel>Start Date</CFormLabel>
-                    <CFormInput value={formatDate(startDate)}
+                    <CFormInput value={formatDate(vacancy.expectedStartDate)}
                                 required
                                 type='date'
                                 onChange={(event) => setStartDate(event.target.value)}/>
@@ -363,7 +283,7 @@ const VacancyPage = ({vacancy}) => {
                 <CRow className='mb-3 mt-3'>
                   <CCol>
                     <CFormLabel>Country</CFormLabel>
-                    <CFormSelect defaultValue={country}
+                    <CFormSelect defaultValue={vacancy.country}
                                  required
                                  onChange={(event) => {setCountry(event.target.value)}}>
                       <option disabled value=''>Choose...</option>
@@ -374,7 +294,7 @@ const VacancyPage = ({vacancy}) => {
 
                   <CCol>
                     <CFormLabel>City</CFormLabel>
-                    <CFormInput defaultValue={city}
+                    <CFormInput defaultValue={vacancy.city}
                                 placeholder='ex: Beirut'
                                 required
                                 type='text'
@@ -386,7 +306,7 @@ const VacancyPage = ({vacancy}) => {
                 <CRow className='mb-3 mt-3'>
                   <CCol>
                     <CFormLabel>Workplace Type</CFormLabel>
-                    <CFormSelect defaultValue={workType}
+                    <CFormSelect defaultValue={vacancy.workType}
                                  required
                                  onChange={(event) => setWorkType(event.target.value)}>
                       <option disabled value=''>Choose...</option>
@@ -399,9 +319,11 @@ const VacancyPage = ({vacancy}) => {
 
                   <CCol>
                     <CFormLabel>Employment Type</CFormLabel>
-                    <CFormSelect defaultValue={employmentType}
+                    <CFormSelect defaultValue={vacancy.employmentType}
                                  required
-                                 onChange={(event) => setEmploymentType(event.target.value)}>
+                                 onChange={
+                                   (event) => setEmploymentType(event.target.value)
+                                 }>
                       <option disabled value=''>Choose...</option>
                       <option key='Full-time' value='Full-time'>Full-time</option>
                       <option key='Part-time' value='Part-time'>Part-time</option>
@@ -417,7 +339,7 @@ const VacancyPage = ({vacancy}) => {
                 <CRow>
                   <CCol>
                     <CFormLabel>Notes</CFormLabel>
-                    <CFormTextarea defaultValue={notes}
+                    <CFormTextarea defaultValue={vacancy.notes}
                                    rows='5'
                                    onChange={(event) => setNotes(event.target.value)}>
                     </CFormTextarea>
@@ -437,6 +359,117 @@ const VacancyPage = ({vacancy}) => {
                      onClick={editJobPosition}>Confirm</CButton>
           </CModalFooter>
         </CModal>
+
+        <CModal alignment='center'
+                backdrop='static'
+                visible={deleteVisible}>
+          <CModalBody>
+            Are you sure you want to delete this job position?
+          </CModalBody>
+          <CModalFooter>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={() => setDeleteVisible(false)}>Close</CButton>
+            <CButton color='dark'
+                     shape='rounded-pill'
+                     variant='outline'
+                     onClick={deleteJobPosition}>Confirm</CButton>
+          </CModalFooter>
+        </CModal>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <CTable style={{width: '100%'}} align='middle' className='mb-0 table' hover responsive>
+            <CTableHead style={{backgroundColor: 'transparent'}}>
+              <CTableRow className='header-row'>
+                <CTableHeaderCell className='text-center icon-cell'>
+                  <CIcon className='header-container' icon={cilPeople}/>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='header-cell'>
+                  <div className='header-container' style={{display:'flex',  alignItems:'center'}}>
+                    <button className='sort-button-top'
+                            onClick={() => setJobCandidates(sortByName(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowTop}/>
+                    </button>
+                    Candidates
+                    <button className='sort-button-bottom'
+                            onClick={() => setJobCandidates(rSortByName(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
+                    </button>
+                  </div>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='text-center header-cell'>
+                  <div className='header-container'
+                       style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
+                    <button className='sort-button-top'
+                            onClick={() => setJobCandidates(sortByEmail(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowTop}/>
+                    </button>
+                    Email
+                    <button className='sort-button-bottom'
+                            onClick={() => setJobCandidates(rSortByEmail(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
+                    </button>
+                  </div>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='text-center header-cell'>
+                  <div className='header-container'
+                       style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
+                    <button className='sort-button-top'
+                            onClick={() => setJobCandidates(sortByPhone(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowTop}/>
+                    </button>
+                    Phone Number
+                    <button className='sort-button-bottom'>
+                      <CIcon className='sort-icon' icon={cilArrowBottom}
+                             onClick={() => setJobCandidates(rSortByPhone(candidates))}/>
+                    </button>
+                  </div>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='text-center header-cell'>
+                  <div className='header-container'
+                       style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
+                    <button className='sort-button-top'
+                            onClick={() => setJobCandidates(sortByDate(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowTop}/>
+                    </button>
+                    Date Applied
+                    <button className='sort-button-bottom'
+                            onClick={() => setJobCandidates(rSortByDate(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
+                    </button>
+                  </div>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='text-center header-cell'>
+                  <div className='header-container'
+                       style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
+                    <button className='sort-button-top'
+                            onClick={() => setJobCandidates(sortByStatus(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowTop}/>
+                    </button>
+                    Status
+                    <button className='sort-button-bottom'
+                            onClick={() => setJobCandidates(rSortByStatus(candidates))}>
+                      <CIcon className='sort-icon' icon={cilArrowBottom}/>
+                    </button>
+                  </div>
+                </CTableHeaderCell>
+                <CTableHeaderCell className='text-center search-cell'>
+                  <div style={{display:'flex',  alignItems:'center'}}>
+                    <CIcon className='search-icon' icon={cilSearch} />
+                    <Input className='search-bar' type='text' id='searchInput' placeholder='Search For Candidates..'
+                           onKeyUp={event => setJobCandidates(filterCandidates(candidates, event.target))}/>
+                  </div>
+                </CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody className='table-body'>
+              {jobCandidates.map(jobCandidate =>
+                <CandidateRow key={jobCandidate.id} candidate={jobCandidate} candidates={jobCandidates}/>
+              )}
+            </CTableBody>
+          </CTable>
+        </div>
         </div>
     </div>
   );
