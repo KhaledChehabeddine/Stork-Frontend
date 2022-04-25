@@ -16,6 +16,11 @@
     height: 100% !important;
 }
 
+.icon-button {
+    border: 0;
+    background-color: transparent;
+}
+
 .profile-card {
     background-color: white;
     position: relative;
