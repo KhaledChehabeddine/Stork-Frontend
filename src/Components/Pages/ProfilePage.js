@@ -31,7 +31,8 @@ const initialState = {
   resume: null,
   textBoxVisible: false,
   feedbackText: '',
-  feedbackVisible: false
+  feedbackVisible: false,
+  feedbacks: []
 }
 
 const reducer = (state, action) => {
@@ -58,6 +59,8 @@ const reducer = (state, action) => {
       return {...state, feedbackText: action.value};
     case 'set-feedback-visible':
       return {...state, feedbackVisible: action.value};
+    case 'set-feedbacks':
+      return {...state, feedbacks: action.value}
     default:
       return {...state}
   }
@@ -76,6 +79,12 @@ const ProfilePage = ({ candidate }) => {
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
       dispatch({ type: 'set-actions', actions: response.data });
+    }).catch(error => console.log(error));
+  }, [candidate.id]);
+
+  useEffect(() => {
+    getApiClient().getFeedbacksByCandidateId(candidate.id).then(response => {
+      dispatch({ type: 'set-feedbacks', actions: response.data });
     }).catch(error => console.log(error));
   }, [candidate.id]);
 
@@ -323,12 +332,8 @@ const ProfilePage = ({ candidate }) => {
             <button className="icon-button" onClick={() => dispatch({ type: 'set-feedback-visible', value: true })} style={{paddingLeft: "2%"}}>
               <CIcon icon={cilNote}/>
             </button>
+            {console.log(state.feedbacks)}
           </div>
-{/*            <div className='feedback-notes'>
-            <CInputGroup>
-              <CFormTextarea aria-label='With textarea'>test</CFormTextarea>
-            </CInputGroup>
-          </div>*/}
         </div>
         </div>
         : <Spinner/>}
