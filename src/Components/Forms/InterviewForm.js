@@ -63,8 +63,8 @@ function overlaps(interview, datetime) {
   if ((s1 === e2) || (s2 === e1)) return false;
   if (e1 === e2) return true;
   if (s1 > s2 && s1 < e2) return true;
-  if (e1 > s2 && e1 < e2) return true;
-  return false;
+  return e1 > s2 && e1 < e2;
+
 }
 
 function timeConflict(interviews, datetime) {
@@ -246,7 +246,7 @@ const InterviewForm = () => {
                   <Calendar events={interviewEvents} />
               </CCol>
 
-            
+
               <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
                 <CFormLabel>Description</CFormLabel>
                 <CFormTextarea rows='5'
@@ -271,9 +271,12 @@ const InterviewForm = () => {
               state.candidate.lastName + ' has been successfully scheduled.'}
               </CModalBody>
               <CModalFooter>
-                <CButton color='secondary'
-                         onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
-                <CButton color='info'
+                <CButton className="form-button"
+                         onClick={() => {
+                           dispatch({type: 'set-visible', visible: false});
+                           navigate('/home');
+                         }}>Close</CButton>
+                <CButton className="form-button"
                          onClick={() => {
                            dispatch({type: 'set-visible', visible: false});
                            navigate(`/candidate/${getHashCode(state.candidateId)}`);

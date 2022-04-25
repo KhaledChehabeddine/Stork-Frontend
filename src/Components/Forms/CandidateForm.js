@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
 import {
-  CButton,
   CCol,
   CForm,
   CFormFeedback,
@@ -301,17 +300,20 @@ const CandidateForm = () => {
       <CModal alignment='center'
               backdrop='static'
               visible={state.visible}
-              onClose={() => dispatch({type: 'set-visible', visible: false})}>
+              onClose={() => {
+                dispatch({type: 'set-visible', visible: false});
+                navigate('/candidate/all');
+              }}>
         <CModalBody>{state.firstName + ' ' + state.lastName + ' has been successfully added.'}</CModalBody>
         <CModalFooter>
-          <CButton color='secondary'
-                   onClick={() => dispatch({type: 'set-visible', visible: false})}>Close</CButton>
-          <CButton color='info'
+          <button className="form-button"
+                   onClick={() => navigate("/candidate/all")}>Close</button>
+          <button className="form-button" style={{width: "45%"}}
                    onClick={() => {
                      dispatch({type: 'set-visible', visible: false});
                      navigate('/interview/add', {state: {candidate: state.candidate}});
                      window.location.reload();
-                   }}>Schedule Interview</CButton>
+                   }}>Schedule Interview</button>
         </CModalFooter>
       </CModal>
     </div>

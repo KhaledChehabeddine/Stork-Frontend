@@ -1,31 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100&display=swap');
 .landing-page {
-    background: linear-gradient(-45deg, #5b0607, #962424, #5a25c2, #06054b);
     background-size: 400% 400%;
-    animation: gradient 7s ease infinite;
-    height: 1000px;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+    height: 100%;
 }
 
 .landing-navbar {
     border-bottom: 0!important;
-    height: 150px;
+    height: 20%;
 }
 
 .landing-navbar-brand a {
     text-align: center;
-    margin-left:60px!important;
+    margin-left: 25%!important;
     color: white!important;
     font-weight: 600;
     font-size: 30px !important;
@@ -37,23 +23,23 @@
 }
 .landing-navbar-firstlink {
     color: white!important;
-    margin-left:60px!important;
-    margin-right:20px!important;
+    margin-left:10%!important;
+    margin-right:3%!important;
     font-weight: 350;
     text-transform: uppercase;
 }
 .landing-navbar-link {
     color: white!important;
-    margin-left: 20px!important;
-    margin-right: 20px!important;
+    margin-left: 3%!important;
+    margin-right: 3%!important;
     font-weight: 350;
     text-transform: uppercase;
 }
 
 .landing-navbar-login {
     color: white!important;
-    padding-left: 20px!important;
-    padding-right: 40px!important;
+    padding-left: 3%!important;
+    padding-right: 5%!important;
     font-weight: 350;
     text-transform: uppercase;
 }
