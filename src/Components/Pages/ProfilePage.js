@@ -168,7 +168,7 @@ const ProfilePage = ({ candidate }) => {
   return (
     <>
       {state.actionsLoaded ?
-        <div className="page-background">
+        <div>
           <NavBar/>
           <div className='profile-card'
                style={{display: 'flex', justifyContent: 'space-evenly'}}>

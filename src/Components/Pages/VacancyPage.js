@@ -138,7 +138,7 @@ const VacancyPage = ({vacancy}) => {
   }
 
   return (
-    <div className='full-height page-background'>
+    <div className='full-height'>
       <div>
         <Navbar/>
         

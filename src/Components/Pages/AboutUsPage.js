@@ -5,7 +5,7 @@ import NavBar from "../Utils/Navbar";
 const AboutUsPage = () => {
   return (
     <>
-      <div className="page-background">
+      <div>
         <NavBar/>
         <div className="profile-card" style={{display: "flex", justifyContent: "space-evenly"}}>
           <img className="aboutus-photo" style={{float:"left"}} src={photo1} alt="Logo" />

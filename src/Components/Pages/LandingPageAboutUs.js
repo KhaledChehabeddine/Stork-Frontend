@@ -7,7 +7,7 @@ const LandingPageAboutUs = () => {
   return (
     <>
       <div className="landing-page">
-        <Background/>
+        <Background styling={"background"}/>
         <LandingPageNavBar/>
         <div className="aboutus-card" style={{display: "flex", justifyContent: "space-evenly"}}>
           <img className="aboutus-photo" style={{float:"left"}} src={photo1} alt="Logo" />

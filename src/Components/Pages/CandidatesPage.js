@@ -129,7 +129,7 @@ const CandidateCardWrapper = () => {
 
   return (
     <>
-      <div className="page-background">
+      <div>
         <NavBar/>
         {state.pageLoaded === true
           ?

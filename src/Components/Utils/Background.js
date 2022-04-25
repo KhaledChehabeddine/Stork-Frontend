@@ -1,6 +1,6 @@
-const Background = () => {
+const Background = ({styling}) => {
   return (
-    <div className="background">
+    <div className={styling}>
       <span></span>
       <span></span>
       <span></span>
