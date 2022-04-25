@@ -17,7 +17,7 @@ const FeedbackTable = ({ feedbacks }) => {
             </CTableRow>
           </CTableHead>
           <CTableBody color="transparent" className="table-body">
-            {feedbacks.map(action => <FeedbackRow feedback={action} /> )}
+            {feedbacks.map(feedback => <FeedbackRow key={feedback.id} feedback={feedback} /> )}
           </CTableBody>
         </CTable>
       </div>
