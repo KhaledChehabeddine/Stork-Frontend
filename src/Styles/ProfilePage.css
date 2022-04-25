@@ -16,6 +16,12 @@
     height: 100% !important;
 }
 
+.icon-button {
+    border: 0;
+    height: 100%;
+    background-color: transparent;
+}
+
 .profile-card {
     background-color: white;
     position: relative;
@@ -152,5 +158,16 @@
     margin: 5% 10%;
     padding-bottom: 5%;
     padding-top: 5%;
+}
+
+.alert-text {
+    color: #9d9d9d;
+    font-family: 'League Spartan', sans-serif;
+    letter-spacing: 4px;
+    font-weight: bolder;
+    font-size: 125%;
+    text-transform: uppercase;
+    padding-bottom: 2%;
+    text-align: center;
 }
 

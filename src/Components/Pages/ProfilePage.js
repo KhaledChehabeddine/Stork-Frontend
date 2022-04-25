@@ -17,6 +17,7 @@ import Spinner from '../Utils/Spinner';
 import {formatDate} from '../Utils/utils';
 import {useNavigate} from 'react-router-dom';
 import '../../Styles/ProfilePage.css'
+import FeedbackTable from "../Tables/FeedbackTable";
 
 const initialState = {
   actions: [],
@@ -29,7 +30,10 @@ const initialState = {
   emailText: '',
   jobPosition: null,
   resume: null,
-  textBoxVisible: false
+  textBoxVisible: false,
+  feedbackText: '',
+  feedbackVisible: false,
+  feedbacks: []
 }
 
 const reducer = (state, action) => {
@@ -49,9 +53,15 @@ const reducer = (state, action) => {
     case 'set-job-position':
       return {...state, jobPosition: action.jobPosition};
     case 'set-resume':
-      return {...state, resume: action.resume}
+      return {...state, resume: action.resume};
     case 'set-text-box-visible':
       return {...state, textBoxVisible: action.value};
+    case 'set-feedback-text':
+      return {...state, feedbackText: action.value};
+    case 'set-feedback-visible':
+      return {...state, feedbackVisible: action.value};
+    case 'set-feedbacks':
+      return {...state, feedbacks: action.value}
     default:
       return {...state}
   }
@@ -70,6 +80,12 @@ const ProfilePage = ({ candidate }) => {
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
       dispatch({ type: 'set-actions', actions: response.data });
+    }).catch(error => console.log(error));
+  }, [candidate.id]);
+
+  useEffect(() => {
+    getApiClient().getFeedbacksByCandidateId(candidate.id).then(notes => {
+      dispatch({ type: 'set-feedbacks', value: notes.data });
     }).catch(error => console.log(error));
   }, [candidate.id]);
 
@@ -101,6 +117,16 @@ const ProfilePage = ({ candidate }) => {
 
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
+  }
+
+  const getActionTable = () => {
+    return state.actions.length ? <ActionTable actions={state.actions}/> :
+      <h1 className='alert-text'>You have not made any actions yet.</h1>
+  }
+
+  const getFeedbackTable = () => {
+    return state.feedbacks.length ? <FeedbackTable feedbacks={state.feedbacks}/> :
+      <h1 className='alert-text'>You have not written any feedback yet.</h1>
   }
 
   const downloadResume = useCallback(() => {
@@ -143,7 +169,6 @@ const ProfilePage = ({ candidate }) => {
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
     getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
-    dispatch({ type: 'set-text-box-visible', value: false });
   }, [candidate]);
 
   const contact = useCallback((text) => {
@@ -151,13 +176,13 @@ const ProfilePage = ({ candidate }) => {
     alert('Message Sent');
     dispatch({ type: 'set-contact-visible', value: false });
     dispatch({ type: 'set-contact-text', value: '' });
-    dispatch({ type: 'set-text-box-visible', value: false });
   }, [candidate.email]);
 
-  const getActionTable = () => {
-    return state.actions.length ? <ActionTable actions={state.actions}/> :
-      <h1 className='profile-name'>You have not made any actions yet.</h1>
-  }
+  const feedback = useCallback((text) => {
+    getApiClient().addFeedback(candidate.id, text);
+    dispatch({ type: 'set-feedback-visible', value: false });
+    dispatch({ type: 'set-feedback-text', value: '' });
+  })
 
   return (
     <>
@@ -282,23 +307,39 @@ const ProfilePage = ({ candidate }) => {
                       onClick={() => contact(state.contactText)}>Confirm</button>
             </CModalFooter>
           </CModal>
+          <CModal alignment='center'
+                  backdrop={'static'}
+                  visible={state.feedbackVisible}
+                  onClose={() => dispatch({type: 'set-feedback-visible', value: false})}>
+            <CModalHeader>
+              <CModalTitle>Write Feedback</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <textarea
+                placeholder='Type your notes...'
+                style={{width: '100%', height: '250px'}}
+                onChange={(event) => {
+                  dispatch({ type: 'set-feedback-text', value: event.target.value });
+                }}/>
+            </CModalBody>
+            <CModalFooter>
+              <button className='form-button'
+                      onClick={() => feedback(state.feedbackText)}>Confirm</button>
+            </CModalFooter>
+          </CModal>
         <div className='profile-card'
              style={{paddingBottom:'5%', marginBottom: '5%'}}>
           {getActionTable(candidate)}
         </div>
         <div className='profile-card'
              style={{paddingBottom:'5%'}}>
-          <div style={{display: 'flex', paddingTop: '5%'}}>
+          <div style={{display: 'flex', justifyContent: "center", marginBottom: "5%"}}>
             <h1 className='feedback-title'>Feedback Notes</h1>
-            <div style={{display: 'inline-block', float: 'right'}}>
+            <button className="icon-button" onClick={() => dispatch({ type: 'set-feedback-visible', value: true })} style={{paddingLeft: "2%"}}>
               <CIcon icon={cilNote}/>
-            </div>
+            </button>
           </div>
-{/*            <div className='feedback-notes'>
-            <CInputGroup>
-              <CFormTextarea aria-label='With textarea'>test</CFormTextarea>
-            </CInputGroup>
-          </div>*/}
+          {getFeedbackTable()}
         </div>
         </div>
         : <Spinner/>}

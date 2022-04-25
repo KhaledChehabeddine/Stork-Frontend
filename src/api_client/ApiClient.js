@@ -35,7 +35,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, managerId, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -44,7 +44,6 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.phone = '+' + countryPhone + phone;
     data.jobPositionId = jobPositionId;
-    data.managerId = managerId;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
@@ -225,9 +224,9 @@ class ApiClient extends ApiClientBase {
       });
   }
 
-  addFeedback(candidateId, notes) {
+  addFeedback(candidateID, notes) {
     const data = {};
-    data.candidateID = candidateId;
+    data.candidateID = candidateID;
     data.notes = notes;
     return this.Post('/feedback/add', data);
   }
@@ -242,12 +241,6 @@ class ApiClient extends ApiClientBase {
     const data = {};
     data.candidateId = candidateId;
     return this.Post('/feedback/delete/all/candidate', data);
-  }
-
-  deleteFeedbackByManagerId(managerId) {
-    const data = {};
-    data.managerId = managerId;
-    return this.Post('/feedback/delete/all/manager', data);
   }
 
   deleteInterviewsByCandidateId(candidateId) {
