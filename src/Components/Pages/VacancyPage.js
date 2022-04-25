@@ -67,7 +67,7 @@ const VacancyPage = ({vacancy}) => {
   }, [city, country, employmentType, jobTitle, startDate, workType]);
 
   return (
-    <div className='full-height page-background'>
+    <div className='full-height'>
       <div>
         <Navbar/>
         

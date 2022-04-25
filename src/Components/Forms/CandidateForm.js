@@ -128,7 +128,7 @@ const CandidateForm = () => {
   }, [state]);
 
   return (
-    <div className="page-background">
+    <div>
       <NavBar/>
       <CForm className='form row g-3 needs-validation'
              encType='multipart/form-data'

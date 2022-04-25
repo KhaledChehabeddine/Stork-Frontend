@@ -8,7 +8,7 @@ import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTable
 
 const Home = () => {
   return (
-    <div className="page-background" align='center' id='home'>
+    <div align='center' id='home'>
       <NavBar/>
       <div style={{ marginTop:'50px'}}>
         <UpcomingEvents/>

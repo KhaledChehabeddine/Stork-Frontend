@@ -50,7 +50,7 @@ const JobForm = () => {
   }, [city, country, employmentType, jobTitle, notes, startDate, workType]);
 
   return (
-    <div className="page-background">
+    <div>
       <NavBar/>
 
       <CForm className='form row g-3 needs-validation'
