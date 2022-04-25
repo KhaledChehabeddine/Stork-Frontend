@@ -1,5 +1,5 @@
 import ApiClientBase from "./ApiClientBase";
-import {getCurrentDate} from "../Components/Utils/utils";
+import {getCurrentDate, getPasswordHash} from "../Components/Utils/utils";
 
 
 class ApiClient extends ApiClientBase {
@@ -19,13 +19,10 @@ class ApiClient extends ApiClientBase {
   }
    */
   authenticateUser(username, password) {
-    return {
-      data : {
-        name: 'Ahmad Zaaroura',
-        email: 'asz07@mail.aub.edu',
-        id: 41
-      }
-    }
+    const data = new FormData();
+    data.append('username', username);
+    data.append('passwordHash', getPasswordHash(password));
+    return this.Post('/user/auth', data);
   }
 
   getAllCandidates() {
@@ -53,6 +50,27 @@ class ApiClient extends ApiClientBase {
     return this.Post('/candidate/add', data);
   }
 
+  deleteCandidatesByJobPositionId(jobPositionId) {
+    const data = {};
+    data.jobPositionId = jobPositionId;
+    this.getCandidatesByJobPositionId(jobPositionId)
+      .then(response => {
+        if (response.status === 200) {
+          for (let i = 0; i < response.data.length; ++i) {
+            this.deleteCandidate(response.data[i].id)
+              .then(response => console.log(response));
+          }
+        }
+      }).catch(error => console.log(error));
+    return this.Post('/candidate/delete/all/job', data);
+  }
+
+  getCandidatesByJobPositionId(jobPositionId) {
+    const data = {};
+    data.jobPositionId = jobPositionId;
+    return this.Get('/candidate/all/jobPosition', data);
+  }
+
   getAllManagers() {
     return this.Get('/manager/all');
   }
@@ -71,6 +89,8 @@ class ApiClient extends ApiClientBase {
   deleteManager(id) {
     const data = new FormData();
     data.append('id', id);
+    this.deleteFeedbackByManagerId(id);
+    this.deleteInterviewsByManagerId(id);
     return this.Post('/manager/delete', data);
   }
 
@@ -90,6 +110,10 @@ class ApiClient extends ApiClientBase {
   deleteCandidate(id) {
     const data = new FormData();
     data.append('id', id);
+    this.deleteInterviewsByCandidateId(id);
+    this.deleteFeedbackByCandidateId(id);
+    this.deleteActionsByCandidateId(id);
+    this.deleteResumeByCandidateId(id);
     return this.Post('/candidate/delete', data);
   }
 
@@ -125,6 +149,7 @@ class ApiClient extends ApiClientBase {
   deleteVacancy(jobPositionId) {
     const data = new FormData();
     data.append('id', jobPositionId);
+    this.deleteCandidatesByJobPositionId(jobPositionId);
     return this.Post('/vacancy/delete', data);
   }
 
@@ -150,6 +175,12 @@ class ApiClient extends ApiClientBase {
     const params = {};
     params.candidateId = candidateId;
     return this.Get('/action/all', params);
+  }
+
+  deleteActionsByCandidateId(candidateId) {
+    const data = {};
+    data.candidateId = candidateId;
+    return this.Post('/action/delete/all', data);
   }
 
   getAllInterviews() {
@@ -192,6 +223,64 @@ class ApiClient extends ApiClientBase {
       }, error => {
         console.log(error);
       });
+  }
+
+  addFeedback(candidateId, managerId, notes) {
+    const data = {};
+    data.candidateId = candidateId;
+    data.managerId = managerId;
+    data.notes = notes;
+    return this.Post('/feedback/add', data);
+  }
+
+  deleteFeedback(id) {
+    const data = {};
+    data.id = id;
+    return this.Post('/feedback/delete', data);
+  }
+
+  deleteFeedbackByCandidateId(candidateId) {
+    const data = {};
+    data.candidateId = candidateId;
+    return this.Post('/feedback/delete/all/candidate', data);
+  }
+
+  deleteFeedbackByManagerId(managerId) {
+    const data = {};
+    data.managerId = managerId;
+    return this.Post('/feedback/delete/all/manager', data);
+  }
+
+  deleteInterviewsByCandidateId(candidateId) {
+    const data = {};
+    data.candidateId = candidateId;
+    return this.Post('/interview/candidate/delete', data);
+  }
+
+  deleteInterviewsByManagerId(managerId) {
+    const data = {};
+    data.managerId = managerId;
+    return this.Post('/interview/manager/delete', data);
+  }
+
+  deleteResumeByCandidateId(candidateId) {
+    const data = {};
+    data.candidateId = candidateId;
+    return this.Post('/resume/delete/candidate', data);
+  }
+
+  deleteResume(id) {
+    const data = {};
+    data.id = id;
+    return this.Post('/resume/delete', data);
+  }
+
+  updateJobPosition(jobPosition) {
+    return this.Put('/vacancy/update', jobPosition);
+  }
+
+  updateCandidate(candidate) {
+    return this.Put('/candidate/update', candidate);
   }
 }
 

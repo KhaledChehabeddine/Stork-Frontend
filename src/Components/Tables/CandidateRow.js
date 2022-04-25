@@ -31,7 +31,7 @@ const CandidateRow = ({candidate, candidates}) => {
   const deleteCandidate = useCallback(() => {
     getApiClient().deleteCandidate(candidate.id);
     setVisible(false);
-    window.location.reload(false);
+    window.location.reload();
   }, [candidate]);
 
   return (
