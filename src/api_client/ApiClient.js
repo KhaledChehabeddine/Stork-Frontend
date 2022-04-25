@@ -293,6 +293,10 @@ class ApiClient extends ApiClientBase {
     data.candidateId = candidateId;
     return this.Get('/feedback/all/candidate', data);
   }
+
+  scheduleCalendarEvent(summary, location, description, startDate, endDate, timeZone, candidateEmail, managerEmail) {
+    const gapi = require('gapi');
+  }
 }
 
 export default ApiClient;
