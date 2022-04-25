@@ -17,6 +17,7 @@ import Spinner from '../Utils/Spinner';
 import {formatDate} from '../Utils/utils';
 import {useNavigate} from 'react-router-dom';
 import '../../Styles/ProfilePage.css'
+import FeedbackTable from "../Tables/FeedbackTable";
 
 const initialState = {
   actions: [],
@@ -83,8 +84,8 @@ const ProfilePage = ({ candidate }) => {
   }, [candidate.id]);
 
   useEffect(() => {
-    getApiClient().getFeedbacksByCandidateId(candidate.id).then(response => {
-      dispatch({ type: 'set-feedbacks', actions: response.data });
+    getApiClient().getFeedbacksByCandidateId(candidate.id).then(notes => {
+      dispatch({ type: 'set-feedbacks', value: notes.data });
     }).catch(error => console.log(error));
   }, [candidate.id]);
 
@@ -116,6 +117,16 @@ const ProfilePage = ({ candidate }) => {
 
   const setGenderIcon = () => {
     return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
+  }
+
+  const getActionTable = () => {
+    return state.actions.length ? <ActionTable actions={state.actions}/> :
+      <h1 className='alert-text'>You have not made any actions yet.</h1>
+  }
+
+  const getFeedbackTable = () => {
+    return state.feedbacks.length ? <FeedbackTable feedbacks={state.feedbacks}/> :
+      <h1 className='alert-text'>You have not written any feedback yet.</h1>
   }
 
   const downloadResume = useCallback(() => {
@@ -172,11 +183,6 @@ const ProfilePage = ({ candidate }) => {
     dispatch({ type: 'set-feedback-visible', value: false });
     dispatch({ type: 'set-feedback-text', value: '' });
   })
-
-  const getActionTable = () => {
-    return state.actions.length ? <ActionTable actions={state.actions}/> :
-      <h1 className='profile-name'>You have not made any actions yet.</h1>
-  }
 
   return (
     <>
@@ -327,13 +333,13 @@ const ProfilePage = ({ candidate }) => {
         </div>
         <div className='profile-card'
              style={{paddingBottom:'5%'}}>
-          <div style={{display: 'flex', justifyContent: "center"}}>
+          <div style={{display: 'flex', justifyContent: "center", marginBottom: "5%"}}>
             <h1 className='feedback-title'>Feedback Notes</h1>
             <button className="icon-button" onClick={() => dispatch({ type: 'set-feedback-visible', value: true })} style={{paddingLeft: "2%"}}>
               <CIcon icon={cilNote}/>
             </button>
-            {console.log(state.feedbacks)}
           </div>
+          {getFeedbackTable()}
         </div>
         </div>
         : <Spinner/>}

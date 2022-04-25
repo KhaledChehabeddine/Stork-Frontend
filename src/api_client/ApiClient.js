@@ -224,9 +224,9 @@ class ApiClient extends ApiClientBase {
       });
   }
 
-  addFeedback(candidateId, notes) {
+  addFeedback(candidateID, notes) {
     const data = {};
-    data.candidateId = candidateId;
+    data.candidateID = candidateID;
     data.notes = notes;
     return this.Post('/feedback/add', data);
   }
