@@ -286,6 +286,10 @@ class ApiClient extends ApiClientBase {
     data.candidateId = candidateId;
     return this.Get('/feedback/all/candidate', data);
   }
+
+  updateFeedback(feedback) {
+    return this.Post('/feedback/update', feedback);
+  }
 }
 
 export default ApiClient;

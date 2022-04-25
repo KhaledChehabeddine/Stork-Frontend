@@ -182,6 +182,7 @@ const ProfilePage = ({ candidate }) => {
     getApiClient().addFeedback(candidate.id, text);
     dispatch({ type: 'set-feedback-visible', value: false });
     dispatch({ type: 'set-feedback-text', value: '' });
+    window.location.reload();
   })
 
   return (
