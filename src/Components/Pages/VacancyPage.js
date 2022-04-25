@@ -160,7 +160,7 @@ const VacancyPage = ({vacancy}) => {
     <>
       <Navbar/>
       <div style={{height: "10px"}}>
-        <button className="back-icon-container" style={{paddingLeft: "2%"}}>
+        <button className="back-icon-container" onClick={() => {navigate('/job/all')}} style={{paddingLeft: "2%"}}>
           <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
         </button>
       </div>

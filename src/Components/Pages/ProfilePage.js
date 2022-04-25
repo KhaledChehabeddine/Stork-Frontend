@@ -190,7 +190,7 @@ const ProfilePage = ({ candidate }) => {
         <div>
           <NavBar/>
           <div style={{height: "10px"}}>
-            <button className="back-icon-container" style={{paddingLeft: "2%"}}>
+            <button className="back-icon-container" onClick={() => {navigate('/candidate/all')}} style={{paddingLeft: "2%"}}>
               <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
             </button>
           </div>
