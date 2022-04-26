@@ -7,7 +7,7 @@ import {
   CFormFeedback,
   CFormTextarea,
   CFormSelect,
-  CButton, CModalBody, CModalFooter, CModal, CHeader
+  CModalBody, CModalFooter, CModal, CHeader
 } from '@coreui/react';
 import {countries} from '../Utils/utils';
 import {formStyle} from '../Utils/Styles';
@@ -164,14 +164,17 @@ const JobForm = () => {
               onClose={() => setVisible(false)}>
         <CModalBody>{jobTitle + ' has been successfully added.'}</CModalBody>
         <CModalFooter>
-          <CButton color='secondary'
-                   onClick={() => setVisible(false)}>Close</CButton>
-          <CButton color='info'
+          <button className="form-button"
+                   onClick={() => {
+                     setVisible(false);
+                     window.location.reload();
+                   }}>Close</button>
+          <button className="form-button" style={{width: "30%"}}
                    onClick={() => {
                      setVisible(false);
                      navigate('/job/all');
                      window.location.reload();
-                   }}>View Jobs</CButton>
+                   }}>View Jobs</button>
         </CModalFooter>
       </CModal>
     </div>

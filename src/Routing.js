@@ -1,6 +1,5 @@
 import CandidateForm from './Components/Forms/CandidateForm';
 import CandidatesPage from "./Components/Pages/CandidatesPage";
-import getApiClient from "./api_client/getApiClient";
 import Home from './Components/Pages/Home';
 import InterviewForm from './Components/Forms/InterviewForm';
 import JobForm from './Components/Forms/JobForm';
@@ -16,11 +15,11 @@ import VacanciesPage from "./Components/Pages/VacanciesPage";
 import VacancyPage from "./Components/Pages/VacancyPage";
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {getHashCode} from "./Components/Utils/utils";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback} from "react";
 import './App.css';
-import Provider from "./Context/Provider";
 import {useData} from "./Context/Use";
 import LandingPageAboutUs from "./Components/Pages/LandingPageAboutUs";
+import ManagerTable from "./Components/Tables/ManagerTable";
 
 const Routing = () => {
   const { values: { jobPositions, candidates } } = useData();
@@ -45,9 +44,11 @@ const Routing = () => {
             <Route element={ <CandidateForm /> } exact path='/candidate/add'/>
             <Route element={ <CandidatesPage /> } exact path='/candidate/all'/>
             <Route element={ <InterviewForm /> } exact path='/interview/add'/>
+            {/*<Route element={ <InterviewTable /> } exact path='/interview/all'/>*/}
             <Route element={ <JobForm /> } exact path='/job/add'/>
             <Route element={ <VacanciesPage /> } exact path='/job/all'/>
             <Route element={ <ManagerForm /> } exact path='/manager/add'/>
+            <Route element={ <ManagerTable /> } exact path='/manager/all'/>
             {candidates.map(candidate =>
               <Route element={ <ProfilePage candidate={candidate} /> } exact key={candidate.id}
                      path={`/candidate/${getHashCode(candidate.id)}`} />)}

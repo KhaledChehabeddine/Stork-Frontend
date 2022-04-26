@@ -88,7 +88,6 @@ class ApiClient extends ApiClientBase {
   deleteManager(id) {
     const data = new FormData();
     data.append('id', id);
-    this.deleteFeedbackByManagerId(id);
     this.deleteInterviewsByManagerId(id);
     return this.Post('/manager/delete', data);
   }

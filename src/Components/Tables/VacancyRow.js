@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTableDataCell, CTableRow} from "@coreui/react";
+import {CModal, CModalBody, CModalFooter, CTableDataCell, CTableRow} from "@coreui/react";
 import '../../Styles/Table.css'
 import CIcon from "@coreui/icons-react";
 import {cilArrowCircleRight, cilTrash, cilUserFollow} from "@coreui/icons";
@@ -44,11 +44,9 @@ const VacancyRow = ({vacancy, vacancies}) => {
               backdrop={"static"}
               visible={visible}
               onClose={() => setVisible(false)}>
-        <CModalHeader>
-          <CModalTitle>{vacancy.jobTitle}</CModalTitle>
-        </CModalHeader>
         <CModalBody>Are you sure you want to delete this job position?</CModalBody>
         <CModalFooter>
+          <button className="form-button" onClick={() => setVisible(false)}>Cancel</button>
           <button className="form-button" onClick={deleteJobPosition}>Confirm</button>
         </CModalFooter>
       </CModal>

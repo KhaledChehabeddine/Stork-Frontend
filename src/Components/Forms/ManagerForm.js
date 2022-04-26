@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  CButton,
   CCol,
   CForm, CFormFeedback,
   CFormInput,
@@ -13,6 +12,7 @@ import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css'
 import '../../Styles/FormStyle.css'
 import {useData} from "../../Context/Use";
+import {useNavigate} from "react-router-dom";
 
 const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
@@ -28,6 +28,7 @@ const ManagerForm = () => {
   const [phone, setPhone] = useState('');
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -54,10 +55,8 @@ const ManagerForm = () => {
   };
 
   return (
-    <div className="page-background">
+    <div>
       <NavBar/>
-      <h1 className='form-title'>Hiring Manager Form</h1>
-
       <CForm className='form row g-3 needs-validation'
              noValidate
              style={formStyle}
@@ -151,8 +150,8 @@ const ManagerForm = () => {
               onClose={onClose}>
         <CModalBody>{firstName + ' ' + lastName + ' successfully added.'}</CModalBody>
         <CModalFooter>
-          <CButton color='info'
-                   onClick={onClose}>Close</CButton>
+          <button className="form-button"
+                   onClick={() => {navigate("/manager/all"); window.location.reload()}}>Close</button>
         </CModalFooter>
       </CModal>
     </div>

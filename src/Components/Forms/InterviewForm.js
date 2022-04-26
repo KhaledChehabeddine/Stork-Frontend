@@ -1,6 +1,5 @@
 import React, {useReducer, useEffect, useCallback, useState} from 'react';
 import {
-  CButton,
   CCol,
   CForm,
   CFormFeedback,
@@ -74,7 +73,7 @@ function timeConflict(interviews, datetime) {
 }
 
 const InterviewForm = () => {
-  const { values: { jobPositions, candidates, managers } } = useData(); // context, to avoid repitition, and to manage the state
+  const { values: { jobPositions, candidates, managers } } = useData(); // context, to avoid repetition, and to manage the state
   const location = useLocation();
   const navigate = useNavigate();
   const [manager, setManager] = useState(null);
@@ -190,7 +189,7 @@ const InterviewForm = () => {
   }, [navigate, state.candidateId]);
 
   return (
-    <div className="page-background">
+    <div>
       <NavBar/>
         {state.pageLoaded ?
           <div>
@@ -294,16 +293,16 @@ const InterviewForm = () => {
               state.candidate.lastName + ' has been successfully scheduled.'}
               </CModalBody>
               <CModalFooter>
-                <CButton className="form-button"
+                <button className="form-button"
                          onClick={() => {
                            dispatch({type: 'set-visible', visible: false});
                            navigate('/home');
-                         }}>Close</CButton>
-                <CButton className="form-button"
+                         }}>Close</button>
+                <button className="form-button" style={{width: "40%"}}
                          onClick={() => {
                            dispatch({type: 'set-visible', visible: false});
                            onViewCandidate();
-                         }}>View Candidate</CButton>
+                         }}>View Candidate</button>
               </CModalFooter>
             </CModal>
           </div> : <Spinner/>}
