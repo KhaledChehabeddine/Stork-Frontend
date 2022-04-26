@@ -20,6 +20,7 @@ import './App.css';
 import {useData} from "./Context/Use";
 import LandingPageAboutUs from "./Components/Pages/LandingPageAboutUs";
 import ManagerTable from "./Components/Tables/ManagerTable";
+import InterviewTable from "./Components/Tables/InterviewTable";
 
 const Routing = () => {
   const { values: { jobPositions, candidates } } = useData();
@@ -44,7 +45,7 @@ const Routing = () => {
             <Route element={ <CandidateForm /> } exact path='/candidate/add'/>
             <Route element={ <CandidatesPage /> } exact path='/candidate/all'/>
             <Route element={ <InterviewForm /> } exact path='/interview/add'/>
-            {/*<Route element={ <InterviewTable /> } exact path='/interview/all'/>*/}
+            <Route element={ <InterviewTable /> } exact path='/interview/all'/>
             <Route element={ <JobForm /> } exact path='/job/add'/>
             <Route element={ <VacanciesPage /> } exact path='/job/all'/>
             <Route element={ <ManagerForm /> } exact path='/manager/add'/>
