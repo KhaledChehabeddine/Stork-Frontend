@@ -51,7 +51,7 @@ const UpcomingEvents = (factory, deps) => {
       }
       setDict(dict);
       setLoaded(true);
-    }, [1000]);
+    }, [1500]);
     return () => clearInterval(interval);
   }, [actions, candidates, dict, jobPositions]);
 
