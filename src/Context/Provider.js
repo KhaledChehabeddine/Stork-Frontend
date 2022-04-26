@@ -7,6 +7,7 @@ const Provider = ({ children }) => {
   const [candidates, setCandidates] = useState([]);
   const [managers, setManagers] = useState([]);
   const [interviews, setInterviews] = useState([]);
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
     getApiClient().getAllVacancies()
@@ -33,6 +34,12 @@ const Provider = ({ children }) => {
           setInterviews(response.data);
         }
       }).catch(error => console.log(error));
+    getApiClient().getAllActions()
+      .then(response => {
+        if (response.status === 200) {
+          setActions(response.data);
+        }
+      })
   }, []);
 
   const value = {
@@ -40,13 +47,15 @@ const Provider = ({ children }) => {
       jobPositions,
       candidates,
       managers,
-      interviews
+      interviews,
+      actions
     },
     actions: {
       setJobPositions,
       setCandidates,
       setManagers,
-      setInterviews
+      setInterviews,
+      setActions
     }
   };
 

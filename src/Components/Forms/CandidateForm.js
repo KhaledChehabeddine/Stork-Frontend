@@ -115,16 +115,21 @@ const CandidateForm = () => {
     if (!state.jobPositionId) return;
     if (!state.managerId) return;
     if (!state.resumeFile) return;
-    getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
-                                state.email, state.phone, state.jobPositionId, state.managerId, 'Pending')
-      .then(response => {
-        dispatch({type: 'set-candidate', candidate: response.data});
-        getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
-        getApiClient().addAction('Resume received', response.data.id).catch(error => console.log(error));
-        candidates.push(response.data);
-        setCandidates(candidates);
+    getApiClient().findVacancy(state.jobPositionId)
+      .then(job => {
+        console.log(job.data);
+        getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
+          state.email, state.phone, job.data, state.managerId, 'Pending')
+          .then(response => {
+            console.log(response.data);
+            dispatch({type: 'set-candidate', candidate: response.data});
+            getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
+            getApiClient().addAction('Resume received', response.data).catch(error => console.log(error));
+            candidates.push(response.data);
+            setCandidates(candidates);
+          }).catch(error => console.log(error));
+        dispatch({type: 'set-visible', visible: true});
       }).catch(error => console.log(error));
-    dispatch({type: 'set-visible', visible: true});
   }, [state]);
 
   return (

@@ -71,11 +71,9 @@ const ProfilePage = ({ candidate }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
-      console.log(job_position);
-      dispatch({type: 'set-job-position', jobPosition: job_position.data});
-    }).catch(error => console.log(error));
-  }, [candidate.jobPositionId]);
+    console.log(candidate);
+    dispatch({type: 'set-job-position', jobPosition: candidate.jobPosition});
+  }, [candidate.jobPosition]);
 
   useEffect(() => {
     getApiClient().getActionsByCandidateId(candidate.id).then(response => {
@@ -148,7 +146,7 @@ const ProfilePage = ({ candidate }) => {
   const sendOffer = useCallback((text) => {
     getApiClient().sendEmail(candidate.email, 'Job Offer', text);
     getApiClient().updateStatus(candidate, 'Offer Sent').catch(error => console.log(error));
-    getApiClient().addAction('Offer Received', candidate.id).catch(error => console.log(error));
+    getApiClient().addAction('Offer Received', candidate).catch(error => console.log(error));
     dispatch({ type: 'set-text-box-visible', value: false });
     dispatch({ type: 'set-email-text', value: '' });
   }, [candidate]);
@@ -161,13 +159,13 @@ const ProfilePage = ({ candidate }) => {
                       + window.localStorage.getItem('name');
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
-    getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
+    getApiClient().addAction('Rejected', candidate).catch(error => console.log(error));
     dispatch({ type: 'set-confirm-rejection', value: false });
   }, [candidate]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
-    getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
+    getApiClient().addAction('Accepted', candidate).catch(error => console.log(error));
     dispatch({ type: 'set-confirm-acceptance', value: false });
   }, [candidate]);
 

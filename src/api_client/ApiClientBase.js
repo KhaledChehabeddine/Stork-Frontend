@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class ApiClientBase {
   //apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : 'https://storkrecruit-api.herokuapp.com';
-  apiBaseUrl = 'https://storkrecruit-api.herokuapp.com';
+  apiBaseUrl = 'http://localhost:8080';
   serviceId = 'service_stork';
   templateId = 'template_jf4iv1s';
   publicKey = 'Dj0YvZ0Kvb5X-oIfQ';

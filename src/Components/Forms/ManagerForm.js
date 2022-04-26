@@ -151,7 +151,7 @@ const ManagerForm = () => {
         <CModalBody>{firstName + ' ' + lastName + ' successfully added.'}</CModalBody>
         <CModalFooter>
           <button className="form-button"
-                   onClick={() => {navigate("/manager/all"); window.location.reload()}}>Close</button>
+                   onClick={() => {navigate("/manager/all"); window.location.reload();}}>Close</button>
         </CModalFooter>
       </CModal>
     </div>
