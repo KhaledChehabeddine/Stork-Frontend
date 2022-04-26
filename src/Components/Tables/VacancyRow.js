@@ -36,9 +36,9 @@ const VacancyRow = ({vacancy, vacancies}) => {
         <button onClick={addCandidateForJobPosition} className="view-button" style={{margin:0, padding: "10px"}}>
           <CIcon className="view-icon" icon={cilUserFollow}/>
         </button>
-        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>
-          <CIcon className="view-icon" icon={cilTrash}/>
-        </button>
+        {/*<button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>*/}
+        {/*  <CIcon className="view-icon" icon={cilTrash}/>*/}
+        {/*</button>*/}
       </CTableDataCell>
       <CModal alignment="center"
               backdrop={"static"}

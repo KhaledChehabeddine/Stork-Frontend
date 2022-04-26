@@ -80,13 +80,13 @@ const InterviewTable = () => {
     filteredInterviews: []
   });
   useEffect(() => {
-    dispatch({ type: 'managers-loaded', interviews: interviews, filteredInterviews: interviews});
+    dispatch({ type: 'interviews-loaded', interviews: interviews, filteredInterviews: interviews});
   }, [interviews]);
   return (
     <>
       <div>
         <NavBar />
-        {state.managersLoaded
+        {state.interviewsLoaded
           ?
           <div style={{ display: 'flex', flexDirection: 'column'}}>
             <CTable style={{width: "100%"}} align="middle" className="mb-0 table" hover responsive>
@@ -139,7 +139,7 @@ const InterviewTable = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody className="table-body">
-                {state.filteredInterviews.map(interview => <InterviewRow key={interview.id} manager={interview} managers={state.filteredInterviews}/>)}
+                {state.filteredInterviews.map(interview => <InterviewRow key={interview.id} interview={interview} interviews={state.filteredInterviews}/>)}
               </CTableBody>
             </CTable>
           </div>

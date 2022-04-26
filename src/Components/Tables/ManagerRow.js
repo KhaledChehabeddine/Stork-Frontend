@@ -21,11 +21,11 @@ const ManagerRow = ({manager, managers}) => {
       <CTableDataCell className="text-center">{manager.email}</CTableDataCell>
       <CTableDataCell className="text-center">{manager.phone}</CTableDataCell>
       <CTableDataCell className="text-center">{manager.gender}</CTableDataCell>
-      <CTableDataCell className="text-center">
-        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>
-          <CIcon className="view-icon" icon={cilTrash}/>
-        </button>
-      </CTableDataCell>
+      {/*<CTableDataCell className="text-center">*/}
+      {/*  <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>*/}
+      {/*    <CIcon className="view-icon" icon={cilTrash}/>*/}
+      {/*  </button>*/}
+      {/*</CTableDataCell>*/}
       <CModal alignment="center"
               backdrop={"static"}
               visible={visible}

@@ -46,7 +46,7 @@ const NavBar = () => {
             </NavDropdown>
           </Nav>
           <Nav className="navbar-link link4">
-            <Nav.Link as={Link} to="/interviews/all">Interviews</Nav.Link>
+            <Nav.Link as={Link} to="/interview/all">Interviews</Nav.Link>
           </Nav>
           <Nav style={{marginLeft:"auto", float: "left"}} className="nav-hamburger">
             <Dropdown  align="end" id="dropdown-menu-align-end">

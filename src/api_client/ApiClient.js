@@ -35,7 +35,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPositionId, managerId, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -43,25 +43,10 @@ class ApiClient extends ApiClientBase {
     data.sex = gender;
     data.email = email;
     data.phone = '+' + countryPhone + phone;
-    data.jobPositionId = jobPositionId;
+    data.jobPosition = jobPosition;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
-  }
-
-  deleteCandidatesByJobPositionId(jobPositionId) {
-    const data = {};
-    data.jobPositionId = jobPositionId;
-    this.getCandidatesByJobPositionId(jobPositionId)
-      .then(response => {
-        if (response.status === 200) {
-          for (let i = 0; i < response.data.length; ++i) {
-            this.deleteCandidate(response.data[i].id)
-              .then(response => console.log(response));
-          }
-        }
-      }).catch(error => console.log(error));
-    return this.Post('/candidate/delete/all/job', data);
   }
 
   getCandidatesByJobPositionId(jobPositionId) {
@@ -88,7 +73,6 @@ class ApiClient extends ApiClientBase {
   deleteManager(id) {
     const data = new FormData();
     data.append('id', id);
-    this.deleteInterviewsByManagerId(id);
     return this.Post('/manager/delete', data);
   }
 
@@ -108,20 +92,16 @@ class ApiClient extends ApiClientBase {
   deleteCandidate(id) {
     const data = new FormData();
     data.append('id', id);
-    this.deleteInterviewsByCandidateId(id);
-    this.deleteFeedbackByCandidateId(id);
-    this.deleteActionsByCandidateId(id);
-    this.deleteResumeByCandidateId(id);
     return this.Post('/candidate/delete', data);
   }
 
-  addInterview(candidateId, dateTime, description, jobPositionId, managerId) {
+  addInterview(candidate, dateTime, description, jobPosition, manager) {
     const data = {};
-    data.candidateId = candidateId;
+    data.candidate = candidate;
     data.dateTime = dateTime;
     data.description = description;
-    data.vacancyId = jobPositionId;
-    data.managerId = managerId;
+    data.vacancy = jobPosition;
+    data.manager = manager;
     return this.Post('/interview/add', data);
   }
 
@@ -147,7 +127,6 @@ class ApiClient extends ApiClientBase {
   deleteVacancy(jobPositionId) {
     const data = new FormData();
     data.append('id', jobPositionId);
-    this.deleteCandidatesByJobPositionId(jobPositionId);
     return this.Post('/vacancy/delete', data);
   }
 
@@ -155,10 +134,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/vacancy/all');
   }
 
-  addAction(title, candidateId) {
+  addAction(title, candidate) {
     const data = {};
     data.title = title;
-    data.candidateId = candidateId;
+    data.candidate = candidate;
     data.date = getCurrentDate();
     return this.Post('/action/add', data);
   }
@@ -172,13 +151,7 @@ class ApiClient extends ApiClientBase {
   getActionsByCandidateId(candidateId) {
     const params = {};
     params.candidateId = candidateId;
-    return this.Get('/action/all', params);
-  }
-
-  deleteActionsByCandidateId(candidateId) {
-    const data = {};
-    data.candidateId = candidateId;
-    return this.Post('/action/delete/all', data);
+    return this.Get('/action/all/candidate', params);
   }
 
   getAllInterviews() {
@@ -223,47 +196,23 @@ class ApiClient extends ApiClientBase {
       });
   }
 
-  addFeedback(candidateID, notes) {
+  addFeedback(candidate, notes) {
     const data = {};
-    data.candidateID = candidateID;
+    data.candidate = candidate;
     data.notes = notes;
     return this.Post('/feedback/add', data);
   }
 
   deleteFeedback(id) {
-    const data = new FormData;
+    const data = new FormData();
     data.append('id', id);
     return this.Post('/feedback/delete', data);
-  }
-
-  deleteFeedbackByCandidateId(candidateId) {
-    const data = {};
-    data.candidateId = candidateId;
-    return this.Post('/feedback/delete/all/candidate', data);
-  }
-
-  deleteFeedbackByManagerId(managerId) {
-    const data = {};
-    data.managerId = managerId;
-    return this.Post('/feedback/delete/all/manager', data);
   }
 
   deleteInterviewsByCandidateId(candidateId) {
     const data = {};
     data.candidateId = candidateId;
     return this.Post('/interview/candidate/delete', data);
-  }
-
-  deleteInterviewsByManagerId(managerId) {
-    const data = {};
-    data.managerId = managerId;
-    return this.Post('/interview/manager/delete', data);
-  }
-
-  deleteResumeByCandidateId(candidateId) {
-    const data = {};
-    data.candidateId = candidateId;
-    return this.Post('/resume/delete/candidate', data);
   }
 
   deleteResume(id) {
@@ -289,8 +238,13 @@ class ApiClient extends ApiClientBase {
   getFeedbacksByCandidateId(candidateId) {
     const data = {};
     data.candidateId = candidateId;
-    return this.Get('/feedback/all/candidate', data);
+    return this.Get('/feedback/all', data);
   }
+
+  getAllActions() {
+    return this.Get('/action/all');
+  }
+
 
   getManager(managerId) {
     const data = {};

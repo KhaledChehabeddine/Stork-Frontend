@@ -45,7 +45,7 @@ const VacancyPage = ({vacancy}) => {
   const {values: {candidates}} = useData();
 
   const getCandidates = () => {
-    setJobCandidates(candidates.filter((candidate) => {return candidate.jobPositionId === vacancy.id;}));
+    setJobCandidates(candidates.filter((candidate) => {return candidate.jobPosition.id === vacancy.id;}));
   };
 
   useEffect(getCandidates, [candidates, vacancy.id]);

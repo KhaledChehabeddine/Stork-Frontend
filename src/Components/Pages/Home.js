@@ -1,10 +1,11 @@
-import React, { useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
 import getApiClient from '../../api_client/getApiClient';
 import {formatDateTime} from '../Utils/utils';
 import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from '@coreui/react';
+import {useData} from "../../Context/Use";
 
 const Home = () => {
   return (
@@ -17,35 +18,42 @@ const Home = () => {
   );
 };
 
-const UpcomingEvents = () => {
+const UpcomingEvents = (factory, deps) => {
+  const { values: { candidates, jobPositions, actions } } = useData();
   const [loaded, setLoaded] = useState(false);
   const [showingMore, setShowingMore] = useState(false);
-  const [events, setEvents] = useState([]); 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [candidates, setCandidates] = useState({});
+  const [events, setEvents] = useState([]);
+  const [dict, setDict] = useState({});
 
   useEffect(()=> {
-    getApiClient().getAllVacancies()
-      .then(response => {
-        setLoaded(true);
-        setEvents(response.data);
-      })
-      .catch(error => {
-        setErrorMessage(error.message);
-        console.log(error);
-      });
-  }, []);
-
-  useEffect(() => {
-    getApiClient().getAllCandidates()
-      .then(response => {
-        let curr = {};
-        for (let i = 0; i < response.data.length; ++i) {
-          curr[response.data[i].id] = response.data[i];
+    setEvents(jobPositions);
+    const interval = setInterval(() => {
+      for (let j = 0; j < jobPositions.length; ++j) {
+        let can = [];
+        for (let i = 0; i < candidates.length; ++i) {
+          if (jobPositions[j].id === candidates[i].jobPosition.id) {
+            can.push(candidates[i]);
+          }
         }
-        setCandidates(curr);
-      }).catch(error => console.log(error));
-  }, []);
+
+        let ac = [];
+        for (let i = 0; i < can.length; ++i) {
+          for (let k = 0; k < actions.length; ++k) {
+            if (can[i].id === actions[k].candidate.id) {
+              ac.push(actions[k]);
+            }
+          }
+        }
+        ac.sort((a, b) => {
+          return a.id - b.id;
+        });
+        dict[jobPositions[j].id] = ac[ac.length - 1];
+      }
+      setDict(dict);
+      setLoaded(true);
+    }, [1000]);
+    return () => clearInterval(interval);
+  }, [actions, candidates, dict, jobPositions]);
 
   return (
     <div className='upcoming-events-container'>
@@ -55,13 +63,13 @@ const UpcomingEvents = () => {
       <CTable striped hover bordered>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope='col' colSpan='1'>Job Postition</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Job Position</CTableHeaderCell>
             <CTableHeaderCell scope='col' colSpan='1'>Candidate</CTableHeaderCell>
             <CTableHeaderCell scope='col' colSpan='1'>Status</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          {!loaded && 
+          {!loaded &&
             <CTableRow>
               <CTableDataCell colSpan='3'>
                 <div className='loading-text'>
@@ -70,22 +78,9 @@ const UpcomingEvents = () => {
               </CTableDataCell>
             </CTableRow>
           }
-          {
-            (showingMore ? events : events.slice(0, 3)).map(element => (
-              <CTableRow key={element.id}>
-                <CTableDataCell>{element.jobTitle}</CTableDataCell>
-                <CTableDataCell>
-                  {candidates[element.candidateId] ?
-                    candidates[element.candidateId].firstName + ' ' + candidates[element.candidateId].lastName
-                    :
-                    ''
-                  }
-                </CTableDataCell>
-                <CTableDataCell>
-                  {candidates[element.candidateId] ?
-                    candidates[element.candidateId].status : ''}
-                </CTableDataCell>
-              </CTableRow>
+          { loaded &&
+            (showingMore ? events : events.slice(0, 10)).map(element => (
+              <LatestAction key={element.id} jobPosition={element} action={dict[element.id]} />
             ))
           }
           {!showingMore && events.length > 3 && // conditional rendering
@@ -102,5 +97,18 @@ const UpcomingEvents = () => {
   );
 };
 
+const LatestAction = ({ jobPosition, action }) => {
+  return (
+    <CTableRow>
+      <CTableDataCell>{jobPosition.jobTitle}</CTableDataCell>
+      <CTableDataCell>
+        {action ? action.candidate.firstName + ' ' + action.candidate.lastName : 'N/A'}
+      </CTableDataCell>
+      <CTableDataCell>
+        {action ? action.title : 'N/A'}
+      </CTableDataCell>
+    </CTableRow>
+  );
+};
 
 export default Home;

@@ -77,9 +77,8 @@ const InterviewForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [manager, setManager] = useState(null);
-  const [candidate, setCandidate] = useState(null);
   const [state, dispatch] = useReducer(reducer, {
-    candidate: {firstName: '', lastName: ''},
+    candidate: null,
     candidateId: null,
     date_time: null,
     description: "",
@@ -118,24 +117,24 @@ const InterviewForm = () => {
     getApiClient().getCandidate(state.candidateId)
       .then(response => {
         console.log(response.data);
-        setCandidate(response.data);
+        dispatch({ type: 'set-candidate', candidate: response.data });
       }).catch(error => console.log(error));
-  }, [managerId, state.candidateId]); // anything inside the dependency list if it changes the effect runs again.
+  }, [state.candidateId, managerId]); // anything inside the dependency list if it changes the effect runs again.
 
   useEffect(() => {
     if (location.state)
       if (location.state.candidate) {
         dispatch({type: 'set-candidate', candidate: location.state.candidate});
         dispatch({type: 'set-candidate-id', candidateId: location.state.candidate.id});
-        dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPositionId});
+        dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPosition.id});
         dispatch({type: 'set-redirected'});
-        getApiClient().findVacancy(location.state.candidate.jobPositionId).then(job_position =>
-          dispatch({
-            type: 'set-job-title',
-            jobTitle: job_position.data.jobTitle + ' (' + job_position.data.country + ')'
-          })
-        ).catch(error => console.log(error));
+        dispatch({
+          type: 'set-job-title',
+          jobTitle: location.state.candidate.jobPosition.jobTitle +
+            ' (' + location.state.candidate.jobPosition.country + ')'
+        });
       }
+
   }, [location]);
 
   const handleClick = useCallback((event) => {
@@ -163,21 +162,27 @@ const InterviewForm = () => {
       dispatch({type: 'set-error', message: "There is a time conflict, check the calendar!"});
       return;
     }
-    getApiClient().getCandidate(state.candidateId).then(response =>
-      dispatch({type: 'set-candidate', candidate: response.data})).catch(error => console.log(error));
-    getApiClient().addInterview(state.candidateId, state.date_time, state.description, state.jobPositionId, state.managerId)
-      .then(() => {
-        getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
-          getApiClient().addAction(`Interview #${response.data} scheduled`, state.candidateId)
-            .then(response => {
-              console.log(response);
-            }).catch(error => console.log(error));
-          getApiClient().updateStatus(state.candidate, `Interview #${response.data} scheduled`)
-            .then(r => console.log(r))
-            .catch(error => console.log(error));
-        }).catch(error => console.log(error));
-    }).catch(error => console.log(error));
-    dispatch({type: 'set-visible', visible: true});
+    getApiClient().getCandidate(state.candidateId)
+      .then(candidate => {
+        console.log(candidate.data);
+        getApiClient().getManager(state.managerId)
+          .then(manager => {
+            getApiClient().addInterview(candidate.data, state.date_time, state.description, state.candidate.jobPosition,
+              manager.data)
+              .then(() => {
+                getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
+                  getApiClient().addAction(`Interview #${response.data} scheduled`, candidate.data)
+                    .then(response => {
+                      console.log(response);
+                    }).catch(error => console.log(error));
+                  getApiClient().updateStatus(candidate.data, `Interview #${response.data} scheduled`)
+                    .then(r => console.log(r))
+                    .catch(error => console.log(error));
+                }).catch(error => console.log(error));
+              }).catch(error => console.log(error));
+            dispatch({type: 'set-visible', visible: true});
+          })
+      }).catch(error => console.log(error));
   }, [state]);
 
   const onViewCandidate = useCallback(() => {
@@ -289,8 +294,8 @@ const InterviewForm = () => {
                     backdrop='static'
                     visible={state.visible}
                     onClose={() => dispatch({type: 'set-visible', visible: false})}>
-              <CModalBody>{'Interview with ' + state.candidate.firstName + ' ' +
-              state.candidate.lastName + ' has been successfully scheduled.'}
+              <CModalBody>{'Interview with ' + (state.candidate && state.candidate.firstName) + ' ' +
+              (state.candidate && state.candidate.lastName) + ' has been successfully scheduled.'}
               </CModalBody>
               <CModalFooter>
                 <button className="form-button"
