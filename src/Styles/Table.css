@@ -125,3 +125,14 @@
 .feedback-cell {
     width: 10%;
 }
+
+.upcoming-title {
+    font-family: 'League Spartan', sans-serif !important;
+    text-transform: uppercase;
+}
+
+.upcoming-table {
+    font-family: 'Raleway', sans-serif !important;
+    margin-top: 3%;
+    width: 95%!important;
+}

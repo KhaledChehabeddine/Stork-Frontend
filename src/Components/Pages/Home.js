@@ -56,11 +56,11 @@ const UpcomingEvents = (factory, deps) => {
   }, [actions, candidates, dict, jobPositions]);
 
   return (
-    <div className='upcoming-events-container'>
-      <h2>
+    <div className='profile-card'>
+      <h2 className="upcoming-title">
         Latest Updates
       </h2>
-      <CTable striped hover bordered>
+      <CTable className="upcoming-table" striped hover bordered>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell scope='col' colSpan='1'>Job Position</CTableHeaderCell>
