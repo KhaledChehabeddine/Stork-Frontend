@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
@@ -18,37 +18,42 @@ const Home = () => {
   );
 };
 
-const UpcomingEvents = () => {
+const UpcomingEvents = (factory, deps) => {
   const { values: { candidates, jobPositions, actions } } = useData();
   const [loaded, setLoaded] = useState(false);
   const [showingMore, setShowingMore] = useState(false);
   const [events, setEvents] = useState([]);
+  const [dict, setDict] = useState({});
 
   useEffect(()=> {
     setEvents(jobPositions);
-    setLoaded(true);
-  }, [jobPositions]);
+    const interval = setInterval(() => {
+      for (let j = 0; j < jobPositions.length; ++j) {
+        let can = [];
+        for (let i = 0; i < candidates.length; ++i) {
+          if (jobPositions[j].id === candidates[i].jobPosition.id) {
+            can.push(candidates[i]);
+          }
+        }
 
-  const getLatestAction = useCallback((jobPosition) => {
-    let can = [];
-    for (let i = 0; i < candidates.length; ++i) {
-      if (jobPosition.id === candidates[i].jobPosition.id) {
-        can.push(candidates[i]);
+        let ac = [];
+        for (let i = 0; i < can.length; ++i) {
+          for (let k = 0; k < actions.length; ++k) {
+            if (can[i].id === actions[k].candidate.id) {
+              ac.push(actions[k]);
+            }
+          }
+        }
+        ac.sort((a, b) => {
+          return a.id - b.id;
+        });
+        dict[jobPositions[j].id] = ac[ac.length - 1];
       }
-    }
-    let ac = [];
-    for (let i = 0; i < Math.min(ac.length, can.length); ++i) {
-      if (can[i].id === ac[i].candidate.id) {
-        ac.push(ac[i]);
-      }
-    }
-    console.log(actions);
-    actions.sort((a, b) => {
-      return a.id - b.id;
-    });
-    return ac[ac.length - 1];
-  }, []);
-
+      setDict(dict);
+      setLoaded(true);
+    }, [1000]);
+    return () => clearInterval(interval);
+  }, [actions, candidates, dict, jobPositions]);
 
   return (
     <div className='upcoming-events-container'>
@@ -58,13 +63,13 @@ const UpcomingEvents = () => {
       <CTable striped hover bordered>
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope='col' colSpan='1'>Job Postition</CTableHeaderCell>
+            <CTableHeaderCell scope='col' colSpan='1'>Job Position</CTableHeaderCell>
             <CTableHeaderCell scope='col' colSpan='1'>Candidate</CTableHeaderCell>
             <CTableHeaderCell scope='col' colSpan='1'>Status</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
-          {!loaded && 
+          {!loaded &&
             <CTableRow>
               <CTableDataCell colSpan='3'>
                 <div className='loading-text'>
@@ -73,9 +78,9 @@ const UpcomingEvents = () => {
               </CTableDataCell>
             </CTableRow>
           }
-          {
+          { loaded &&
             (showingMore ? events : events.slice(0, 10)).map(element => (
-              <LatestAction key={element.id} jobPosition={element} action={getLatestAction(element)} />
+              <LatestAction key={element.id} jobPosition={element} action={dict[element.id]} />
             ))
           }
           {!showingMore && events.length > 3 && // conditional rendering

@@ -22,9 +22,9 @@ const InterviewRow = ({interview, interviews}) => {
       <CTableDataCell className="text-center">{interview.candidate.firstName + ' ' + interview.candidate.lastName}</CTableDataCell>
       <CTableDataCell className="text-center">{interview.manager.firstName + ' ' + interview.manager.lastName}</CTableDataCell>
       <CTableDataCell className="text-center">
-        <button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>
-          <CIcon className="view-icon" icon={cilTrash}/>
-        </button>
+        {/*<button className="view-button" onClick={() => setVisible(true)} style={{margin:0, padding: "10px"}}>*/}
+        {/*  <CIcon className="view-icon" icon={cilTrash}/>*/}
+        {/*</button>*/}
       </CTableDataCell>
       <CModal alignment="center"
               backdrop={"static"}

@@ -50,11 +50,11 @@ const FeedbackRow = ({ feedback }) => {
             <button className="view-button" onClick={() => dispatch({ type: 'set-edit-visible', value: true })} style={{margin:0, padding: "10px"}}>
               <CIcon className="view-icon" icon={cilPencil}/>
             </button>
-            <button className="view-button"
-                    style={{margin:0, padding: "10px"}}
-                    onClick={() => setVisible(true)}>
-              <CIcon className="view-icon" icon={cilTrash}/>
-            </button>
+            {/*<button className="view-button"*/}
+            {/*        style={{margin:0, padding: "10px"}}*/}
+            {/*        onClick={() => setVisible(true)}>*/}
+            {/*  <CIcon className="view-icon" icon={cilTrash}/>*/}
+            {/*</button>*/}
           </div>
         </CTableDataCell>
       </CTableRow>

@@ -107,7 +107,7 @@ const ProfilePage = ({ candidate }) => {
     let status = (candidate.status).toLowerCase();
     if (status.includes("pending") || status.includes("interview"))
       return <div style={{textAlign: "center"}}>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
-    else if (status.includes("sent")) return <div style={{textAlign: "center"}}>{acceptButton()}</div>;
+    else if (status.includes("sent")) return <div style={{textAlign: "center", width: "100%"}}>{acceptButton()}</div>;
     else if (status.includes("accepted")) return null;
     else if (status.includes("rejected")) return null;
     else return null
@@ -153,7 +153,7 @@ const ProfilePage = ({ candidate }) => {
 
   const sendRejection = useCallback(() => {
     let rejectionText = "Dear " + candidate.firstName + " " + candidate.lastName + ",\n"
-                      + "Thank you for your interest in the " + state.jobPosition.jobTitle + " position.\n"+
+                      + "Thank you for your interest in the " + candidate.jobPosition.jobTitle + " position.\n"+
                       + "After careful consideration, we regret to inform you that you were not selected for the position.\n\n"
                       + "Best Regards,\n"
                       + window.localStorage.getItem('name');
@@ -176,14 +176,14 @@ const ProfilePage = ({ candidate }) => {
   }, [candidate.email]);
 
   const feedback = useCallback((text) => {
-    getApiClient().addFeedback(candidate.id, text)
+    getApiClient().addFeedback(candidate, text)
       .then(response => {
         console.log(response);
         window.location.reload();
       }).catch(error => console.log(error));
     dispatch({ type: 'set-feedback-visible', value: false });
     dispatch({ type: 'set-feedback-text', value: '' });
-  }, [candidate.id]);
+  }, [candidate]);
 
   return (
     <>

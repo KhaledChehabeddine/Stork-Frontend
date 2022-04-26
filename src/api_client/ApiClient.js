@@ -35,7 +35,7 @@ class ApiClient extends ApiClientBase {
     return this.Get('/candidate/find', params);
   }
 
-  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, managerId, status) {
+  addCandidate(firstName, lastName, country, countryPhone, gender, email, phone, jobPosition, status) {
     const data = {};
     data.firstName = firstName;
     data.lastName = lastName;
@@ -196,9 +196,9 @@ class ApiClient extends ApiClientBase {
       });
   }
 
-  addFeedback(candidateID, notes) {
+  addFeedback(candidate, notes) {
     const data = {};
-    data.candidateID = candidateID;
+    data.candidate = candidate;
     data.notes = notes;
     return this.Post('/feedback/add', data);
   }
@@ -238,7 +238,7 @@ class ApiClient extends ApiClientBase {
   getFeedbacksByCandidateId(candidateId) {
     const data = {};
     data.candidateId = candidateId;
-    return this.Get('/feedback/all/candidate', data);
+    return this.Get('/feedback/all', data);
   }
 
   getAllActions() {

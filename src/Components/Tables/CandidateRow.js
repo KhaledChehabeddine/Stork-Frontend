@@ -54,11 +54,11 @@ const CandidateRow = ({candidate, candidates}) => {
                 onClick={() => navigate(`/candidate/${getHashCode(candidate.id)}`)}>
           <CIcon className="view-icon" icon={cilArrowCircleRight}/>
         </button>
-        <button className="view-button"
-                style={{margin:0, padding: "10px"}}
-                onClick={() => setVisible(true)}>
-          <CIcon className="view-icon" icon={cilTrash}/>
-        </button>
+        {/*<button className="view-button"*/}
+        {/*        style={{margin:0, padding: "10px"}}*/}
+        {/*        onClick={() => setVisible(true)}>*/}
+        {/*  <CIcon className="view-icon" icon={cilTrash}/>*/}
+        {/*</button>*/}
       </CTableDataCell>
       <CModal alignment="center"
               backdrop={"static"}

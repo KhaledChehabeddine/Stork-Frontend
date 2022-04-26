@@ -113,13 +113,12 @@ const CandidateForm = () => {
     if (!phoneRegex.test(state.phone)) return;
     if (!state.gender) return;
     if (!state.jobPositionId) return;
-    if (!state.managerId) return;
     if (!state.resumeFile) return;
     getApiClient().findVacancy(state.jobPositionId)
       .then(job => {
         console.log(job.data);
         getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
-          state.email, state.phone, job.data, state.managerId, 'Pending')
+          state.email, state.phone, job.data, 'Pending')
           .then(response => {
             console.log(response.data);
             dispatch({type: 'set-candidate', candidate: response.data});
@@ -265,22 +264,6 @@ const CandidateForm = () => {
         </CCol>
 
         <CCol className='position-relative'
-              md={6}
-              style={{marginBottom: '1rem'}}>
-          <CFormLabel>Hiring Manager</CFormLabel>
-          <CFormSelect defaultValue=''
-                       required
-                       onChange={(event) => dispatch(
-                         {type: 'set-manager-id', managerId: event.target.value}
-                       )}>
-            <option disabled value=''>Choose...</option>
-            {state.managers.map(manager => <option key={manager.id} value={manager.id}>
-              {manager.firstName + ' ' + manager.lastName}</option>)}
-          </CFormSelect>
-          <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
-        </CCol>
-
-        <CCol className='position-relative'
               md={12}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Resume</CFormLabel>
@@ -312,7 +295,10 @@ const CandidateForm = () => {
         <CModalBody>{state.firstName + ' ' + state.lastName + ' has been successfully added.'}</CModalBody>
         <CModalFooter>
           <button className="form-button"
-                   onClick={() => navigate("/candidate/all")}>Close</button>
+                   onClick={() => {
+                     navigate("/candidate/all");
+                     window.location.reload();
+                   }}>Close</button>
           <button className="form-button" style={{width: "45%"}}
                    onClick={() => {
                      dispatch({type: 'set-visible', visible: false});
