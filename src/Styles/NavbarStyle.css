@@ -15,15 +15,15 @@
 }
 .navbar-firstlink a {
     color: white!important;
-    margin-left:50px!important;
-    margin-right:30px!important;
+    margin-left:50px;
+    margin-right:30px;
     font-weight: 350;
     text-transform: uppercase;
 }
 .navbar-link a {
     color: white!important;
-    margin-left: 30px!important;
-    margin-right: 30px!important;
+    margin-left: 30px;
+    margin-right: 30px;
     font-weight: 350;
     text-transform: uppercase;
 }
@@ -48,4 +48,18 @@
 .hamburger-dropdown {
     background-color: transparent !important;
     border: 0 solid transparent!important;
+}
+
+.navbar-item {
+    text-transform: uppercase;
+    font-size: 100%;
+    color: black!important;
+    margin: 0!important;
+}
+
+.navbar-item:focus,
+.navbar-item:active,
+.navbar-item.active {
+    background-color: transparent!important;
+    border-color: transparent!important;
 }
