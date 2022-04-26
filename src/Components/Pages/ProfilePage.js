@@ -73,6 +73,7 @@ const ProfilePage = ({ candidate }) => {
 
   useEffect(() => {
     getApiClient().findVacancy(candidate.jobPositionId).then(job_position => {
+      console.log(job_position);
       dispatch({type: 'set-job-position', jobPosition: job_position.data});
     }).catch(error => console.log(error));
   }, [candidate.jobPositionId]);
@@ -179,11 +180,14 @@ const ProfilePage = ({ candidate }) => {
   }, [candidate.email]);
 
   const feedback = useCallback((text) => {
-    getApiClient().addFeedback(candidate.id, text);
+    getApiClient().addFeedback(candidate.id, text)
+      .then(response => {
+        console.log(response);
+        window.location.reload();
+      }).catch(error => console.log(error));
     dispatch({ type: 'set-feedback-visible', value: false });
     dispatch({ type: 'set-feedback-text', value: '' });
-    window.location.reload();
-  })
+  }, [candidate.id]);
 
   return (
     <>

@@ -24,21 +24,22 @@ const FeedbackRow = ({ feedback }) => {
   const [visible, setVisible] = useState();
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const deleteFeedback = useCallback((feedback) => {
-    getApiClient().deleteFeedbackByCandidateId(feedback.candidateID)
-      .then(r => console.log(r))
-      .catch(error => console.log(error));
+  const deleteFeedback = useCallback(() => {
+    getApiClient().deleteFeedback(feedback.id)
+      .then(response => {
+        console.log(response);
+        window.location.reload();
+      }).catch(error => console.log(error));
     setVisible(false);
-    window.location.reload();
-  }, [feedback]);
+  }, [feedback.id]);
 
-  const editFeedback = useCallback((feedback, editText) => {
+  const editFeedback = useCallback((editText) => {
     feedback.notes = editText;
     getApiClient().updateFeedback(feedback)
       .then(r => console.log(r))
       .catch(error => console.log(error));
-    setVisible(false);
-  }, [feedback]);
+    dispatch({ type: 'set-edit-visible', value: false });
+  }, [feedback.id]);
 
   return (
     <>
@@ -64,7 +65,7 @@ const FeedbackRow = ({ feedback }) => {
         <CModalBody>Are you sure you want to delete this feedback?</CModalBody>
         <CModalFooter>
           <button className="form-button" onClick={() => setVisible(false)}>Cancel</button>
-          <button className="form-button" onClick={() => deleteFeedback(feedback)}>Confirm</button>
+          <button className="form-button" onClick={deleteFeedback}>Confirm</button>
         </CModalFooter>
       </CModal>
       <CModal alignment='center'
@@ -83,7 +84,7 @@ const FeedbackRow = ({ feedback }) => {
                 }}/>
         </CModalBody>
         <CModalFooter>
-          <button className='form-button' onClick={() => editFeedback(feedback, state.editText)}>Apply</button>
+          <button className='form-button' onClick={() => editFeedback(state.editText)}>Apply</button>
         </CModalFooter>
       </CModal>
     </>

@@ -1,4 +1,4 @@
-import React, {useReducer, useEffect, useCallback} from 'react';
+import React, {useReducer, useEffect, useCallback, useState} from 'react';
 import {
   CButton,
   CCol,
@@ -11,7 +11,7 @@ import {
   CModalBody, CModalFooter
 } from "@coreui/react";
 import {formStyle} from "../Utils/Styles";
-import {getHashCode} from "../Utils/utils";
+import {add30Mins, getHashCode} from "../Utils/utils";
 import {useLocation, useNavigate} from "react-router-dom";
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
@@ -77,6 +77,8 @@ const InterviewForm = () => {
   const { values: { jobPositions, candidates, managers } } = useData(); // context, to avoid repitition, and to manage the state
   const location = useLocation();
   const navigate = useNavigate();
+  const [manager, setManager] = useState(null);
+  const [candidate, setCandidate] = useState(null);
   const [state, dispatch] = useReducer(reducer, {
     candidate: {firstName: '', lastName: ''},
     candidateId: null,
@@ -109,7 +111,17 @@ const InterviewForm = () => {
         dispatch({type: 'set-interviews', interviews: response.data});
         // response.data is the data given from the backend.
       }).catch(error => console.log(error));
-  }, [managerId]); // anything inside the dependency list if it changes the effect runs again.
+    getApiClient().getManager(managerId)
+      .then(response => {
+        console.log(response.data);
+        setManager(response.data);
+      }).catch(error => console.log(error));
+    getApiClient().getCandidate(state.candidateId)
+      .then(response => {
+        console.log(response.data);
+        setCandidate(response.data);
+      }).catch(error => console.log(error));
+  }, [managerId, state.candidateId]); // anything inside the dependency list if it changes the effect runs again.
 
   useEffect(() => {
     if (location.state)
@@ -128,8 +140,9 @@ const InterviewForm = () => {
   }, [location]);
 
   const handleClick = useCallback((event) => {
+    console.log(state.date_time);
+    console.log(add30Mins(state.date_time));
     event.preventDefault();
-    console.log(state.jobPositionId);
     dispatch({ type: 'set-valid' });
     if (!state.candidateId) {
       dispatch({type: 'set-error', message: "Select a candidate!"});
@@ -167,6 +180,14 @@ const InterviewForm = () => {
     }).catch(error => console.log(error));
     dispatch({type: 'set-visible', visible: true});
   }, [state]);
+
+  const onViewCandidate = useCallback(() => {
+    const interval = setInterval(() => {
+      navigate(`/candidate/${getHashCode(state.candidateId)}`);
+      window.location.reload();
+    }, [1500]);
+    return () => clearInterval(interval);
+  }, [navigate, state.candidateId]);
 
   return (
     <div className="page-background">
@@ -281,8 +302,7 @@ const InterviewForm = () => {
                 <CButton className="form-button"
                          onClick={() => {
                            dispatch({type: 'set-visible', visible: false});
-                           navigate(`/candidate/${getHashCode(state.candidateId)}`);
-                           window.location.reload();
+                           onViewCandidate();
                          }}>View Candidate</CButton>
               </CModalFooter>
             </CModal>
