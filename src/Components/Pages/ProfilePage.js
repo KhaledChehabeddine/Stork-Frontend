@@ -7,7 +7,6 @@ import {
   CModal,
   CModalBody,
   CModalFooter,
-  CModalHeader,
   CModalTitle
 } from '@coreui/react';
 import ActionTable from '../Tables/ActionTable';
@@ -150,31 +149,30 @@ const ProfilePage = ({ candidate }) => {
     getApiClient().sendEmail(candidate.email, 'Job Offer', text);
     getApiClient().updateStatus(candidate, 'Offer Sent').catch(error => console.log(error));
     getApiClient().addAction('Offer Received', candidate.id).catch(error => console.log(error));
-    alert('Email sent successfully!');
     dispatch({ type: 'set-text-box-visible', value: false });
     dispatch({ type: 'set-email-text', value: '' });
   }, [candidate]);
 
   const sendRejection = useCallback(() => {
-    let rejectionText = 'Dear ' + candidate.firstName + ' ' + candidate.lastName + ',\n'
-                      + 'Thank you for your interest in the ' + state.jobPosition.jobTitle + ' position.\n'
-                      + 'After careful consideration, we regret to inform you that you were not selected for the position.\n\n'
-                      + 'Best Regards,\n'
+    let rejectionText = "Dear " + candidate.firstName + " " + candidate.lastName + ",\n"
+                      + "Thank you for your interest in the " + state.jobPosition.jobTitle + " position.\n"+
+                      + "After careful consideration, we regret to inform you that you were not selected for the position.\n\n"
+                      + "Best Regards,\n"
                       + window.localStorage.getItem('name');
     getApiClient().sendEmail(candidate.email, 'Application', rejectionText)
     getApiClient().updateStatus(candidate, 'Rejected').catch(error => console.log(error));
     getApiClient().addAction('Rejected', candidate.id).catch(error => console.log(error));
-    dispatch({ type: 'set-text-box-visible', value: false });
+    dispatch({ type: 'set-confirm-rejection', value: false });
   }, [candidate]);
 
   const Acceptance = useCallback(() => {
     getApiClient().updateStatus(candidate, 'Accepted').catch(error => console.log(error));
     getApiClient().addAction('Accepted', candidate.id).catch(error => console.log(error));
+    dispatch({ type: 'set-confirm-acceptance', value: false });
   }, [candidate]);
 
   const contact = useCallback((text) => {
-    getApiClient().sendEmail(candidate.email, 'Application', text);
-    alert('Message Sent');
+    getApiClient().sendEmail(candidate.email, 'Application', text+`\n`);
     dispatch({ type: 'set-contact-visible', value: false });
     dispatch({ type: 'set-contact-text', value: '' });
   }, [candidate.email]);
@@ -258,11 +256,9 @@ const ProfilePage = ({ candidate }) => {
                 backdrop='static'
                 visible={state.confirmRejection}
                 onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
-          <CModalHeader>
-            <CModalTitle>{'Reject ' + candidate.firstName + ' ' + candidate.lastName}</CModalTitle>
-          </CModalHeader>
           <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
           <CModalFooter>
+            <button className="form-button" onClick={() => dispatch({type: 'set-confirm-rejection', value: false})}>Cancel</button>
             <button className="form-button" onClick={sendRejection}>Confirm</button>
           </CModalFooter>
         </CModal>
@@ -270,40 +266,37 @@ const ProfilePage = ({ candidate }) => {
                   backdrop='static'
                   visible={state.confirmAcceptance}
                   onClose={() => dispatch({type: 'set-confirm-acceptance', value: false})}>
-            <CModalHeader>
-              <CModalTitle>{'Accept ' + candidate.firstName + ' ' + candidate.lastName}</CModalTitle>
-            </CModalHeader>
             <CModalBody>Are you sure you want to accept this candidate?</CModalBody>
             <CModalFooter>
+              <button className="form-button" onClick={() => dispatch({type: 'set-confirm-acceptance', value: false})}>Cancel</button>
               <button className="form-button" onClick={Acceptance}>Confirm</button>
             </CModalFooter>
           </CModal>
           <CModal alignment='center'
                   backdrop={'static'}
                   visible={state.textBoxVisible}
+                  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                   onClose={() => dispatch({type: 'set-text-box-visible', value: false})}>
-            <CModalHeader>
-              <CModalTitle>Write a letter</CModalTitle>
-            </CModalHeader>
+            <CModalTitle style={{margin:"3%"}}>Send An Offer</CModalTitle>
             <CModalBody>
               <textarea
-                placeholder='Type an offer...'
+                placeholder='Type an email...'
                 style={{width: '100%', height: '250px'}}
                 onChange={(event) => {
                 dispatch({ type: 'set-email-text', value: event.target.value });
               }}/>
             </CModalBody>
             <CModalFooter>
+              <button className="form-button" onClick={() => dispatch({type: 'set-text-box-visible', value: false})}>Cancel</button>
               <button className='form-button' onClick={() => sendOffer(state.emailText)}>Confirm</button>
             </CModalFooter>
           </CModal>
           <CModal alignment='center'
                   backdrop={'static'}
                   visible={state.contactVisible}
+                  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                   onClose={() => dispatch({type: 'set-contact-visible', value: false})}>
-            <CModalHeader>
-              <CModalTitle>Write a letter</CModalTitle>
-            </CModalHeader>
+            <CModalTitle style={{margin: "3%"}}>Send An Email</CModalTitle>
             <CModalBody>
               <textarea
                 placeholder='Type a message...'
@@ -313,6 +306,7 @@ const ProfilePage = ({ candidate }) => {
               }}/>
             </CModalBody>
             <CModalFooter>
+              <button className="form-button" onClick={() => dispatch({type: 'set-contact-visible', value: false})}>Cancel</button>
               <button className='form-button'
                       onClick={() => contact(state.contactText)}>Confirm</button>
             </CModalFooter>
@@ -320,10 +314,9 @@ const ProfilePage = ({ candidate }) => {
           <CModal alignment='center'
                   backdrop={'static'}
                   visible={state.feedbackVisible}
+                  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                   onClose={() => dispatch({type: 'set-feedback-visible', value: false})}>
-            <CModalHeader>
-              <CModalTitle>Write Feedback</CModalTitle>
-            </CModalHeader>
+            <CModalTitle style={{margin: "3%"}}>Write Feedback</CModalTitle>
             <CModalBody>
               <textarea
                 placeholder='Type your notes...'
@@ -333,6 +326,7 @@ const ProfilePage = ({ candidate }) => {
                 }}/>
             </CModalBody>
             <CModalFooter>
+              <button className="form-button" onClick={() => dispatch({type: 'set-feedback-visible', value: false})}>Cancel</button>
               <button className='form-button'
                       onClick={() => feedback(state.feedbackText)}>Confirm</button>
             </CModalFooter>

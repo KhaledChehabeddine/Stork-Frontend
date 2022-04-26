@@ -1,5 +1,4 @@
 import React, {useEffect, useReducer} from 'react';
-import getApiClient from "../../api_client/getApiClient";
 import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
 import NavBar from "../Utils/Navbar";
 import VacancyRow from "../Tables/VacancyRow";

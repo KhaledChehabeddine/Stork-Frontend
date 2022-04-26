@@ -6,7 +6,6 @@ import CIcon from "@coreui/icons-react";
 import {cilHamburgerMenu} from "@coreui/icons";
 import {useNavigate} from "react-router";
 import DropdownItem from "react-bootstrap/DropdownItem";
-import Background from "./Background";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ const NavBar = () => {
 
   return (
     <Navbar className="navbar" sticky="top" style={{backgroundColor:"#2e2e2e",padding:"2%"}} expand="lg">
-      <Background styling={'background navbar-background'}/>
       <Container>
         <Nav className="navbar-brand">
           <Navbar.Brand as={Link} to="/home">STOЯK</Navbar.Brand>
@@ -38,9 +36,15 @@ const NavBar = () => {
           <Nav className="navbar-link link4">
             <Nav.Link as={Link} to="/candidate/all">View Candidates</Nav.Link>
           </Nav>
-          {/*<Nav style={{marginLeft:"auto"}} className="navbar-profile">*/}
-          {/*  <Nav.Link style={{color:"white",width: 100}} as={Link} to="#">Profile</Nav.Link>*/}
-          {/*</Nav>*/}
+          <Nav className="navbar-link link4">
+            <Nav.Link as={Link} to="/manager/add">Add Managers</Nav.Link>
+          </Nav>
+          <Nav className="navbar-link link4">
+            <Nav.Link as={Link} to="/manager/all">View Managers</Nav.Link>
+          </Nav>
+{/*          <Nav className="navbar-link link4">
+            <Nav.Link as={Link} to="/interviews/all">Interviews</Nav.Link>
+          </Nav>*/}
           <Nav style={{marginLeft:"auto", float: "left"}} className="nav-hamburger">
             <Dropdown  align="end" id="dropdown-menu-align-end">
               <Dropdown.Toggle className="hamburger-dropdown">
