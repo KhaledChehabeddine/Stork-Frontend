@@ -44,7 +44,6 @@ class ApiClient extends ApiClientBase {
     data.email = email;
     data.phone = '+' + countryPhone + phone;
     data.jobPositionId = jobPositionId;
-    data.managerId = managerId;
     data.status = status;
     data.date = getCurrentDate();
     return this.Post('/candidate/add', data);
@@ -225,16 +224,16 @@ class ApiClient extends ApiClientBase {
       });
   }
 
-  addFeedback(candidateId, notes) {
+  addFeedback(candidateID, notes) {
     const data = {};
-    data.candidateID = candidateId;
+    data.candidateID = candidateID;
     data.notes = notes;
     return this.Post('/feedback/add', data);
   }
 
   deleteFeedback(id) {
-    const data = {};
-    data.id = id;
+    const data = new FormData;
+    data.append('id', id);
     return this.Post('/feedback/delete', data);
   }
 
@@ -298,6 +297,10 @@ class ApiClient extends ApiClientBase {
     const data = {};
     data.id = managerId;
     return this.Get('/manager/find', data);
+  }
+
+  updateFeedback(feedback) {
+    return this.Post('/feedback/update', feedback);
   }
 }
 
