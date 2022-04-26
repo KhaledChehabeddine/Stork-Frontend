@@ -2,15 +2,14 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import NavBar from '../Utils/Navbar';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
-import getApiClient from '../../api_client/getApiClient';
-import {formatDateTime} from '../Utils/utils';
 import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from '@coreui/react';
 import {useData} from "../../Context/Use";
+import Navbar2 from "../Utils/Navbar2";
 
 const Home = () => {
   return (
     <div align='center' id='home'>
-      <NavBar/>
+      <Navbar2/>
       <div style={{ marginTop:'50px'}}>
         <UpcomingEvents/>
       </div>
