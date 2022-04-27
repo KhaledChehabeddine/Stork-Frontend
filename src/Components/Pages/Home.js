@@ -1,23 +1,103 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import NavBar from '../Utils/Navbar';
+import React, {useEffect, useState} from 'react';
 import '../../Styles/Breadcrumbs.css';
 import '../../Styles/Home.css';
-import {CTableHead, CTableHeaderCell, CTable, CTableBody, CTableDataCell, CTableRow } from '@coreui/react';
-import {useData} from "../../Context/Use";
-import Navbar2 from "../Utils/Navbar2";
+import {
+  CTableHead,
+  CTableHeaderCell,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableRow,
+  CCardBody,
+  CCard
+} from '@coreui/react';
+import {useData} from '../../Context/Use';
+import Navbar from '../Utils/Navbar';
+import CardHeader from 'react-bootstrap/CardHeader';
+import {cilBriefcase, cilCalendar, cilCheckCircle, cilClock, cilPaperPlane, cilXCircle} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 
-const Home = () => {
-  return (
-    <div align='center' id='home'>
-      <Navbar2/>
-      <div style={{ marginTop:'50px'}}>
-        <UpcomingEvents/>
+const statusMessage = (action) => {
+  if (action.title.toLowerCase() === 'accepted')
+    return (
+      <div className='status-accepted'>
+        <CIcon className='me-2'
+               icon={cilCheckCircle}/>
+        {action.title}
+      </div>);
+  if (action.title.toLowerCase() === 'offer accepted')
+    return (
+      <div className='status-accepted'>
+        <CIcon className='me-2'
+               icon={cilCheckCircle}/>
+        {action.title}
       </div>
+    );
+  if (action.title.toLowerCase() === 'offer rejected')
+    return (
+      <div className='status-rejected'>
+        <CIcon className='me-2'
+               icon={cilXCircle}/>
+        {action.title}
+      </div>
+    );
+  if (action.title.toLowerCase() === 'offer sent')
+    return (
+      <div className='status-pending'>
+        <CIcon className='me-2'
+               icon={cilPaperPlane}/>
+        {action.title}
+      </div>
+    );
+  if (action.title.toLowerCase() === 'pending')
+    return (
+      <div className='status-pending'>
+        <CIcon className='me-2'
+               icon={cilClock}/>
+        {action.title}
+      </div>);
+  if (action.title.toLowerCase() === 'rejected')
+    return (
+      <div className='status-rejected'>
+        <CIcon className='me-2'
+               icon={cilXCircle}/>
+        {action.title}
+      </div>);
+  return (
+    <div className='status-interview'>
+      <CIcon className='me-2'
+             icon={cilCalendar}/>
+      {action.title}
     </div>
+  );
+}
+
+const LatestAction = ({action, jobPosition}) => {
+  return (
+    <CTableRow className='table-body-row'>
+      <CTableDataCell className='table-header-cell table-job-position-cell'
+                      style={{color: '#cfd5da'}}><span>{jobPosition.jobTitle}</span></CTableDataCell>
+      <CTableDataCell className='table-header-cell table-candidate-status-cell'
+                      style={{color: '#cfd5da'}}>
+        {action ? action.candidate.firstName + ' ' + action.candidate.lastName :
+          <div className='candidate-none'>
+            No Candidate
+          </div>}
+      </CTableDataCell>
+      <CTableDataCell className='table-header-cell table-candidate-status-cell'
+                      style={{color: '#cfd5da'}}>
+        {action ? statusMessage(action) :
+          <div className='status-new-position'>
+            <CIcon className='me-2'
+                   icon={cilBriefcase}/>
+            New Position
+          </div>}
+      </CTableDataCell>
+    </CTableRow>
   );
 };
 
-const UpcomingEvents = (factory, deps) => {
+const UpcomingEvents = () => {
   const { values: { candidates, jobPositions, actions } } = useData();
   const [loaded, setLoaded] = useState(false);
   const [showingMore, setShowingMore] = useState(false);
@@ -29,84 +109,87 @@ const UpcomingEvents = (factory, deps) => {
     const interval = setInterval(() => {
       for (let j = 0; j < jobPositions.length; ++j) {
         let can = [];
-        for (let i = 0; i < candidates.length; ++i) {
-          if (jobPositions[j].id === candidates[i].jobPosition.id) {
+        for (let i = 0; i < candidates.length; ++i)
+          if (jobPositions[j].id === candidates[i].jobPosition.id)
             can.push(candidates[i]);
-          }
-        }
-
         let ac = [];
-        for (let i = 0; i < can.length; ++i) {
-          for (let k = 0; k < actions.length; ++k) {
-            if (can[i].id === actions[k].candidate.id) {
+        for (let i = 0; i < can.length; ++i)
+          for (let k = 0; k < actions.length; ++k)
+            if (can[i].id === actions[k].candidate.id)
               ac.push(actions[k]);
-            }
-          }
-        }
-        ac.sort((a, b) => {
-          return a.id - b.id;
-        });
+        ac.sort((a, b) => {return a.id - b.id});
         dict[jobPositions[j].id] = ac[ac.length - 1];
       }
       setDict(dict);
       setLoaded(true);
-    }, [1500]);
+    }, [loaded ? 1 : 1000]);
     return () => clearInterval(interval);
-  }, [actions, candidates, dict, jobPositions]);
+  }, [actions, candidates, dict, jobPositions, loaded]);
 
   return (
-    <div className='profile-card'>
-      <h2 className="upcoming-title">
-        Latest Updates
-      </h2>
-      <CTable className="upcoming-table" striped hover bordered>
-        <CTableHead>
-          <CTableRow>
-            <CTableHeaderCell scope='col' colSpan='1'>Job Position</CTableHeaderCell>
-            <CTableHeaderCell scope='col' colSpan='1'>Candidate</CTableHeaderCell>
-            <CTableHeaderCell scope='col' colSpan='1'>Status</CTableHeaderCell>
-          </CTableRow>
-        </CTableHead>
-        <CTableBody>
-          {!loaded &&
-            <CTableRow>
-              <CTableDataCell colSpan='3'>
-                <div className='loading-text'>
-                  Loading...
-                </div>
-              </CTableDataCell>
-            </CTableRow>
-          }
-          { loaded &&
-            (showingMore ? events : events.slice(0, 10)).map(element => (
-              <LatestAction key={element.id} jobPosition={element} action={dict[element.id]} />
-            ))
-          }
-          {!showingMore && events.length > 3 && // conditional rendering
-            <CTableRow>
-              <CTableDataCell colSpan='4'>
-                <div onClick={() => setShowingMore(true)} className='view-more-button'>
-                  View more
-                </div>
-              </CTableDataCell>
-            </CTableRow>}
-        </CTableBody>
-      </CTable>
-    </div>
+    <CCard className='home-card'>
+      <CCardBody>
+        <CardHeader className='home-card-header mb-3'>LATEST UPDATES</CardHeader>
+        <CCard>
+          <CTable className='home-table'
+                  hover
+                  striped
+                  style={{color: '#cfd5da'}}>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell className='table-header-cell'
+                                  colSpan='1'
+                                  scope='col'>Job Position</CTableHeaderCell>
+                <CTableHeaderCell className='table-header-cell'
+                                  colSpan='1'
+                                  scope='col'>Candidate</CTableHeaderCell>
+                <CTableHeaderCell className='table-header-cell'
+                                  colSpan='1'
+                                  scope='col'>Status</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              {!loaded &&
+                <CTableRow>
+                  <CTableDataCell className='table-loading-cell'
+                                  colSpan='3'>Loading...</CTableDataCell>
+                </CTableRow>}
+              {loaded &&
+                (showingMore ? events : events.slice(0, 3)).map(element =>
+                  <LatestAction key={element.id} jobPosition={element} action={dict[element.id]}/>
+                )}
+              {!showingMore && events.length > 3 &&
+                <CTableRow>
+                  <CTableDataCell className='table-view'
+                                  colSpan='3'>
+                    <div onClick={() => setShowingMore(true)}>View more</div>
+                  </CTableDataCell>
+                </CTableRow>}
+              {showingMore && events.length > 3 &&
+                <CTableRow>
+                  <CTableDataCell className='table-view'
+                                  colSpan='3'>
+                    <div onClick={() => setShowingMore(false)}>View less</div>
+                  </CTableDataCell>
+                </CTableRow>}
+            </CTableBody>
+          </CTable>
+        </CCard>
+      </CCardBody>
+    </CCard>
   );
 };
 
-const LatestAction = ({ jobPosition, action }) => {
+const Home = () => {
   return (
-    <CTableRow>
-      <CTableDataCell>{jobPosition.jobTitle}</CTableDataCell>
-      <CTableDataCell>
-        {action ? action.candidate.firstName + ' ' + action.candidate.lastName : 'N/A'}
-      </CTableDataCell>
-      <CTableDataCell>
-        {action ? action.title : 'N/A'}
-      </CTableDataCell>
-    </CTableRow>
+    <div align='center'
+         className='full-height'
+         style={{background: '#272D32'}}>
+      <Navbar/>
+      <div style={{ marginTop:'50px'}}>
+        <UpcomingEvents/>
+      </div>
+    </div>
   );
 };
 

@@ -1,17 +1,114 @@
-.upcoming-events-container {
-  padding-left: 15rem;
-  padding-right: 15rem;
-  padding-top: 0rem;
-  padding-bottom: 10rem;
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap');
+
+.home-card {
+  background: #272D32 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow:  3px  3px 3px #171B1E,
+              -3px -3px 3px #373F46 !important;
+  font-family: 'Nunito Sans', sans-serif;
+  width: 90% !important;
 }
 
-.view-more-button {
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
+.home-card-header {
+  /*box-shadow:  2px  2px 2px #171B1E,*/
+  /*            -2px -2px 2px #373F46 !important;*/
+  background: #272D32 !important;
+  border: none !important;
+  color: #FFFFFF !important;
+  font-size: 2rem !important;
+  font-weight: bold !important;
+  width: 30% !important;
 }
 
-.loading-text {
-  display: flex;
-  justify-content: center;
+.home-table {
+  background: #272D32 !important;
+  border: 0 !important;
+  /*box-shadow:  2px  2px 2px #171B1E,*/
+  /*            -2px -2px 2px #373F46 !important;*/
+  margin: 0 !important;
+}
+
+.table-header-cell {
+  /*border-top: none !important;*/
+  color: #F5F5F5 !important;
+  padding-bottom: 1rem !important;
+  padding-top: 1rem !important;
+  text-align: center !important;
+}
+
+.table-body-row:hover {
+  background: #394249 !important;
+}
+
+.table-job-position-cell {
+  color: #BECBD8 !important;
+  font-size: 1.1rem !important;
+  font-weight: bold !important;
+  padding-bottom: 1.5rem !important;
+  padding-top: 1.5rem !important;
+  text-align: start !important;
+}
+
+.table-job-position-cell span {
+  left: 15px !important;
+  position: relative !important;
+}
+
+.table-candidate-status-cell {
+  font-size: 1.1rem !important;
+  padding-bottom: 1.5rem !important;
+  padding-top: 1.5rem !important;
+}
+
+.table-loading-cell {
+  color: #FFFFFF !important;
+  font-size: 1.1rem !important;
+  font-weight: bold !important;
+  padding-bottom: 1.5rem !important;
+  padding-top: 1.5rem !important;
+  text-align: center !important;
+}
+
+.table-view {
+  color: #FFFFFF !important;
+  cursor: pointer !important;
+  font-size: 1.1rem !important;
+  font-weight: bold !important;
+  padding-bottom: 0.5rem !important;
+  padding-top: 0.5rem !important;
+  text-align: center !important;
+}
+
+.table-view:hover {
+  background: #394249 !important;
+}
+
+.candidate-none {
+  color: #F06F83 !important;
+}
+
+.status-accepted {
+  font-weight: bold !important;
+  color: #2EE0A6 !important;
+}
+
+.status-interview {
+  font-weight: bold !important;
+  color: #72B1FC !important;
+}
+
+.status-pending {
+  font-weight: bold !important;
+  color: #F9A138 !important;
+}
+
+.status-rejected {
+  font-weight: bold !important;
+  color: #F06F83 !important;
+}
+
+.status-new-position {
+  font-weight: bold !important;
+  color: #B87FED !important;
 }
