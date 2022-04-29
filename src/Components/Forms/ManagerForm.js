@@ -1,39 +1,37 @@
+import CIcon from "@coreui/icons-react";
 import React, {useState} from 'react';
 import {
   CButton,
   CCol,
   CForm, CFormFeedback,
   CFormInput,
-  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CRow
+  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CModalHeader, CRow
 } from '@coreui/react';
+import {cilX} from "@coreui/icons";
 import {countries, genders} from '../Utils/utils';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import {useData} from "../../Context/Use";
 import {useNavigate} from "react-router-dom";
-import '../../Styles/Breadcrumbs.css'
 import '../../Styles/Form.css'
+import '../../Styles/Modal.css'
 
-const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
+const nameRegex = new RegExp('^[A-Za-z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const ManagerForm = () => {
-  const { values: { managers }, actions: { setManagers } } = useData();
+  const {values: {managers}, actions: {setManagers}} = useData();
   const [countryPhone, setCountryPhone] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState(null);
   const [lastName, setLastName] = useState('');
+  const [manager, setManager] = useState(null);
   const [phone, setPhone] = useState('');
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
-
-  const handleClose = () => {
-    setVisible(false);
-    window.location.reload();
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,13 +42,11 @@ const ManagerForm = () => {
     if (!nameRegex.test(firstName)) return;
     if (!nameRegex.test(lastName)) return;
     if (!phoneRegex.test(phone)) return;
-    getApiClient().addManager(firstName, lastName, gender, countryPhone, phone, email)
-      .then(response => {
-        if (response.status === 200) {
-          managers.add(response.data);
-          setManagers(managers);
-        }
-      }).catch(error => console.log(error));
+    getApiClient().addManager(firstName, lastName, gender, countryPhone, phone, email).then(response => {
+      managers.push(response.data);
+      setManager(response.data);
+      setManagers(managers);
+    }).catch(error => console.log(error));
     setVisible(true);
   };
 
@@ -127,7 +123,7 @@ const ManagerForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Gender</CFormLabel>
-          <CFormSelect className='form-background form-input'
+          <CFormSelect className='form-background form-input form-input-cursor'
                        defaultValue=''
                        required
                        onChange={(event) => setGender(event.target.value)}>
@@ -145,12 +141,24 @@ const ManagerForm = () => {
       </CForm>
 
       <CModal alignment='center'
-              visible={visible}
-              onClose={handleClose}>
-        <CModalBody>{firstName + ' ' + lastName + ' successfully added.'}</CModalBody>
-        <CModalFooter>
-          <button className="form-button"
-                   onClick={() => {navigate("/manager/all"); window.location.reload();}}>Close</button>
+              backdrop='static'
+              visible={visible}>
+        <CModalHeader className='modal-background modal-header'
+                      closeButton={false}>
+          {firstName + ' ' + lastName}
+          <CIcon className='modal-close-icon'
+                 icon={cilX}
+                 size='xl'
+                 onClick={() => window.location.reload()}/>
+        </CModalHeader>
+        <CModalBody className='modal-background'>Hiring manager has been successfully added.</CModalBody>
+        <CModalFooter className='modal-background'>
+          <CButton className='me-2 modal-button'
+                   shape='rounded-pill'
+                   onClick={() => navigate('/manager/all')}>View managers</CButton>
+          <CButton className='modal-button'
+                   shape='rounded-pill'
+                   onClick={() => navigate('/interview/add', {state: {manager: manager}})}>Schedule interview</CButton>
         </CModalFooter>
       </CModal>
 

@@ -1,3 +1,4 @@
+import CIcon from "@coreui/icons-react";
 import React, {useCallback, useEffect, useReducer} from 'react';
 import {
   CButton,
@@ -6,15 +7,16 @@ import {
   CFormFeedback,
   CFormInput,
   CFormLabel,
-  CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CRow
+  CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CModalHeader, CRow
 } from '@coreui/react';
+import {cilX} from "@coreui/icons";
 import {countries, genders} from '../Utils/utils';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import {useData} from "../../Context/Use";
 import {useLocation, useNavigate} from 'react-router-dom';
-import '../../Styles/Breadcrumbs.css'
-import '../../Styles/FormStyle.css'
+import '../../Styles/Form.css'
+import '../../Styles/Modal.css';
 
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const nameRegex = new RegExp('^[A-Za-z][A-Za-z ]{1,25}$');
@@ -80,7 +82,7 @@ const reducer = (state, action) => {
 };
 
 const CandidateForm = () => {
-  const { values: { candidates, jobPositions, managers }, actions: { setCandidates } } = useData();
+  const {values: {candidates, jobPositions, managers}, actions: {setCandidates}} = useData();
   const location = useLocation();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -104,7 +106,7 @@ const CandidateForm = () => {
 
   const handleSubmit = useCallback( (event) => {
     event.preventDefault();
-    dispatch({ type: 'set-valid' });
+    dispatch({type: 'set-valid'});
     if (!state.country) return;
     if (!state.countryPhone) return;
     if (!emailRegex.test(state.email)) return;
@@ -116,19 +118,17 @@ const CandidateForm = () => {
     if (!state.resumeFile) return;
     getApiClient().findVacancy(state.jobPositionId)
       .then(job => {
-        console.log(job.data);
         getApiClient().addCandidate(state.firstName, state.lastName, state.country, state.countryPhone, state.gender,
           state.email, state.phone, job.data, 'Pending')
           .then(response => {
-            console.log(response.data);
             dispatch({type: 'set-candidate', candidate: response.data});
             getApiClient().addResume(response.data.id, state.resumeFile).catch(error => console.log(error));
             getApiClient().addAction('Resume received', response.data).catch(error => console.log(error));
             candidates.push(response.data);
             setCandidates(candidates);
           }).catch(error => console.log(error));
-        dispatch({type: 'set-visible', visible: true});
       }).catch(error => console.log(error));
+    dispatch({type: 'set-visible', visible: true});
   }, [candidates, setCandidates, state.country, state.countryPhone, state.email, state.firstName,
             state.gender, state.jobPositionId, state.lastName, state.phone, state.resumeFile]);
 
@@ -172,7 +172,7 @@ const CandidateForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Country</CFormLabel>
-          <CFormSelect className='form-background form-input'
+          <CFormSelect className='form-background form-input form-input-cursor'
                        defaultValue=''
                        required
                        onChange={(event) => dispatch(
@@ -188,7 +188,7 @@ const CandidateForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Gender</CFormLabel>
-          <CFormSelect className='form-background form-input'
+          <CFormSelect className='form-background form-input form-input-cursor'
                        defaultValue=''
                        required
                        onChange={(event) => dispatch(
@@ -254,7 +254,7 @@ const CandidateForm = () => {
                         plainText
                         readOnly
                         type='text'/> :
-            <CFormSelect className='form-background form-input'
+            <CFormSelect className='form-background form-input form-input-cursor'
                          defaultValue=''
                          required
                          onChange={(event) => dispatch(
@@ -291,24 +291,25 @@ const CandidateForm = () => {
 
       <CModal alignment='center'
               backdrop='static'
-              visible={state.visible}
-              onClose={() => {
-                dispatch({type: 'set-visible', visible: false});
-                navigate('/candidate/all');
-              }}>
-        <CModalBody>{state.firstName + ' ' + state.lastName + ' has been successfully added.'}</CModalBody>
-        <CModalFooter>
-          <button className="form-button"
-                   onClick={() => {
-                     navigate("/candidate/all");
-                     window.location.reload();
-                   }}>Close</button>
-          <button className="form-button" style={{width: "45%"}}
-                   onClick={() => {
-                     dispatch({type: 'set-visible', visible: false});
-                     navigate('/interview/add', {state: {candidate: state.candidate}});
-                     window.location.reload();
-                   }}>Schedule Interview</button>
+              visible={state.visible}>
+        <CModalHeader className='modal-background modal-header'
+                      closeButton={false}>
+          {state.firstName + ' ' + state.lastName}
+          <CIcon className='modal-close-icon'
+                 icon={cilX}
+                 size='xl'
+                 onClick={() => window.location.reload()}/>
+        </CModalHeader>
+        <CModalBody className='modal-background'>Candidate has been successfully added.</CModalBody>
+        <CModalFooter className='modal-background'>
+          <CButton className='me-2 modal-button'
+                   shape='rounded-pill'
+                   onClick={() => navigate('/candidate/all')}>View candidates</CButton>
+          <CButton className='modal-button'
+                   shape='rounded-pill'
+                   onClick={() =>
+                     navigate('/interview/add', {state: {candidate: state.candidate}})
+                   }>Schedule interview</CButton>
         </CModalFooter>
       </CModal>
 

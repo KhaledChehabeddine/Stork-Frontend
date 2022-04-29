@@ -1,3 +1,4 @@
+import CIcon from "@coreui/icons-react";
 import React, {useCallback, useState} from 'react';
 import {
   CForm,
@@ -9,16 +10,14 @@ import {
   CFormSelect,
   CModalBody, CModalFooter, CModal, CHeader, CButton, CModalHeader, CRow
 } from '@coreui/react';
+import {cilX} from "@coreui/icons";
 import {countries} from '../Utils/utils';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
 import {useData} from "../../Context/Use";
 import {useNavigate} from 'react-router-dom'
-import '../../Styles/Breadcrumbs.css'
 import '../../Styles/Form.css';
 import '../../Styles/Modal.css';
-import {cilX} from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
 
 const JobForm = () => {
   const { values: { jobPositions }, actions: { setJobPositions } } = useData();
@@ -26,6 +25,7 @@ const JobForm = () => {
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [employmentType, setEmploymentType] = useState(null);
+  const [jobPosition, setJobPosition] = useState(null);
   const [jobTitle, setJobTitle] = useState('');
   const [notes, setNotes] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -43,10 +43,9 @@ const JobForm = () => {
     if (!workType) return;
     getApiClient().addVacancy(jobTitle, startDate, country, city, workType, employmentType, notes)
       .then(response => {
-        if (response.status === 200) {
           jobPositions.push(response.data);
           setJobPositions(jobPositions);
-        }
+          setJobPosition(response.data);
       }).catch(error => console.log(error));
     setVisible(true);
   }, [city, country, employmentType, jobPositions, jobTitle, notes, setJobPositions, startDate, workType]);
@@ -163,30 +162,25 @@ const JobForm = () => {
 
       <CModal alignment='center'
               backdrop='static'
-              visible={visible}
-              onClose={() => setVisible(false)}>
+              visible={visible}>
         <CModalHeader className='modal-background modal-header'
                       closeButton={false}>
           {jobTitle}
           <CIcon className='modal-close-icon'
                  icon={cilX}
                  size='xl'
-                 onClick={() => setVisible(false)}/>
+                 onClick={() => window.location.reload()}/>
         </CModalHeader>
         <CModalBody className='modal-background'>Job position has been successfully added.</CModalBody>
         <CModalFooter className='modal-background'>
           <CButton className='me-2 modal-button'
                    shape='rounded-pill'
-                   onClick={() => {
-                     setVisible(false);
-                     window.location.reload();
-                   }}>Close</CButton>
+                   onClick={() => navigate('/job/all')}>View Jobs</CButton>
           <CButton className='modal-button'
                    shape='rounded-pill'
-                   onClick={() => {
-                     setVisible(false);
-                     navigate('/job/all');
-                   }}>View Jobs</CButton>
+                   onClick={() =>
+                     navigate('/candidate/add', {state: {jobPosition: jobPosition}})
+                   }>Add Candidate</CButton>
         </CModalFooter>
       </CModal>
 
