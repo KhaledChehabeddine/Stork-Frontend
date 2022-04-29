@@ -1,36 +1,39 @@
+import CIcon from "@coreui/icons-react";
 import React, {useState} from 'react';
 import {
+  CButton,
   CCol,
   CForm, CFormFeedback,
   CFormInput,
-  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter
+  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CModalHeader, CRow
 } from '@coreui/react';
-import {formStyle} from '../Utils/Styles';
+import {cilX} from "@coreui/icons";
 import {countries, genders} from '../Utils/utils';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
-import '../../Styles/Breadcrumbs.css'
-import '../../Styles/FormStyle.css'
 import {useData} from "../../Context/Use";
 import {useNavigate} from "react-router-dom";
+import '../../Styles/Form.css'
+import '../../Styles/Modal.css'
 
-const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
+const nameRegex = new RegExp('^[A-Za-z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
 const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const ManagerForm = () => {
-  const { values: { managers }, actions: { setManagers } } = useData();
+  const {values: {managers}, actions: {setManagers}} = useData();
   const [countryPhone, setCountryPhone] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState(null);
   const [lastName, setLastName] = useState('');
+  const [manager, setManager] = useState(null);
   const [phone, setPhone] = useState('');
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     setValid(true);
     if (!countryPhone) return;
@@ -39,38 +42,28 @@ const ManagerForm = () => {
     if (!nameRegex.test(firstName)) return;
     if (!nameRegex.test(lastName)) return;
     if (!phoneRegex.test(phone)) return;
-    getApiClient().addManager(firstName, lastName, gender, countryPhone, phone, email)
-      .then(response => {
-        if (response.status === 200) {
-          managers.add(response.data);
-          setManagers(managers);
-        }
-      }).catch(error => console.log(error));
+    getApiClient().addManager(firstName, lastName, gender, countryPhone, phone, email).then(response => {
+      managers.push(response.data);
+      setManager(response.data);
+      setManagers(managers);
+    }).catch(error => console.log(error));
     setVisible(true);
-  };
-
-  const onClose = () => {
-    setVisible(false);
-    window.location.reload();
   };
 
   return (
     <div>
       <NavBar/>
-      <CForm className='form row g-3 needs-validation'
-             noValidate
-             style={formStyle}
+      <CForm className='form form-background g-3 row'
              validated={valid}>
 
-        <CHeader>
-          <h1 className='form-title'>Hiring Manager Form</h1>
-        </CHeader>
+        <CHeader className='form-background form-title'>Hiring Manager Form</CHeader>
 
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>First Name</CFormLabel>
-          <CFormInput placeholder='ex: Jonathon'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Jonathon'
                       required
                       type='text'
                       onChange={(event) => setFirstName(event.target.value)}/>
@@ -80,7 +73,8 @@ const ManagerForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Last Name</CFormLabel>
-          <CFormInput placeholder='ex: Walker'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Walker'
                       required
                       type='text'
                       onChange={(event) => setLastName(event.target.value)}/>
@@ -91,7 +85,8 @@ const ManagerForm = () => {
               md={12}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Email</CFormLabel>
-          <CFormInput placeholder='ex: example@email.com'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: example@email.com'
                       required
                       type='email'
                       onChange={(event) => setEmail(event.target.value)}/>
@@ -103,7 +98,8 @@ const ManagerForm = () => {
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Phone Number</CFormLabel>
           <CInputGroup>
-            <CFormSelect defaultValue=''
+            <CFormSelect className='form-background form-select-group'
+                         defaultValue=''
                          required
                          type='tel'
                          onChange={(event) => setCountryPhone(event.target.value)}>
@@ -112,7 +108,7 @@ const ManagerForm = () => {
                 return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
                 <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
             </CFormSelect>
-            <CFormInput className='w-auto'
+            <CFormInput className='form-background form-input-group'
                         placeholder='ex: 44521276'
                         required
                         type='tel'
@@ -127,7 +123,8 @@ const ManagerForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Gender</CFormLabel>
-          <CFormSelect defaultValue=''
+          <CFormSelect className='form-background form-input form-input-cursor'
+                       defaultValue=''
                        required
                        onChange={(event) => setGender(event.target.value)}>
             <option value='' disabled>Choose...</option>
@@ -136,24 +133,36 @@ const ManagerForm = () => {
           <CFormFeedback invalid>Invalid gender selected.</CFormFeedback>
         </CCol>
 
-        <CCol xs={12}>
-          <center>
-            <button className="form-button"
-                    type='submit'
-                    onClick={onSubmit}>Submit</button>
-          </center>
+        <CCol>
+          <CButton className='form-button'
+                   shape='rounded-pill'
+                   onClick={handleSubmit}>Submit</CButton>
         </CCol>
       </CForm>
 
       <CModal alignment='center'
-              visible={visible}
-              onClose={onClose}>
-        <CModalBody>{firstName + ' ' + lastName + ' successfully added.'}</CModalBody>
-        <CModalFooter>
-          <button className="form-button"
-                   onClick={() => {navigate("/manager/all"); window.location.reload();}}>Close</button>
+              backdrop='static'
+              visible={visible}>
+        <CModalHeader className='modal-background modal-header'
+                      closeButton={false}>
+          {firstName + ' ' + lastName}
+          <CIcon className='modal-close-icon'
+                 icon={cilX}
+                 size='xl'
+                 onClick={() => window.location.reload()}/>
+        </CModalHeader>
+        <CModalBody className='modal-background'>Hiring manager has been successfully added.</CModalBody>
+        <CModalFooter className='modal-background'>
+          <CButton className='me-2 modal-button'
+                   shape='rounded-pill'
+                   onClick={() => navigate('/manager/all')}>View managers</CButton>
+          <CButton className='modal-button'
+                   shape='rounded-pill'
+                   onClick={() => navigate('/interview/add', {state: {manager: manager}})}>Schedule interview</CButton>
         </CModalFooter>
       </CModal>
+
+      <CRow className='mt-3'/>
     </div>
   );
 }

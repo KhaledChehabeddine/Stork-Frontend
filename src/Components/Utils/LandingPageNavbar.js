@@ -21,9 +21,9 @@ const LandingPageNavBar = () => {
           <Nav style = {{marginLeft:"auto"}} className="landing-navbar-login">
             <Nav.Link as={Link} to="/login">Log In</Nav.Link>
           </Nav>
-          <Nav style = {{paddingRight:"5%"}} className="landing-navbar-register">
-            <Nav.Link as={Link} to="/register">Register</Nav.Link>
-          </Nav>
+          {/*<Nav style = {{paddingRight:"5%"}} className="landing-navbar-register">*/}
+          {/*  <Nav.Link as={Link} to="/register">Register</Nav.Link>*/}
+          {/*</Nav>*/}
         </Navbar.Collapse>
       </Container>
     </Navbar>

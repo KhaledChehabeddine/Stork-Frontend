@@ -1,5 +1,7 @@
+import CIcon from "@coreui/icons-react";
 import React, {useReducer, useEffect, useCallback, useState} from 'react';
 import {
+  CButton,
   CCol,
   CForm,
   CFormFeedback,
@@ -7,17 +9,36 @@ import {
   CFormLabel,
   CFormSelect,
   CFormTextarea, CHeader, CModal,
-  CModalBody, CModalFooter
+  CModalBody, CModalFooter, CModalHeader, CRow
 } from "@coreui/react";
-import {formStyle} from "../Utils/Styles";
-import {add30Mins, getHashCode} from "../Utils/utils";
-import {useLocation, useNavigate} from "react-router-dom";
+import {cilX} from "@coreui/icons";
+import Calendar from '../Calendar/Calendar';
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-import '../../Styles/FormStyle.css';
+import {getHashCode} from "../Utils/utils";
 import {useData} from "../../Context/Use";
-import Calendar from '../Calendar/Calendar';
+import {useLocation, useNavigate} from "react-router-dom";
+import '../../Styles/Form.css';
+import '../../Styles/Modal.css'
+
+const initialState = {
+  candidate: {firstName: '', lastName: ''},
+  candidateId: null,
+  date_time: null,
+  description: "",
+  interviews: [],
+  jobPosition: {jobTitle: ''},
+  jobPositionId: null,
+  jobTitle: '',
+  manager: {firstName: '', lastName: ''},
+  managerId: null,
+  pageLoaded: true,
+  redirectedCandidate: false,
+  redirectedManager: false,
+  valid: false,
+  visible: false
+}
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -25,28 +46,32 @@ const reducer = (state, action) => {
       return {...state, candidate: action.candidate};
     case 'set-candidate-id':
       return {...state, candidateId: action.candidateId};
-    case 'set-vacancy-id':
-      return {...state, vacancyId: action.vacancyId};
     case 'set-date-time':
       return {...state, date_time: action.date_time};
     case 'set-description':
       return {...state, description: action.description};
+    case 'set-vacancy-id':
+      return {...state, vacancyId: action.vacancyId};
+    case 'set-job-position':
+      return {...state, jobPosition: action.jobPosition};
     case 'set-job-position-id':
       return {...state, jobPositionId: action.jobPositionId};
     case 'set-job-title':
       return {...state, jobTitle: action.jobTitle};
+    case 'set-manager':
+      return {...state, manager: action.manager};
     case 'set-manager-id':
       return {...state, managerId: action.managerId};
-    case 'set-redirected':
-      return {...state, redirected: true};
+    case 'set-redirected-candidate':
+      return {...state, redirectedCandidate: true};
+    case 'set-redirected-manager':
+      return {...state, redirectedManager: true}
     case 'set-valid':
       return {...state, valid: true};
     case 'set-visible':
       return {...state, visible: action.visible};
     case 'set-interviews':
       return {...state, interviews: action.interviews};
-    case 'set-error':
-      return {...state, errorMessage: action.message};
     default:
       return {...state};
   }
@@ -73,119 +98,89 @@ function timeConflict(interviews, datetime) {
 }
 
 const InterviewForm = () => {
-  const { values: { jobPositions, candidates, managers } } = useData(); // context, to avoid repetition, and to manage the state
+  const {values: {jobPositions, candidates, managers, interviews}, actions: {setInterviews}} = useData();
   const location = useLocation();
   const navigate = useNavigate();
   const [manager, setManager] = useState(null);
-  const [state, dispatch] = useReducer(reducer, {
-    candidate: null,
-    candidateId: null,
-    date_time: null,
-    description: "",
-    jobPositionId: null,
-    jobTitle: '',
-    managerId: null,
-    pageLoaded: true,
-    redirected: false,
-    valid: false,
-    visible: false,
-    interviews: [],
-    errorMessage: ""
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-
-
-  const interviewEvents= state.interviews.map(interview => ({
+  const interviewEvents = state.interviews.map(interview => ({
     id: interview.id, 
     start: new Date(interview.dateTime), 
     end: new Date(new Date(interview.dateTime).getTime() + 1800 * 1000),
     title: interview.description
-  }))
-  const { managerId }= state; // destructure.
+  }));
+
+  const { managerId } = state;
+
   useEffect(() => {
     if (managerId == null) return;
     getApiClient().getInterviewsByManagerId(managerId)
-      .then(response => {
-        dispatch({type: 'set-interviews', interviews: response.data});
-        // response.data is the data given from the backend.
-      }).catch(error => console.log(error));
+      .then(response =>
+        dispatch({type: 'set-interviews', interviews: response.data})
+      ).catch(error => console.log(error));
     getApiClient().getManager(managerId)
-      .then(response => {
-        console.log(response.data);
-        setManager(response.data);
-      }).catch(error => console.log(error));
+      .then(response => setManager(response.data)).catch(error => console.log(error));
     getApiClient().getCandidate(state.candidateId)
-      .then(response => {
-        console.log(response.data);
-        dispatch({ type: 'set-candidate', candidate: response.data });
-      }).catch(error => console.log(error));
-  }, [state.candidateId, managerId]); // anything inside the dependency list if it changes the effect runs again.
+      .then(response =>
+        dispatch({ type: 'set-candidate', candidate: response.data })
+      ).catch(error => console.log(error));
+  }, [state.candidateId, managerId]);
 
   useEffect(() => {
-    if (location.state)
+    if (location.state) {
       if (location.state.candidate) {
         dispatch({type: 'set-candidate', candidate: location.state.candidate});
         dispatch({type: 'set-candidate-id', candidateId: location.state.candidate.id});
         dispatch({type: 'set-job-position-id', jobPositionId: location.state.candidate.jobPosition.id});
-        dispatch({type: 'set-redirected'});
         dispatch({
           type: 'set-job-title',
           jobTitle: location.state.candidate.jobPosition.jobTitle +
             ' (' + location.state.candidate.jobPosition.country + ')'
         });
+        dispatch({type: 'set-redirected-candidate', redirectedCandidate: true});
       }
-
+      if (location.state.manager) {
+        dispatch({type: 'set-manager', manager: location.state.manager});
+        dispatch({type: 'set-manager-id', managerId: location.state.managers});
+        dispatch({type: 'set-redirected-manager', redirectedManager: true});
+      }
+    }
   }, [location]);
 
-  const handleClick = useCallback((event) => {
-    console.log(state.date_time);
-    console.log(add30Mins(state.date_time));
+  const handleSubmit = useCallback((event) => {
     event.preventDefault();
-    dispatch({ type: 'set-valid' });
-    if (!state.candidateId) {
-      dispatch({type: 'set-error', message: "Select a candidate!"});
-      return;
-    }
-    if (!state.date_time) {
-      dispatch({type: 'set-error', message: "Select an interview time!"});
-      return;
-    }
-    if (!state.jobPositionId) {
-      dispatch({type: 'set-error', message: "Select a job position!"});
-      return;
-    }
-    if (!state.managerId) {
-      dispatch({type: 'set-error', message: "Select a hiring manager!"});
-      return;
-    }
-    if (timeConflict(state.interviews, state.date_time)) {
-      dispatch({type: 'set-error', message: "There is a time conflict, check the calendar!"});
-      return;
-    }
-    getApiClient().getCandidate(state.candidateId)
-      .then(candidate => {
-        console.log(candidate.data);
-        getApiClient().getManager(state.managerId)
-          .then(manager => {
-            getApiClient().addInterview(candidate.data, state.date_time, state.description, state.candidate.jobPosition,
-              manager.data)
-              .then(() => {
+    dispatch({type: 'set-valid'});
+    if (!state.candidateId) return;
+    if (!state.date_time) return;
+    if (!state.jobPositionId) return;
+    if (!state.managerId) return;
+    if (timeConflict(state.interviews, state.date_time)) return;
+    getApiClient().findVacancy(state.jobPositionId).then(jobPosition =>
+      dispatch({type: 'set-job-position', jobPosition: jobPosition.data})
+    ).catch(error => console.log(error));
+    getApiClient().getCandidate(state.candidateId).then(candidate => {
+        dispatch({type: 'set-candidate', candidate: candidate.data});
+        getApiClient().getManager(state.managerId).then(manager => {
+            dispatch({type: 'set-manager', manager: candidate.data});
+            getApiClient().addInterview(candidate.data, state.date_time, state.description,
+                                        state.candidate.jobPosition, manager.data).then((response) => {
+                interviews.push(response.data);
+                setInterviews(interviews);
                 getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
                   getApiClient().addAction(`Interview #${response.data} scheduled`, candidate.data)
-                    .then(response => {
-                      console.log(response);
-                    }).catch(error => console.log(error));
+                    .catch(error => console.log(error));
                   getApiClient().updateStatus(candidate.data, `Interview #${response.data} scheduled`)
-                    .then(r => console.log(r))
                     .catch(error => console.log(error));
                 }).catch(error => console.log(error));
               }).catch(error => console.log(error));
-            dispatch({type: 'set-visible', visible: true});
-          })
+          }).catch(error => console.log(error))
       }).catch(error => console.log(error));
-  }, [state]);
+    dispatch({type: 'set-visible', visible: true})
+  }, [interviews, setInterviews, state.candidate.jobPosition, state.candidateId, state.date_time,
+            state.description, state.interviews, state.jobPositionId, state.managerId]);
 
-  const onViewCandidate = useCallback(() => {
+  const viewCandidate = useCallback(() => {
     const interval = setInterval(() => {
       navigate(`/candidate/${getHashCode(state.candidateId)}`);
       window.location.reload();
@@ -198,21 +193,22 @@ const InterviewForm = () => {
       <NavBar/>
         {state.pageLoaded ?
           <div>
-            <CForm className='form row g-3 needs-validation'
-                   noValidate
-                   style={formStyle}
+            <CForm className='form g-3 row'
                    validated={state.valid}>
-              <CHeader>
-                <h1 className='form-title'>Interview Form</h1>
-              </CHeader>
-              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
+              <CHeader className='form-background form-title'>Interview Form</CHeader>
+
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
                 <CFormLabel>Candidate</CFormLabel>
-                {state.redirected ?
-                  <CFormInput defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
+                {state.redirectedCandidate ?
+                  <CFormInput className='form-background form-input'
+                              defaultValue={state.candidate.firstName + ' ' + state.candidate.lastName}
                               plainText
                               readOnly
                               type='text'/> :
-                  <CFormSelect defaultValue=''
+                  <CFormSelect className='form-background form-input form-input-cursor'
+                               defaultValue=''
                                required
                                onChange={(event) => dispatch(
                                  {type: 'set-candidate-id', candidateId: event.target.value}
@@ -224,14 +220,18 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid candidate selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
                 <CFormLabel>Job Position</CFormLabel>
-                {state.redirected ?
-                  <CFormInput defaultValue={state.jobTitle}
+                {state.redirectedCandidate ?
+                  <CFormInput className='form-background form-input'
+                              defaultValue={state.jobTitle}
                               plainText
                               readOnly
                               type='text'/> :
-                  <CFormSelect defaultValue=''
+                  <CFormSelect className='form-background form-input form-input-cursor'
+                               defaultValue=''
                                required
                                onChange={(event) => dispatch(
                                  {type: 'set-job-position-id', jobPositionId: event.target.value}
@@ -244,23 +244,35 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid job position selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
                 <CFormLabel>Hiring Manager</CFormLabel>
-                <CFormSelect defaultValue=''
-                             required
-                             onChange={(event) => dispatch(
-                               {type: 'set-manager-id', managerId: event.target.value}
-                             )}>
-                  <option disabled value=''>Choose...</option>
-                  {managers.map(manager => <option key={manager.id} value={manager.id}>
-                    {manager.firstName + ' ' + manager.lastName}</option>)}
-                </CFormSelect>
+                {state.redirectedManager ?
+                  <CFormInput className='form-background form-input'
+                              defaultValue={state.manager.firstName + ' ' + state.manager.lastName}
+                              plainText
+                              readOnly
+                              type='text'/> :
+                  <CFormSelect className='form-background form-input form-input-cursor'
+                               defaultValue=''
+                               required
+                               onChange={(event) => dispatch(
+                                 {type: 'set-manager-id', managerId: event.target.value}
+                               )}>
+                    <option disabled value=''>Choose...</option>
+                    {managers.map(manager => <option key={manager.id} value={manager.id}>
+                      {manager.firstName + ' ' + manager.lastName}</option>)}
+                </CFormSelect>}
                 <CFormFeedback invalid>Invalid hiring manager selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative' md={6} style={{marginBottom: '1rem'}}>
+              <CCol className='position-relative'
+                    md={6}
+                    style={{marginBottom: '1rem'}}>
                 <CFormLabel>Date and time</CFormLabel>
-                <CFormInput required
+                <CFormInput className='form-background form-input'
+                            required
                             type='datetime-local'
                             onChange={(event) => dispatch(
                               {type: 'set-date-time', date_time: event.target.value}
@@ -268,49 +280,60 @@ const InterviewForm = () => {
                 <CFormFeedback invalid>Invalid date or time selected.</CFormFeedback>
               </CCol>
 
-              <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
-                <CFormLabel>Hiring Manager's Calendar</CFormLabel>
-                  <Calendar events={interviewEvents} />
-              </CCol>
-
-
-              <CCol className='position-relative' md={12} style={{marginBottom: '0.7rem'}}>
+              <CCol className='position-relative'
+                    md={12}
+                    style={{marginBottom: '0.7rem'}}>
                 <CFormLabel>Description</CFormLabel>
-                <CFormTextarea rows='5'
+                <CFormTextarea className='form-background form-input'
+                               rows='5'
                                type='text'
                                onChange={(event) => dispatch(
                                  {type: 'set-description', description: event.target.value})}/>
               </CCol>
 
+              <CCol className='position-relative'
+                    md={12}
+                    style={{marginBottom: '0.7rem'}}>
+                <CFormLabel>Hiring Manager's Calendar</CFormLabel>
+                <Calendar events={interviewEvents}/>
+              </CCol>
+
               <CCol>
-                <center>
-                  <button className="form-button" type='submit' onClick={handleClick}>Submit</button>
-                  {state.errorMessage && <p style={{color: 'red'}}>{state.errorMessage}</p>}
-                </center>
+                <CButton className='form-button'
+                         shape='rounded-pill'
+                         onClick={handleSubmit}>Submit</CButton>
               </CCol>
             </CForm>
 
             <CModal alignment='center'
                     backdrop='static'
-                    visible={state.visible}
-                    onClose={() => dispatch({type: 'set-visible', visible: false})}>
-              <CModalBody>{'Interview with ' + (state.candidate && state.candidate.firstName) + ' ' +
-              (state.candidate && state.candidate.lastName) + ' has been successfully scheduled.'}
+                    visible={state.visible}>
+              <CModalHeader className='modal-background modal-header'
+                            closeButton={false}>
+                Interview Scheduled
+                <CIcon className='modal-close-icon'
+                       icon={cilX}
+                       size='xl'
+                       onClick={() => window.location.reload()}/>
+              </CModalHeader>
+              <CModalBody className='modal-background'>
+                {'Interview of ' + state.candidate.firstName + ' ' + state.candidate.lastName + ' for ' +
+                  state.jobPosition.jobTitle + ' with ' + state.manager.firstName + ' ' + state.manager.lastName +
+                  'has been successfully scheduled.'}
               </CModalBody>
-              <CModalFooter>
-                <button className="form-button"
-                         onClick={() => {
-                           dispatch({type: 'set-visible', visible: false});
-                           navigate('/home');
-                         }}>Close</button>
-                <button className="form-button" style={{width: "40%"}}
-                         onClick={() => {
-                           dispatch({type: 'set-visible', visible: false});
-                           onViewCandidate();
-                         }}>View Candidate</button>
+              <CModalFooter className='modal-background'>
+                <CButton className='me-2 modal-button'
+                         shape='rounded-pill'
+                         onClick={() => navigate('/interview/all')}>View interviews</CButton>
+                <CButton className='modal-button'
+                         shape='rounded-pill'
+                         onClick={() => viewCandidate()}>View candidate</CButton>
               </CModalFooter>
             </CModal>
-          </div> : <Spinner/>}
+          </div>
+          : <Spinner/>}
+
+      <CRow className='mt-3'/>
     </div>
   );
 };

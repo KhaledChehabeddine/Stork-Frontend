@@ -28,9 +28,9 @@ const Navbar = () => {
       <CContainer fluid>
         <CNavbarBrand className='navbar-logo me-5'
                       href='/'>
-          <span className='navbar-logo-glow'>STO</span>
-          <span className='navbar-logo-glow navbar-logo-R'>Я</span>
-          <span className='navbar-logo-glow'>K</span>
+          STO
+          <span>Я</span>
+          K
         </CNavbarBrand>
         <CNavbarToggler/>
         <CNavbarNav className='mb-2 mb-lg-0 me-auto'>
@@ -88,9 +88,22 @@ const Navbar = () => {
             </CDropdown>
           </CNavItem>
 
-          <CNavItem>
-            <CButton className='me-4 navbar-navs-button'
-                     onClick={() => navigate('/interview/all')}>INTERVIEWS</CButton>
+          <CNavItem className='me-3'>
+            <CDropdown variant='nav-item'>
+              <CDropdownToggle className='navbar-navs-dropdown'
+                               caret={false}>
+                INTERVIEWS
+                <CIcon className='ms-sm-1 navbar-navs-dropdown-caret-animation'
+                       icon={cilChevronBottom}
+                       size='sm'/>
+              </CDropdownToggle>
+              <CDropdownMenu className='navbar-navs-dropdown-menu'>
+                <CDropdownItem className='mt-2 navbar-navs-dropdown-item'
+                               onClick={() => navigate('/interview/add')}>Add interview</CDropdownItem>
+                <CDropdownItem className='mb-2 navbar-navs-dropdown-item'
+                               onClick={() => navigate('/interview/all')}>View interview</CDropdownItem>
+              </CDropdownMenu>
+            </CDropdown>
           </CNavItem>
         </CNavbarNav>
 
