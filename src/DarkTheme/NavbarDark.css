@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap');
+
 .navbar {
     background: #272D32 !important;
     border: none !important;
-    box-shadow:  2px  2px 3px #666666,
-                -2px -2px 3px #FFFFFF !important;
+    box-shadow:  3px  3px 3px #171B1E,
+                -3px -3px 3px #373F46 !important;
     font-family: 'Nunito Sans', sans-serif !important;
     font-weight: bold !important;
     padding: 1.5rem !important;
@@ -14,10 +16,14 @@
     font-size: 2rem !important;
     letter-spacing: .1rem !important;
     padding: 0.5em 0.5em !important;
-    text-shadow: 0 0 5px #FFFFFF !important;
 }
 
 .navbar-logo span {
+    color: #FFFFFF !important;
+    text-shadow: 0 0 5px #FFFFFF !important;
+}
+
+.navbar-logo .navbar-logo-R {
     color: #A3FFA3 !important;
     text-shadow: 0 0 5px #A3FFA3 !important;
 }
@@ -47,14 +53,14 @@
 }
 
 .navbar-navs-dropdown-menu {
-    border: none !important;
-    background: #ECF0F3 !important;
-    box-shadow:  1px  1px 2px #CBCED1,
-                -1px -1px 2px #FFFFFF !important;
+    border: 1px solid #808080 !important;
+    background: #F3F9FF !important;
+    box-shadow:  5px  5px 10px #171B1E,
+                -5px -5px 10px #373F46 !important;
 }
 
 .navbar-navs-dropdown-item {
-    background: #ECF0F3 !important;
+    background: #F3F9FF !important;
     color: #272D32 !important;
     cursor: pointer !important;
     font-size: 0.9rem !important;
@@ -68,13 +74,8 @@
 }
 
 .navbar-navs-dropdown-item:hover {
-    box-shadow: inset  2px  2px 3px #CBCED1,
-                inset -2px -2px 3px #FFFFFF;
-}
-
-.navbar-navs-dropdown-item:active {
-    box-shadow: inset  1px  1px 2px #CBCED1,
-                inset -1px -1px 2px #FFFFFF;
+    box-shadow: inset  1px  1px 3px #929599,
+                inset -1px -1px 3px #FFFFFF;
 }
 
 .navbar-navs-dropdown-hamburger {
@@ -107,10 +108,10 @@
 .navbar-navs-button:hover {
     color: #F3F9FF !important;
     box-shadow: inset  1px  1px 3px #101214,
-    inset -1px -1px 3px #3e4850 !important;
+                inset -1px -1px 3px #3e4850 !important;
 }
 
 .navbar-navs-button:active {
     box-shadow: inset  1px  1px 1px #101214,
-    inset -1px -1px 1px #3e4850 !important;
+                inset -1px -1px 1px #3e4850 !important;
 }

@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import {
+  CButton,
   CCol,
   CForm, CFormFeedback,
   CFormInput,
-  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter
+  CFormLabel, CFormSelect, CHeader, CInputGroup, CModal, CModalBody, CModalFooter, CRow
 } from '@coreui/react';
-import {formStyle} from '../Utils/Styles';
 import {countries, genders} from '../Utils/utils';
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
-import '../../Styles/Breadcrumbs.css'
-import '../../Styles/FormStyle.css'
 import {useData} from "../../Context/Use";
 import {useNavigate} from "react-router-dom";
+import '../../Styles/Breadcrumbs.css'
+import '../../Styles/Form.css'
 
 const nameRegex = new RegExp('^[A-Z][A-Za-z ]{1,25}$');
 const emailRegex = new RegExp('^[^ ]+@[^ ]+$');
@@ -30,7 +30,12 @@ const ManagerForm = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (event) => {
+  const handleClose = () => {
+    setVisible(false);
+    window.location.reload();
+  };
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     setValid(true);
     if (!countryPhone) return;
@@ -49,28 +54,20 @@ const ManagerForm = () => {
     setVisible(true);
   };
 
-  const onClose = () => {
-    setVisible(false);
-    window.location.reload();
-  };
-
   return (
     <div>
       <NavBar/>
-      <CForm className='form row g-3 needs-validation'
-             noValidate
-             style={formStyle}
+      <CForm className='form form-background g-3 row'
              validated={valid}>
 
-        <CHeader>
-          <h1 className='form-title'>Hiring Manager Form</h1>
-        </CHeader>
+        <CHeader className='form-background form-title'>Hiring Manager Form</CHeader>
 
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>First Name</CFormLabel>
-          <CFormInput placeholder='ex: Jonathon'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Jonathon'
                       required
                       type='text'
                       onChange={(event) => setFirstName(event.target.value)}/>
@@ -80,7 +77,8 @@ const ManagerForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Last Name</CFormLabel>
-          <CFormInput placeholder='ex: Walker'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Walker'
                       required
                       type='text'
                       onChange={(event) => setLastName(event.target.value)}/>
@@ -91,7 +89,8 @@ const ManagerForm = () => {
               md={12}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Email</CFormLabel>
-          <CFormInput placeholder='ex: example@email.com'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: example@email.com'
                       required
                       type='email'
                       onChange={(event) => setEmail(event.target.value)}/>
@@ -103,7 +102,8 @@ const ManagerForm = () => {
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Phone Number</CFormLabel>
           <CInputGroup>
-            <CFormSelect defaultValue=''
+            <CFormSelect className='form-background form-select-group'
+                         defaultValue=''
                          required
                          type='tel'
                          onChange={(event) => setCountryPhone(event.target.value)}>
@@ -112,7 +112,7 @@ const ManagerForm = () => {
                 return Object.values(countries).indexOf(phoneCode) === index;}).sort().map(phoneCode =>
                 <option key={phoneCode} value={phoneCode}>{phoneCode}</option>)}
             </CFormSelect>
-            <CFormInput className='w-auto'
+            <CFormInput className='form-background form-input-group'
                         placeholder='ex: 44521276'
                         required
                         type='tel'
@@ -127,7 +127,8 @@ const ManagerForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Gender</CFormLabel>
-          <CFormSelect defaultValue=''
+          <CFormSelect className='form-background form-input'
+                       defaultValue=''
                        required
                        onChange={(event) => setGender(event.target.value)}>
             <option value='' disabled>Choose...</option>
@@ -136,24 +137,24 @@ const ManagerForm = () => {
           <CFormFeedback invalid>Invalid gender selected.</CFormFeedback>
         </CCol>
 
-        <CCol xs={12}>
-          <center>
-            <button className="form-button"
-                    type='submit'
-                    onClick={onSubmit}>Submit</button>
-          </center>
+        <CCol>
+          <CButton className='form-button'
+                   shape='rounded-pill'
+                   onClick={handleSubmit}>Submit</CButton>
         </CCol>
       </CForm>
 
       <CModal alignment='center'
               visible={visible}
-              onClose={onClose}>
+              onClose={handleClose}>
         <CModalBody>{firstName + ' ' + lastName + ' successfully added.'}</CModalBody>
         <CModalFooter>
           <button className="form-button"
                    onClick={() => {navigate("/manager/all"); window.location.reload();}}>Close</button>
         </CModalFooter>
       </CModal>
+
+      <CRow className='mt-3'/>
     </div>
   );
 }

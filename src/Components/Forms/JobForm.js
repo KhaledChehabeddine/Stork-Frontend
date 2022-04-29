@@ -7,16 +7,18 @@ import {
   CFormFeedback,
   CFormTextarea,
   CFormSelect,
-  CModalBody, CModalFooter, CModal, CHeader
+  CModalBody, CModalFooter, CModal, CHeader, CButton, CModalHeader, CRow
 } from '@coreui/react';
 import {countries} from '../Utils/utils';
-import {formStyle} from '../Utils/Styles';
-import {useNavigate} from 'react-router-dom'
 import getApiClient from '../../api_client/getApiClient';
 import NavBar from '../Utils/Navbar';
-import '../../Styles/Breadcrumbs.css'
-import '../../Styles/FormStyle.css'
 import {useData} from "../../Context/Use";
+import {useNavigate} from 'react-router-dom'
+import '../../Styles/Breadcrumbs.css'
+import '../../Styles/Form.css';
+import '../../Styles/Modal.css';
+import {cilX} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 
 const JobForm = () => {
   const { values: { jobPositions }, actions: { setJobPositions } } = useData();
@@ -47,26 +49,23 @@ const JobForm = () => {
         }
       }).catch(error => console.log(error));
     setVisible(true);
-  }, [city, country, employmentType, jobTitle, notes, startDate, workType]);
+  }, [city, country, employmentType, jobPositions, jobTitle, notes, setJobPositions, startDate, workType]);
 
   return (
     <div>
       <NavBar/>
 
-      <CForm className='form row g-3 needs-validation'
-             noValidate
-             style={formStyle}
+      <CForm className='form form-background g-3 row'
              validated={valid}>
 
-        <CHeader>
-          <h1 className='form-title'>Job Position Form</h1>
-        </CHeader>
+        <CHeader className='form-background form-title'>Job Form</CHeader>
 
         <CCol className='position-relative'
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Job Title</CFormLabel>
-          <CFormInput placeholder='ex: Software Engineer'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Software Engineer'
                       required
                       type='text'
                       onChange={(event) => setJobTitle(event.target.value)}/>
@@ -77,7 +76,8 @@ const JobForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Start Date</CFormLabel>
-          <CFormInput required
+          <CFormInput className='form-background form-input'
+                      required
                       type='date'
                       onChange={(event) => setStartDate(event.target.value)}/>
           <CFormFeedback invalid>Invalid start date selected.</CFormFeedback>
@@ -87,7 +87,8 @@ const JobForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Country</CFormLabel>
-          <CFormSelect defaultValue={''}
+          <CFormSelect className='form-background form-input form-input-cursor'
+                       defaultValue=''
                        required
                        onChange={(event) => {setCountry(event.target.value)}}>
             <option disabled value=''>Choose...</option>
@@ -100,7 +101,8 @@ const JobForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>City</CFormLabel>
-          <CFormInput placeholder='ex: Beirut'
+          <CFormInput className='form-background form-input'
+                      placeholder='ex: Beirut'
                       required
                       type='text'
                       onChange={(event) => setCity(event.target.value)}/>
@@ -111,7 +113,8 @@ const JobForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Workplace Type</CFormLabel>
-          <CFormSelect defaultValue=''
+          <CFormSelect className='form-background form-input form-input-cursor'
+                       defaultValue=''
                        required
                        onChange={(event) => setWorkType(event.target.value)}>
             <option disabled value=''>Choose...</option>
@@ -126,7 +129,8 @@ const JobForm = () => {
               md={6}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Employment Type</CFormLabel>
-          <CFormSelect defaultValue=''
+          <CFormSelect className='form-background form-input form-input-cursor'
+                       defaultValue=''
                        required
                        onChange={(event) => setEmploymentType(event.target.value)}>
             <option disabled value=''>Choose...</option>
@@ -144,17 +148,16 @@ const JobForm = () => {
               md={12}
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Notes</CFormLabel>
-          <CFormTextarea rows='5'
+          <CFormTextarea className='form-background form-input'
+                         rows='5'
                          onChange={(event) => setNotes(event.target.value)}>
           </CFormTextarea>
         </CCol>
 
         <CCol>
-          <center>
-            <button className="form-button"
-                    type='submit'
-                    onClick={handleSubmit}>Submit</button>
-          </center>
+          <CButton className='form-button'
+                   shape='rounded-pill'
+                   onClick={handleSubmit}>Submit</CButton>
         </CCol>
       </CForm>
 
@@ -162,21 +165,32 @@ const JobForm = () => {
               backdrop='static'
               visible={visible}
               onClose={() => setVisible(false)}>
-        <CModalBody>{jobTitle + ' has been successfully added.'}</CModalBody>
-        <CModalFooter>
-          <button className="form-button"
+        <CModalHeader className='modal-background modal-header'
+                      closeButton={false}>
+          {jobTitle}
+          <CIcon className='modal-close-icon'
+                 icon={cilX}
+                 size='xl'
+                 onClick={() => setVisible(false)}/>
+        </CModalHeader>
+        <CModalBody className='modal-background'>Job position has been successfully added.</CModalBody>
+        <CModalFooter className='modal-background'>
+          <CButton className='me-2 modal-button'
+                   shape='rounded-pill'
                    onClick={() => {
                      setVisible(false);
                      window.location.reload();
-                   }}>Close</button>
-          <button className="form-button" style={{width: "30%"}}
+                   }}>Close</CButton>
+          <CButton className='modal-button'
+                   shape='rounded-pill'
                    onClick={() => {
                      setVisible(false);
                      navigate('/job/all');
-                     window.location.reload();
-                   }}>View Jobs</button>
+                   }}>View Jobs</CButton>
         </CModalFooter>
       </CModal>
+
+      <CRow className='mt-3'/>
     </div>
   );
 };
