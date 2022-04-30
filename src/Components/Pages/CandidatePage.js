@@ -1,13 +1,24 @@
 import axios from 'axios';
 import CIcon from '@coreui/icons-react';
 import React, {useCallback, useEffect, useReducer} from 'react';
-import {cilArrowCircleLeft, cilBriefcase, cilCalendar, cilHome, cilPhone, cilUser, cilUserFemale} from '@coreui/icons';
-import {cilMail, cilNote} from '@coreui/icons-pro';
 import {
+  cilArrowCircleLeft,
+  cilBriefcase,
+  cilCalendar,
+  cilGlobeAlt,
+  cilHome,
+  cilPhone,
+  cilUser,
+  cilUserFemale
+} from '@coreui/icons';
+import {cilCalendarEvent, cilCity, cilMail, cilNote} from '@coreui/icons-pro';
+import {
+  CButton, CCard,
+  CCardBody, CCardText, CCardTitle, CCol,
   CModal,
   CModalBody,
   CModalFooter,
-  CModalTitle
+  CModalTitle, CRow
 } from '@coreui/react';
 import ActionTable from '../Tables/ActionTable';
 import getApiClient from '../../api_client/getApiClient';
@@ -17,6 +28,7 @@ import {formatDate} from '../Utils/utils';
 import {useNavigate} from 'react-router-dom';
 import '../../Styles/ProfilePage.css'
 import FeedbackTable from "../Tables/FeedbackTable";
+import '../../Styles/ViewPage.css'
 
 const initialState = {
   actions: [],
@@ -66,7 +78,7 @@ const reducer = (state, action) => {
   }
 }
 
-const ProfilePage = ({ candidate }) => {
+const CandidatePage = ({ candidate }) => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -87,34 +99,10 @@ const ProfilePage = ({ candidate }) => {
     }).catch(error => console.log(error));
   }, [candidate.id]);
 
-  const interviewButton = () => {
-    return <button className='action-button' onClick={scheduleInterview}>Schedule Interview</button>
-  }
-
-  const offerButton = () => {
-    return <button className='action-button' onClick={() => dispatch({ type: 'set-text-box-visible', value: true })}>Send Offer</button>
-  }
-
-  const rejectButton = () => {
-    return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-rejection', value: true })}>Reject</button>
-  }
-
-  const acceptButton = () => {
-    return <button className='action-button' onClick={() => dispatch({ type: 'set-confirm-acceptance', value: true })}>Accept</button>
-  }
-
-  const getActionButtons = () => {
-    let status = (candidate.status).toLowerCase();
-    if (status.includes("pending") || status.includes("interview"))
-      return <div style={{textAlign: "center"}}>{interviewButton()}{offerButton()}{rejectButton()}{acceptButton()}</div>;
-    else if (status.includes("sent")) return <div style={{textAlign: "center", width: "100%"}}>{acceptButton()}</div>;
-    else if (status.includes("accepted")) return null;
-    else if (status.includes("rejected")) return null;
-    else return null
-  }
-
   const setGenderIcon = () => {
-    return candidate.sex === 'Male' ? <CIcon icon={cilUser}/> : <CIcon icon={cilUserFemale}/>;
+    return candidate.sex === 'Male' ? <CIcon className='me-3'
+                                             icon={cilUser}/> : <CIcon className='me-3'
+                                                                       icon={cilUserFemale}/>;
   }
 
   const getActionTable = () => {
@@ -190,76 +178,188 @@ const ProfilePage = ({ candidate }) => {
       {state.actionsLoaded ?
         <div>
           <NavBar/>
-          <div style={{height: "10px"}}>
-            <button className="back-icon-container" onClick={() => {navigate('/candidate/all')}} style={{paddingLeft: "2%"}}>
-              <CIcon className="back-icon" icon={cilArrowCircleLeft}/>
-            </button>
-          </div>
-          <div className='profile-card'
-               style={{display: 'flex', justifyContent: 'space-evenly'}}>
-            <div className='profile-info'>
-              <h1 className='profile-name'
-                  style={{paddingTop: '2%'}}>{candidate.firstName + ' ' + candidate.lastName}</h1>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}>{setGenderIcon()}</div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{candidate.sex}</h3>
-              </div>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}><CIcon icon={cilHome}/></div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{candidate.country}</h3>
-              </div>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}><CIcon icon={cilPhone}/></div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{candidate.phone}</h3>
-              </div>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}><CIcon icon={cilMail}/></div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{candidate.email}</h3>
-              </div>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}><CIcon icon={cilBriefcase}/></div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{state.jobPosition.jobTitle}</h3>
-              </div>
-              <div className='profile-field'>
-                <div className='profile-icon-container'
-                     style={{float: 'left'}}><CIcon icon={cilCalendar}/></div>
-                <h3 className='card-text'
-                    style={{float: 'right'}}>{formatDate(candidate.date)}</h3>
-              </div>
-            </div>
-          <div className='button-container'
-               style={{float: 'right', width: '35%'}}>
-            <h1 className='profile-name'
-                style={{paddingTop: '2%'}}>Actions</h1>
-            <button className='action-button'
-                    onClick={() => downloadResume()}>View Resume</button>
-            {getActionButtons()}
-            <button className='action-button'
-                    style={{marginBottom: '5%'}}
-                    onClick={() => dispatch({ type: 'set-contact-visible', value: true })}>Contact</button>
-          </div>
-        </div>
 
-        <CModal alignment='center'
-                backdrop='static'
-                visible={state.confirmRejection}
-                onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
-          <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
-          <CModalFooter>
-            <button className="form-button" onClick={() => dispatch({type: 'set-confirm-rejection', value: false})}>Cancel</button>
-            <button className="form-button" onClick={sendRejection}>Confirm</button>
-          </CModalFooter>
-        </CModal>
+          <div style={{height: '5px'}}>
+            <CIcon className='view-back-button view-back-cursor'
+                   icon={cilArrowCircleLeft}
+                   size='xxl'
+                   onClick={() => {navigate('/candidate/all')}}/>
+          </div>
+
+          <div className='full-height'>
+            <CCard className='m-auto mt-5 mb-5 p-5 view-card'
+                   style={{borderRadius: '2rem'}}>
+              <CCardBody>
+                <CRow>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardTitle className='mb-4 fw-bold fs-2 profile-name'>
+                      {candidate.firstName + ' ' + candidate.lastName}
+                    </CCardTitle>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    <CCardTitle className='mb-4 fw-bold fs-2 profile-name'>Actions</CCardTitle>
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      {setGenderIcon()}
+                      {candidate.sex}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    <CButton className='view-page-button'
+                             shape='rounded-pill'
+                             onClick={downloadResume}>View resume</CButton>
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      <CIcon className='me-3'
+                             icon={cilHome}/>
+                      {candidate.country}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    {candidate.status.toLowerCase() === 'offer sent' ||
+                     candidate.status.toLowerCase() === 'accepted' ||
+                     candidate.status.toLowerCase() === 'rejected' ?
+                      <CButton className='view-page-button-disabled'
+                               shape='rounded-pill'>Schedule interview</CButton> :
+                      <CButton className='view-page-button'
+                               shape='rounded-pill'
+                               onClick={scheduleInterview}>Schedule interview</CButton>}
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      <CIcon className='me-3'
+                             icon={cilPhone}/>
+                      {candidate.phone}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    {candidate.status.toLowerCase() === 'offer sent' ||
+                     candidate.status.toLowerCase() === 'accepted' ||
+                     candidate.status.toLowerCase() === 'rejected' ?
+                      <CButton className='view-page-button-disabled'
+                               shape='rounded-pill'>Send offer</CButton> :
+                      <CButton className='view-page-button'
+                               shape='rounded-pill'
+                               onClick={() => dispatch({
+                                 type: 'set-text-box-visible', value: true
+                               })}>Send offer</CButton>}
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      <CIcon className='me-3'
+                             icon={cilMail}/>
+                      {candidate.email}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    {candidate.status.toLowerCase() === 'offer sent' ||
+                     candidate.status.toLowerCase() === 'accepted' ||
+                     candidate.status.toLowerCase() === 'rejected' ?
+                      <CButton className='view-page-button-disabled'
+                               shape='rounded-pill'>Reject</CButton> :
+                      <CButton className='view-page-button'
+                               shape='rounded-pill'
+                               onClick={() => dispatch({
+                                 type: 'set-confirm-rejection', value: true
+                               })}>Reject</CButton>}
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      <CIcon className='me-3'
+                             icon={cilBriefcase}/>
+                      {state.jobPosition.jobTitle}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    {candidate.status.toLowerCase() === 'accepted' ||
+                     candidate.status.toLowerCase() === 'rejected' ?
+                      <CButton className='view-page-button-disabled'
+                               shape='rounded-pill'>Accept</CButton> :
+                      <CButton className='view-page-button'
+                               shape='rounded-pill'
+                               onClick={() => dispatch({
+                                 type: 'set-confirm-acceptance', value: true
+                               })}>Accept</CButton>}
+                  </CCol>
+                </CRow>
+
+                <CRow className='mb-3'>
+                  <CCol className='position-relative'
+                        style={{left: '10%'}}>
+                    <CCardText className='mb-2'>
+                      <CIcon className='me-3'
+                             icon={cilCalendar}/>
+                      {formatDate(candidate.date)}
+                    </CCardText>
+                  </CCol>
+                  <CCol className='d-sm-flex justify-content-sm-center'>
+                    {candidate.status.toLowerCase() === 'offer sent' ||
+                     candidate.status.toLowerCase() === 'accepted' ||
+                     candidate.status.toLowerCase() === 'rejected' ?
+                      <CButton className='view-page-button-disabled'
+                               shape='rounded-pill'>Contact</CButton> :
+                      <CButton className='view-page-button'
+                               shape='rounded-pill'
+                               onClick={() => dispatch({
+                                 type: 'set-contact-visible', value: true
+                               })}>Contact</CButton>}
+                  </CCol>
+                </CRow>
+              </CCardBody>
+            </CCard>
+          </div>
+
+          <CCard className='m-auto mt-5 mb-5 pt-5 pb-5 view-card'
+                 style={{borderRadius: '2rem'}}>
+            {getActionTable(candidate)}
+          </CCard>
+
+          <CCard className='m-auto mt-5 mb-5 pt-5 pb-5 view-card'
+                 style={{borderRadius: '2rem'}}>
+            <div className='d-flex justify-content-center mb-4'>
+              <h1 className='feedback-title'>Feedback Notes</h1>
+              <button className="icon-button" onClick={() => dispatch({ type: 'set-feedback-visible', value: true })} style={{paddingLeft: "2%"}}>
+                <CIcon icon={cilNote}/>
+              </button>
+            </div>
+            {getFeedbackTable()}
+          </CCard>
+
+          <CRow className='mt-3'/>
+
+          <CModal alignment='center'
+                  backdrop='static'
+                  visible={state.confirmRejection}
+                  onClose={() => dispatch({type: 'set-confirm-rejection', value: false})}>
+            <CModalBody>Are you sure you want to reject this candidate?</CModalBody>
+            <CModalFooter>
+              <button className="form-button" onClick={() => dispatch({type: 'set-confirm-rejection', value: false})}>Cancel</button>
+              <button className="form-button" onClick={sendRejection}>Confirm</button>
+            </CModalFooter>
+          </CModal>
           <CModal alignment='center'
                   backdrop='static'
                   visible={state.confirmAcceptance}
@@ -329,24 +429,10 @@ const ProfilePage = ({ candidate }) => {
                       onClick={() => feedback(state.feedbackText)}>Confirm</button>
             </CModalFooter>
           </CModal>
-        <div className='profile-card'
-             style={{paddingBottom:'5%', marginBottom: '5%'}}>
-          {getActionTable(candidate)}
-        </div>
-        <div className='profile-card'
-             style={{paddingBottom:'5%'}}>
-          <div style={{display: 'flex', justifyContent: "center", marginBottom: "5%"}}>
-            <h1 className='feedback-title'>Feedback Notes</h1>
-            <button className="icon-button" onClick={() => dispatch({ type: 'set-feedback-visible', value: true })} style={{paddingLeft: "2%"}}>
-              <CIcon icon={cilNote}/>
-            </button>
-          </div>
-          {getFeedbackTable()}
-        </div>
         </div>
         : <Spinner/>}
     </>
   );
 };
 
-export default ProfilePage;
+export default CandidatePage;

@@ -15,11 +15,29 @@
     letter-spacing: .1rem !important;
     padding: 0.5em 0.5em !important;
     text-shadow: 0 0 5px #FFFFFF !important;
+    transition: ease-in-out .5s !important;
 }
 
 .navbar-logo span {
-    color: #A3FFA3 !important;
-    text-shadow: 0 0 5px #A3FFA3 !important;
+    color: #9E88ED !important;
+    text-shadow: 0 0 5px #9E88ED !important;
+    transition: ease-in-out .5s !important;
+}
+
+.navbar-logo:hover {
+    text-shadow: 0 0 8px #FFFFFF !important;
+}
+
+.navbar-logo:hover span {
+    text-shadow: 0 0 8px #9E88ED !important;
+}
+
+.navbar-logo:active {
+    text-shadow: 0 0 10px #FFFFFF !important;
+}
+
+.navbar-logo:active span {
+    text-shadow: 0 0 10px #9E88ED !important;
 }
 
 .navbar-navs-dropdown {
