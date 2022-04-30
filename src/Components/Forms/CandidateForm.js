@@ -219,7 +219,7 @@ const CandidateForm = () => {
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Phone Number</CFormLabel>
           <CInputGroup>
-            <CFormSelect className='form-background form-select-group'
+            <CFormSelect className='form-background form-select-group form-input-cursor'
                          defaultValue=''
                          required
                          type='tel'

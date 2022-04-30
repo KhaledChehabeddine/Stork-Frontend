@@ -252,6 +252,10 @@ class ApiClient extends ApiClientBase {
     return this.Get('/manager/find', data);
   }
 
+  updateManager(manager) {
+    return this.Put('/manager/update', manager);
+  }
+
   updateFeedback(feedback) {
     return this.Post('/feedback/update', feedback);
   }

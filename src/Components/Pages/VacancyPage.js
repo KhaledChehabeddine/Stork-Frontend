@@ -93,6 +93,7 @@ const VacancyPage = ({vacancy}) => {
     vacancy.notes = notes;
     vacancy.workType = workType;
     getApiClient().updateJobPosition(vacancy);
+    setEditVisible(false);
   }, [city, country, employmentType, jobTitle, notes, startDate, vacancy, workType]);
 
   const deleteJobPosition = useCallback(() => {

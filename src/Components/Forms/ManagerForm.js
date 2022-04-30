@@ -22,6 +22,7 @@ const phoneRegex = new RegExp('^\\d{5,12}$');
 
 const ManagerForm = () => {
   const {values: {managers}, actions: {setManagers}} = useData();
+  const navigate = useNavigate();
   const [countryPhone, setCountryPhone] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -31,7 +32,6 @@ const ManagerForm = () => {
   const [phone, setPhone] = useState('');
   const [valid, setValid] = useState(false);
   const [visible, setVisible] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -98,7 +98,7 @@ const ManagerForm = () => {
               style={{marginBottom: '1rem'}}>
           <CFormLabel>Phone Number</CFormLabel>
           <CInputGroup>
-            <CFormSelect className='form-background form-select-group'
+            <CFormSelect className='form-background form-select-group form-input-cursor'
                          defaultValue=''
                          required
                          type='tel'
