@@ -6,6 +6,7 @@
 
 .landing-navbar {
     border-bottom: 0!important;
+    box-shadow: none!important;
     height: 20%;
     background: transparent!important;
 }
