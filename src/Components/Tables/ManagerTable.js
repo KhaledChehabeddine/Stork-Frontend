@@ -19,6 +19,8 @@ import {cilIdBadge} from "@coreui/icons-pro";
 import ManagerRow from "./ManagerRow";
 
 const filterManagers = (managers, input) => {
+  if (!input) return;
+  if (!input.value) return;
   let filter, value, i, title, filteredManagers = [];
   filter = input.value.toUpperCase();
   for (i = 0; i < managers.length; i++) {

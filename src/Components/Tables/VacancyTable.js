@@ -19,6 +19,8 @@ import {useData} from '../../Context/Use';
 import '../../Styles/VacancyTable.css';
 
 const filterPositions = (vacancies, input) => {
+  if (!input) return;
+  if (!input.value) return;
   let filter, value, i, title, filteredPositions = [];
   filter = input.value.toUpperCase();
   for (i = 0; i < vacancies.length; i++) {

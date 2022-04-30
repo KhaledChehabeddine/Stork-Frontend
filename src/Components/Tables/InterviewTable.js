@@ -18,6 +18,8 @@ import {useData} from "../../Context/Use";
 import InterviewRow from "./InterviewRow";
 
 const filterInterviews = (interviews, input) => {
+  if (!input) return;
+  if (!input.value) return;
   let filter, value, i, title, filteredInterviews = [];
   filter = input.value.toUpperCase();
   for (i = 0; i < interviews.length; i++) {

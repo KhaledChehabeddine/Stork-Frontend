@@ -16,7 +16,7 @@ import Calendar from '../Calendar/Calendar';
 import getApiClient from "../../api_client/getApiClient";
 import NavBar from "../Utils/Navbar";
 import Spinner from '../Utils/Spinner';
-import {getHashCode} from "../Utils/utils";
+import {formatDateTime, getHashCode} from "../Utils/utils";
 import {useData} from "../../Context/Use";
 import {useLocation, useNavigate} from "react-router-dom";
 import '../../Styles/Form.css';
@@ -162,11 +162,17 @@ const InterviewForm = () => {
     getApiClient().getCandidate(state.candidateId).then(candidate => {
         dispatch({type: 'set-candidate', candidate: candidate.data});
         getApiClient().getManager(state.managerId).then(manager => {
-            dispatch({type: 'set-manager', manager: candidate.data});
+            dispatch({type: 'set-manager', manager: manager.data});
             getApiClient().addInterview(candidate.data, state.date_time, state.description,
                                         state.candidate.jobPosition, manager.data).then((response) => {
                 interviews.push(response.data);
                 setInterviews(interviews);
+                getApiClient().sendEmail(candidate.data.email, "Interview Scheduled", "Dear " + candidate.data.firstName + " "
+                + candidate.data.lastName + "\n" + "You have an interview with " + manager.data.firstName + " " + manager.data.lastName + " "
+                + "on " + formatDateTime(state.date_time));
+              getApiClient().sendEmail(manager.data.email, "Interview Scheduled", "Dear " + manager.data.firstName + " "
+                + manager.data.lastName + "\n" + "You have an interview with " + candidate.data.firstName + " " + candidate.data.lastName + " "
+                + "on " + formatDateTime(state.date_time));
                 getApiClient().getNumInterviewsPerCandidate(state.candidateId).then(response => {
                   getApiClient().addAction(`Interview #${response.data} scheduled`, candidate.data)
                     .catch(error => console.log(error));

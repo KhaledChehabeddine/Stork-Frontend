@@ -157,7 +157,7 @@ const UpcomingEvents = () => {
                 (showingMore ? events : events.slice(0, 3)).map(element =>
                   <LatestAction key={element.id} jobPosition={element} action={dict[element.id]}/>
                 )}
-              {!showingMore && events.length > 3 &&
+              {loaded && !showingMore && events.length > 3 &&
                 <CTableRow>
                   <CTableDataCell className='table-view'
                                   colSpan='3'>

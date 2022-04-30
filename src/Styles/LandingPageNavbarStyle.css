@@ -7,6 +7,7 @@
 .landing-navbar {
     border-bottom: 0!important;
     height: 20%;
+    background: transparent!important;
 }
 
 .landing-navbar-brand a {
