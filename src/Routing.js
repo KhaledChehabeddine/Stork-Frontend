@@ -1,5 +1,5 @@
 import CandidateForm from './Components/Forms/CandidateForm';
-import CandidatesPage from "./Components/Pages/CandidatesPage";
+import CandidatesPage from "./Components/Tables/CandidatesTable";
 import Home from './Components/Pages/Home';
 import InterviewForm from './Components/Forms/InterviewForm';
 import JobForm from './Components/Forms/JobForm';
@@ -9,9 +9,9 @@ import ManagerForm from "./Components/Forms/ManagerForm";
 import NavigateToAfter from "./Components/Pages/NavigateToAfter";
 import PageNotAvailable from "./Components/Pages/PageNotAvailable";
 import AboutUsPage from "./Components/Pages/AboutUsPage";
-import ProfilePage from './Components/Pages/ProfilePage';
+import CandidatePage from './Components/Pages/CandidatePage';
 import ResumePage from "./Components/Pages/ResumePage";
-import VacanciesPage from "./Components/Pages/VacanciesPage";
+import VacancyTable from "./Components/Tables/VacancyTable";
 import VacancyPage from "./Components/Pages/VacancyPage";
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {getHashCode} from "./Components/Utils/utils";
@@ -47,11 +47,11 @@ const Routing = () => {
             <Route element={ <InterviewForm /> } exact path='/interview/add'/>
             <Route element={ <InterviewTable /> } exact path='/interview/all'/>
             <Route element={ <JobForm /> } exact path='/job/add'/>
-            <Route element={ <VacanciesPage /> } exact path='/job/all'/>
+            <Route element={ <VacancyTable /> } exact path='/job/all'/>
             <Route element={ <ManagerForm /> } exact path='/manager/add'/>
             <Route element={ <ManagerTable /> } exact path='/manager/all'/>
             {candidates.map(candidate =>
-              <Route element={ <ProfilePage candidate={candidate} /> } exact key={candidate.id}
+              <Route element={ <CandidatePage candidate={candidate} /> } exact key={candidate.id}
                      path={`/candidate/${getHashCode(candidate.id)}`} />)}
             {candidates.map(candidate =>
               <Route element={<ResumePage candidate={candidate} />} exact key={candidate.id}

@@ -1,5 +1,14 @@
 import React, {useEffect, useReducer} from 'react';
-import {CTable, CTableBody, CTableHead, CTableHeaderCell, CTableRow} from "@coreui/react";
+import {
+  CButton, CFormInput,
+  CInputGroup,
+  CInputGroupText,
+  CTable,
+  CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow
+} from "@coreui/react";
 import NavBar from "../Utils/Navbar";
 import Spinner from "../Utils/Spinner";
 import CIcon from "@coreui/icons-react";
@@ -95,51 +104,97 @@ const InterviewTable = () => {
                   <CTableHeaderCell className="text-center icon-cell">
                     <CIcon className="header-container" icon={cilChatBubble}/>
                   </CTableHeaderCell>
+
                   <CTableHeaderCell className="header-cell">
-                    <div className="header-container" style={{display:"flex",  alignItems:"center"}}>
-                      <button onClick={event => dispatch({type: 'sort-by-date', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-top">
-                        <CIcon className="sort-icon" icon={cilArrowTop}/>
-                      </button>
+                    <div className='header-container'
+                         style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
                       Interview Date
-                      <button onClick={event => dispatch({type: 'reverse-sort-by-date', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-bottom">
-                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
-                      </button>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'sort-by-date',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowTop}/>
+                      </CButton>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'reverse-sort-by-date',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowBottom}/>
+                      </CButton>
                     </div>
                   </CTableHeaderCell>
+
                   <CTableHeaderCell className="text-center header-cell">
-                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                      <button onClick={event => dispatch({type: 'sort-by-candidate-name', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-top">
-                        <CIcon className="sort-icon" icon={cilArrowTop}/>
-                      </button>
+                    <div className='header-container'
+                         style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
                       Candidate Name
-                      <button onClick={event => dispatch({type: 'reverse-sort-by-candidate-name', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-bottom">
-                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
-                      </button>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'sort-by-candidate-name',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowTop}/>
+                      </CButton>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'reverse-sort-by-candidate-name',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowBottom}/>
+                      </CButton>
                     </div>
                   </CTableHeaderCell>
+
                   <CTableHeaderCell className="text-center header-cell">
-                    <div className="header-container" style={{display:"flex",  alignItems:"center", justifyContent: "center"}}>
-                      <button onClick={event => dispatch({type: 'sort-by-manager-name', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-top">
-                        <CIcon className="sort-icon" icon={cilArrowTop}/>
-                      </button>
+                    <div className='header-container'
+                         style={{display:'flex',  alignItems:'center', justifyContent: 'center'}}>
                       Manager Name
-                      <button onClick={event => dispatch({type: 'reverse-sort-by-manager-name', interviews: (filterInterviews(state.interviews, event.target))})} className="sort-button-bottom">
-                        <CIcon className="sort-icon" icon={cilArrowBottom}/>
-                      </button>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'sort-by-manager-name',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowTop}/>
+                      </CButton>
+                      <CButton className='table-button'
+                               variant='outline'
+                               onClick={event => dispatch({
+                                 type: 'reverse-sort-by-manager-name',
+                                 interviews: (filterInterviews(state.interviews, event.target))}
+                               )}>
+                        <CIcon icon={cilArrowBottom}/>
+                      </CButton>
                     </div>
                   </CTableHeaderCell>
+
                   <CTableHeaderCell className="text-center search-cell">
-                    <div style={{display:"flex",  alignItems:"center"}}>
-                      <CIcon className="search-icon" icon={cilSearch} />
-                      <Input className="search-bar" type="text" id="searchInput" onKeyUp={event =>
-                        dispatch({type: 'set-interviews', interviews: (filterInterviews(state.interviews, event.target))})
-                      } placeholder="Search For Interviews.."/>
+                    <div style={{display:'flex',  alignItems:'center', paddingTop: '1rem', paddingBlock: '1rem'}}>
+                      <CInputGroup className='align-items-center'>
+                        <CInputGroupText className='table-group-text'>
+                          <CIcon icon={cilSearch}/>
+                        </CInputGroupText>
+                        <CFormInput className='table-group-input'
+                                    placeholder='Search...'
+                                    type='text'
+                                    onKeyUp={event => dispatch({
+                                      type: 'set-interviews',
+                                      interviews: (filterInterviews(state.interviews, event.target))}
+                                    )}/>
+                      </CInputGroup>
                     </div>
                   </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody className="table-body">
-                {state.filteredInterviews.map(interview => <InterviewRow key={interview.id} interview={interview} interviews={state.filteredInterviews}/>)}
+                {state.filteredInterviews.map(interview =>
+                  <InterviewRow key={interview.id} interview={interview} interviews={state.filteredInterviews}/>)}
               </CTableBody>
             </CTable>
           </div>

@@ -1,0 +1,87 @@
+.view-back-button {
+    position: absolute !important;
+    left: 45px !important;
+    top: 175px !important;
+    height: 2.5rem !important;
+    padding: 0 !important;
+    width: 2.5rem !important;
+    border-radius: 50% !important;
+    background: #ECF0F3 !important;
+    border: none !important;
+    color: #272D31 !important;
+}
+
+.view-back-button:hover {
+    color: #5F6D77 !important;
+}
+
+.view-back-button:active {
+    color: #72838E !important;
+}
+
+.view-back-cursor {
+    cursor: pointer !important;
+}
+
+.view-card {
+    background: #ECF0F3 !important;
+    border: none !important;
+    border-radius: 2rem !important;
+    box-shadow:  3px  3px 5px #CBCED1,
+                -3px -3px 5px #FFFFFF !important;
+    color: #272D32 !important;
+    font-family: 'Nunito Sans', sans-serif;
+    width: 75% !important;
+}
+
+.view-page-button {
+    background: #ECF0F3 !important;
+    border: none !important;
+    box-shadow:  5px  5px 10px #D4D8DB,
+                -5px -5px 10px #FFFFFF !important;
+    color: #272D31 !important;
+    padding: 0.8rem !important;
+    text-transform: uppercase !important;
+    width: 50% !important;
+}
+
+.view-page-button:hover {
+    box-shadow: inset  2px  2px 3px #CBCED1,
+                inset -2px -2px 3px #FFFFFF !important;
+}
+
+.view-page-button:active {
+    box-shadow: inset  1px  1px 2px #CBCED1,
+                inset -1px -1px 2px #FFFFFF !important;
+}
+
+.view-page-button-disabled {
+    background: #DDE4E9 !important;
+    border: none !important;
+    box-shadow: inset  2px  2px 3px #CBCED1,
+                inset -2px -2px 3px #FFFFFF !important;
+    color: #272D31 !important;
+    cursor: auto !important;
+    padding: 0.8rem !important;
+    text-transform: uppercase !important;
+    width: 50% !important;
+}
+
+.view-form-button {
+    background: #ECF0F3 !important;
+    border: none !important;
+    box-shadow:  5px  5px 10px #D4D8DB,
+                -5px -5px 10px #FFFFFF !important;
+    color: #272D31 !important;
+    width: 15% !important;
+}
+
+.view-form-button:hover {
+    box-shadow: inset  2px  2px 3px #CBCED1,
+                inset -2px -2px 3px #FFFFFF !important;
+}
+
+.view-form-button:active {
+    box-shadow: inset  1px  1px 2px #CBCED1,
+                inset -1px -1px 2px #FFFFFF !important;
+}

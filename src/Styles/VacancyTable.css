@@ -1,0 +1,90 @@
+.full-table {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.table-head-row {
+    /*align-items: center !important;*/
+    /*justify-content: center !important;*/
+    font-family: 'Raleway', sans-serif !important;
+    text-transform: uppercase !important;
+    padding-top: 1rem !important;
+}
+
+.table-header-cell-2 {
+    bottom: 0 !important;
+    left: 0 !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    margin: auto !important;
+}
+
+.table-header-column {
+    position: relative !important;
+}
+
+.table-icon {
+    background: #ECF0F3 !important;
+    border-radius: 50% !important;
+    box-shadow:  5px  5px 10px #D4D8DB,
+                -5px -5px 10px #FFFFFF !important;
+}
+
+.table-button {
+    background: #ECF0F3 !important;
+    border: none !important;
+    box-shadow:  5px  5px 10px #D4D8DB,
+                -5px -5px 10px #FFFFFF !important;
+    color: #272D31 !important;
+    padding: 0 !important;
+    margin-left: 10px !important;
+}
+
+.table-button:hover {
+    box-shadow: inset  2px  2px 3px #CBCED1,
+                inset -2px -2px 3px #FFFFFF !important;
+}
+
+.table-button:active {
+    box-shadow: inset  1px  1px 2px #CBCED1,
+                inset -1px -1px 2px #FFFFFF !important;
+}
+
+.table-group-text {
+    background: #ECF0F3 !important;
+    border: 1px solid #B1B7C1 !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+}
+
+.table-group-input {
+    background: #ECF0F3 !important;
+    border: none !important;
+    border-bottom-right-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    box-shadow: inset  2px  2px 3px #CBCED1,
+                inset -2px -2px 3px #FFFFFF !important;
+    padding: 0.19rem !important;
+}
+
+.table-group-input:hover {
+    box-shadow: inset  1px  1px 2px #CBCED1,
+    inset -1px -1px 2px #FFFFFF !important;
+}
+
+.view-table-button-icon {
+    background-color: transparent;
+    border: 0;
+    height: 50px;
+    width: 50px;
+}
+
+.view-table-button-icon:hover {
+    color: #666666 !important;
+}
+
+.view-table-button-icon:active {
+    color: #999999 !important;
+}
