@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;700&display=swap');
 
 .home-card {
-  background: #272D32 !important;
+  background: #ECF0F3 !important;
   border: none !important;
   border-radius: 10px !important;
-  box-shadow:  3px  3px 3px #171B1E,
-              -3px -3px 3px #373F46 !important;
+  box-shadow:  3px  3px 5px #CBCED1,
+              -3px -3px 5px #FFFFFF !important;
   font-family: 'Nunito Sans', sans-serif;
   width: 90% !important;
 }
@@ -13,16 +13,16 @@
 .home-card-header {
   /*box-shadow:  2px  2px 2px #171B1E,*/
   /*            -2px -2px 2px #373F46 !important;*/
-  background: #272D32 !important;
+  background: #ECF0F3 !important;
   border: none !important;
-  color: #FFFFFF !important;
+  color: #272D32 !important;
   font-size: 2rem !important;
   font-weight: bold !important;
   width: 30% !important;
 }
 
 .home-table {
-  background: #272D32 !important;
+  background: #ECF0F3 !important;
   border: 0 !important;
   /*box-shadow:  2px  2px 2px #171B1E,*/
   /*            -2px -2px 2px #373F46 !important;*/
@@ -31,18 +31,18 @@
 
 .table-header-cell {
   /*border-top: none !important;*/
-  color: #F5F5F5 !important;
+  color: #272D32 !important;
   padding-bottom: 1rem !important;
   padding-top: 1rem !important;
   text-align: center !important;
 }
 
-.table-body-row:hover {
-  background: #394249 !important;
-}
+/*.table-body-row:hover {*/
+/*  background: #394249 !important;*/
+/*}*/
 
 .table-job-position-cell {
-  color: #BECBD8 !important;
+  color: #272D32 !important;
   font-size: 1.1rem !important;
   font-weight: bold !important;
   padding-bottom: 1.5rem !important;
@@ -62,7 +62,7 @@
 }
 
 .table-loading-cell {
-  color: #FFFFFF !important;
+  color: #272D32 !important;
   font-size: 1.1rem !important;
   font-weight: bold !important;
   padding-bottom: 1.5rem !important;
@@ -71,7 +71,7 @@
 }
 
 .table-view {
-  color: #FFFFFF !important;
+  color: #272D32 !important;
   cursor: pointer !important;
   font-size: 1.1rem !important;
   font-weight: bold !important;
@@ -80,35 +80,41 @@
   text-align: center !important;
 }
 
-.table-view:hover {
-  background: #394249 !important;
-}
+/*.table-view:hover {*/
+/*  background: #394249 !important;*/
+/*}*/
 
 .candidate-none {
-  color: #F06F83 !important;
+  /*color: #F06F83 !important;*/
+  color: #E92F4C !important;
 }
 
 .status-accepted {
   font-weight: bold !important;
-  color: #2EE0A6 !important;
+  /*color: #2EE0A6 !important;*/
+  color: #1BBC87 !important;
 }
 
 .status-interview {
   font-weight: bold !important;
-  color: #72B1FC !important;
+  /*color: #72B1FC !important;*/
+  color: #2A89FA !important;
 }
 
 .status-pending {
   font-weight: bold !important;
-  color: #F9A138 !important;
+  /*color: #F9A138 !important;*/
+  color: #EC8407 !important;
 }
 
 .status-rejected {
   font-weight: bold !important;
-  color: #F06F83 !important;
+  /*color: #F06F83 !important;*/
+  color: #E92F4C !important;
 }
 
 .status-new-position {
   font-weight: bold !important;
-  color: #B87FED !important;
+  /*color: #B87FED !important;*/
+  color: #943FE4 !important;
 }

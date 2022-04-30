@@ -133,7 +133,6 @@ const UpcomingEvents = () => {
         <CCard>
           <CTable className='home-table'
                   hover
-                  striped
                   style={{color: '#cfd5da'}}>
             <CTableHead>
               <CTableRow>
@@ -184,7 +183,7 @@ const Home = () => {
   return (
     <div align='center'
          className='full-height'
-         style={{background: '#272D32'}}>
+         style={{background: '#ECF0F3'}}>
       <Navbar/>
       <div style={{ marginTop:'50px'}}>
         <UpcomingEvents/>
