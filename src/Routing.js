@@ -21,9 +21,10 @@ import {useData} from "./Context/Use";
 import LandingPageAboutUs from "./Components/Pages/LandingPageAboutUs";
 import ManagerTable from "./Components/Tables/ManagerTable";
 import InterviewTable from "./Components/Tables/InterviewTable";
+import ManagerPage from "./Components/Pages/ManagerPage";
 
 const Routing = () => {
-  const { values: { jobPositions, candidates } } = useData();
+  const { values: { jobPositions, candidates, managers } } = useData();
 
   const isLoggedIn = useCallback(() => {
     return window.localStorage.getItem('email');
@@ -59,6 +60,9 @@ const Routing = () => {
             {jobPositions.map(jobPosition =>
               <Route element={<VacancyPage vacancy={jobPosition} />} exact key={jobPosition.id}
                      path={`/job/${getHashCode(jobPosition.id)}`} />)}
+            {managers.map(manager =>
+              <Route element={<ManagerPage manager={manager}/>} exact key={manager.id}
+                     path={`/manager/${getHashCode(manager.id)}`}/>)}
           </>
           :
           <></>}
